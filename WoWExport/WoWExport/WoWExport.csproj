@@ -52,6 +52,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WoWFormatLib\Structs\ADT.Struct.cs" />
+    <Compile Include="WoWFormatLib\Structs\ADTobj.Struct.cs" />
+    <Compile Include="WoWFormatLib\Structs\ADTtex.Struct.cs" />
+    <Compile Include="WoWFormatLib\Structs\WDT.struct.cs" />
+    <Compile Include="WoWFormatLib\Utils\ABlock.cs" />
+    <Compile Include="WoWFormatLib\Utils\Quaternion.cs" />
+    <Compile Include="WoWFormatLib\Utils\RGBColor.cs" />
+    <Compile Include="WoWFormatLib\Utils\Vector3.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
