@@ -21,6 +21,9 @@ namespace WoWFormatLib.FileReaders
         public void LoadWDT(string filename)
         {
             tiles = new List<int[]>();
+
+            //--
+            /*
             if (CASC.cascHandler.FileExists(filename))
             {
                 using (Stream tex = CASC.cascHandler.OpenFile(filename))
@@ -32,6 +35,23 @@ namespace WoWFormatLib.FileReaders
             {
                 throw new FileNotFoundException("WDT " + filename + " does not exist");
             }
+            */
+            //--
+
+            //--
+            if (File.Exists(filename))
+            {
+                using (Stream tex = File.OpenRead(filename))
+                {
+                    ReadWDT(filename, tex);
+                }
+            }
+            else
+            {
+                throw new FileNotFoundException("WDT " + filename + " does not exist");
+            }
+            //--
+
         }
         private void ReadMAINChunk(BinaryReader bin, uint size, String filename)
         {

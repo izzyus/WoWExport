@@ -17,12 +17,14 @@ namespace WoWFormatLib.FileReaders
         private Structs.WDT.WDT wdt;
 
         /* ROOT */
-        public void LoadADT(string filename, bool loadSecondaryADTs = true)
+        //public void LoadADT(string filename, bool loadSecondaryADTs = true)
+        public void LoadADT(string filename, string wdtfilename, string objfilename, string texfilename, bool loadSecondaryADTs = true)
         {
             m2Files = new List<string>();
             wmoFiles = new List<string>();
             blpFiles = new List<string>();
-
+            
+            /*
             filename = Path.ChangeExtension(filename, ".adt");
 
             if (!CASC.cascHandler.FileExists(filename) || !CASC.cascHandler.FileExists(filename.Replace(".adt", "_obj0.adt")) || !CASC.cascHandler.FileExists(filename.Replace(".adt", "_tex0.adt"))) {
@@ -32,9 +34,15 @@ namespace WoWFormatLib.FileReaders
             var mapname = filename.Replace("world\\maps\\", "").Substring(0, filename.Replace("world\\maps\\", "").IndexOf("\\"));
 
             if (CASC.cascHandler.FileExists("world\\maps\\" + mapname + "\\" + mapname + ".wdt"))
+            */
+
+            if(File.Exists(wdtfilename))
             {
                 var wdtr = new WDTReader();
-                wdtr.LoadWDT("world\\maps\\" + mapname + "\\" + mapname + ".wdt");
+
+                //wdtr.LoadWDT("world\\maps\\" + mapname + "\\" + mapname + ".wdt");
+                wdtr.LoadWDT(wdtfilename);
+
                 wdt = wdtr.wdtfile;
             }
             else
@@ -42,7 +50,9 @@ namespace WoWFormatLib.FileReaders
                 throw new Exception("WDT does not exist, need this for MCAL flags!");
             }
 
-            using (var adt = CASC.cascHandler.OpenFile(filename))
+            //using (var adt = CASC.cascHandler.OpenFile(filename))
+            var adt = File.OpenRead(filename);
+
             using (var bin = new BinaryReader(adt))
             {
                 long position = 0;
@@ -96,12 +106,14 @@ namespace WoWFormatLib.FileReaders
             
             if (loadSecondaryADTs)
             {
-                using (var adtobj0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_obj0.adt")))
+                //using (var adtobj0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_obj0.adt")))
+                using (var adtobj0 = File.OpenRead(objfilename))
                 {
                     ReadObjFile(adtobj0);
                 }
 
-                using (var adttex0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_tex0.adt")))
+                //using (var adttex0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_tex0.adt")))
+                using (var adttex0 = File.OpenRead(texfilename))
                 {
                     ReadTexFile(adttex0);
                 }
@@ -499,10 +511,16 @@ namespace WoWFormatLib.FileReaders
                 if (blpFilesChunk[i] == '\0')
                 {
                     blpFiles.Add(str.ToString());
+                    
+                    //--
+                    /*
                     if (!CASC.cascHandler.FileExists(str.ToString()))
                     {
                         Console.WriteLine("BLP file does not exist!!! {0}", str.ToString());
                     }
+                    */
+                    //--
+
                     str = new StringBuilder();
                 }
                 else
