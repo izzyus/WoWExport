@@ -52,6 +52,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WoWFormatLib\FileReaders\ADTReader.cs" />
+    <Compile Include="WoWFormatLib\FileReaders\WDTReader.cs" />
     <Compile Include="WoWFormatLib\Structs\ADT.Struct.cs" />
     <Compile Include="WoWFormatLib\Structs\ADTobj.Struct.cs" />
     <Compile Include="WoWFormatLib\Structs\ADTtex.Struct.cs" />
