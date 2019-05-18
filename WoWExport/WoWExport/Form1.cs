@@ -25,6 +25,7 @@ namespace WoWExport
         public List<String> AlphaLayersNames = new List<String>();
         public string filePath = string.Empty;
 
+        public bool exportLayersCSV = false;
 
         //-----------------------------------------------------------------------------------------------------------------
 
@@ -42,10 +43,14 @@ namespace WoWExport
 
             //pictureBox1.Image = Image.FromFile("D:\\Xport\\WorldOfWarcraft\\ModelExport\\azeroth_32_48\\azeroth_32_48.jpg");
 
+            this.Text = "WoW Export";
 
             button1.Text = "Load";
 
-            this.Text = "WoW Export";
+            button2.Enabled = false;
+            button2.Text = "Export";
+
+            textBox1.Text = "D:\\export";
 
             groupBox1.Text = "Alphamap [#]";
 
@@ -148,23 +153,25 @@ namespace WoWExport
                     //Enable the export button if the generation was successful
                     if (AlphaLayers != null)
                     {
-                        //button2.Enabled = true;
+                        button2.Enabled = true;
                     }
                 }
                 else
                 {
                     MessageBox.Show("One or more files are missing", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    //button2.Enabled = false;
+                    button2.Enabled = false;
                 }
 
                 //Disable Layers CSV export button unless method 3 is used
                 if (radioButton3.Checked)
                 {
                     //button3.Enabled = true;
+                    exportLayersCSV = true;
                 }
                 else
                 {
                     //button3.Enabled = false;
+                    exportLayersCSV = false;
                 }
 
             
@@ -198,6 +205,92 @@ namespace WoWExport
             {
                 groupBox1.Text = "Alphamap [PREVIEW DISABLED IN THIS MODE]";
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            {
+                //Get the mapname
+                string mapname = filePath;
+                mapname = mapname.Substring(mapname.LastIndexOf("\\", mapname.Length - 2) + 1);
+                mapname = mapname.Substring(0, mapname.Length - 4);
+
+                //Create a folder with the map name (if non-existent) to save all everything in
+                if (!Directory.Exists(textBox1.Text + "\\" + mapname))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(textBox1.Text + "\\" + mapname + "\\");
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Could not create folder: " + textBox1.Text + "\\" + mapname, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+
+                //Create a folder for the alphamaps (if none-xistent) to save the alphas separately
+                if (!Directory.Exists(textBox1.Text + "\\" + mapname + "\\alphamaps\\"))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(textBox1.Text + "\\" + mapname + "\\alphamaps\\");
+                    }
+                    catch
+                    {
+                        MessageBox.Show(textBox1.Text + "\\" + mapname + "\\alphamaps\\");
+                    }
+
+                }
+
+                for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
+                {
+                    try
+                    {
+                        //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
+                        //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
+                        //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
+                        AlphaLayers[m].Save(textBox1.Text + "\\" + mapname + "\\alphamaps\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                //Export Layers CSV info
+                if (exportLayersCSV)
+                {
+
+                    if (File.Exists(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv"))
+                    {
+                        File.Delete(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv");
+                    }
+
+                    string LineOfText = "";
+                    int cchunk = 0;
+                    for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
+                    {
+                        var line = AlphaLayersNames[i];
+                        var values = line.Split(';');
+                        var chunk = int.Parse(values[0]);
+                        if (chunk == cchunk)
+                        {
+                            LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
+                        }
+                        else //Next Chunk
+                        {
+                            //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+                            File.AppendAllText(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+                            LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";
+                            cchunk++;
+                        }
+                    }
+                    //Last entry, i have no idea how to do it properly so i am doing it like this
+                    //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
+                    File.AppendAllText(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
+                }
+
+            }
+
         }
     }
 }
