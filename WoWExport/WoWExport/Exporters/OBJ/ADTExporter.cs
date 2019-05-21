@@ -6,49 +6,68 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using WoWFormatLib.FileReaders;
-using CASCLib;
+//using CASCLib;
 
-namespace OBJExporterUI.Exporters.OBJ
+//namespace OBJExporterUI.Exporters.OBJ
+namespace Exporters.OBJ
 {
     public class ADTExporter
     {
-        public static void exportADT(string file, BackgroundWorker exportworker = null)
+        //public static void exportADT(string file, BackgroundWorker exportworker = null)
+        public void exportADT(string file, string outdir, string bakeQuality)
         {
+            /*
             if (exportworker == null)
             {
                 exportworker = new BackgroundWorker();
                 exportworker.WorkerReportsProgress = true;
             }
+            */
 
-            var outdir = ConfigurationManager.AppSettings["outdir"];
+            //var outdir = ConfigurationManager.AppSettings["outdir"];
 
+            /*
             var customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+            */
 
             var TileSize = 1600.0f / 3.0f; //533.333
             var ChunkSize = TileSize / 16.0f; //33.333
             var UnitSize = ChunkSize / 8.0f; //4.166666
 
-            var mapname = file.Replace("world/maps/", "").Substring(0, file.Replace("world/maps/", "").IndexOf("/"));
-            var coord = file.Replace("world/maps/" + mapname + "/" + mapname, "").Replace(".adt", "").Split('_');
+            //var mapname = file.Replace("world/maps/", "").Substring(0, file.Replace("world/maps/", "").IndexOf("/"));
+            string mapname = file;
+            mapname = mapname.Substring(mapname.LastIndexOf("\\", mapname.Length - 2) + 1);
+            mapname = mapname.Substring(0, mapname.Length - 4);
 
-            Logger.WriteLine("ADT OBJ Exporter: Starting export of {0}..", file);
+            //var coord = file.Replace("world/maps/" + mapname + "/" + mapname, "").Replace(".adt", "").Split('_');
+
+
+
+            //Logger.WriteLine("ADT OBJ Exporter: Starting export of {0}..", file);
 
             if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file))))
             {
                 Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file)));
             }
 
-            exportworker.ReportProgress(0, "Loading ADT " + file);
+            //exportworker.ReportProgress(0, "Loading ADT " + file);
 
             var reader = new ADTReader();
-            reader.LoadADT(file.Replace('/', '\\'));
+            //reader.LoadADT(file.Replace('/', '\\'));
+            var ADTfile = file;
+            var WDTfile = file.Substring(0, file.Length - 10) + ".wdt";
+            var ADTobj = file.Replace(".adt", "_obj0.adt");
+            var ADTtex = file.Replace(".adt", "_tex0.adt");
+
+            reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
 
             if (reader.adtfile.chunks == null)
             {
-                Logger.WriteLine("ADT OBJ Exporter: File {0} has no chunks, skipping export!", file);
-                return;
+                //Logger.WriteLine("ADT OBJ Exporter: File {0} has no chunks, skipping export!", file);
+                throw new Exception("ADT OBJ Exporter: File has no chunks, skipping export!");
+                //return;
             }
 
             var renderBatches = new List<Structs.RenderBatch>();
@@ -56,8 +75,8 @@ namespace OBJExporterUI.Exporters.OBJ
             var indicelist = new List<int>();
             var materials = new Dictionary<int, string>();
 
-            ConfigurationManager.RefreshSection("appSettings");
-            var bakeQuality = ConfigurationManager.AppSettings["bakeQuality"];
+            //ConfigurationManager.RefreshSection("appSettings");
+            //var bakeQuality = ConfigurationManager.AppSettings["bakeQuality"];
 
             var initialChunkY = reader.adtfile.chunks[0].header.position.Y;
             var initialChunkX = reader.adtfile.chunks[0].header.position.X;
@@ -170,9 +189,10 @@ namespace OBJExporterUI.Exporters.OBJ
 
                 renderBatches.Add(batch);
             }
-            ConfigurationManager.RefreshSection("appSettings");
-            Console.WriteLine(ConfigurationManager.AppSettings["exportEverything"]);
-            if(ConfigurationManager.AppSettings["exportEverything"] == "True")
+            //ConfigurationManager.RefreshSection("appSettings");
+            //Console.WriteLine(ConfigurationManager.AppSettings["exportEverything"]);
+            /*
+            if (ConfigurationManager.AppSettings["exportEverything"] == "True")
             {
                 var doodadSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file).Replace(" ", "") + "_ModelPlacementInformation.csv"));
                 doodadSW.WriteLine("ModelFile;PositionX;PositionY;PositionZ;RotationX;RotationY;RotationZ;ScaleFactor;ModelId;Type");
@@ -211,8 +231,9 @@ namespace OBJExporterUI.Exporters.OBJ
 
                 doodadSW.Close();
             }
-
-            exportworker.ReportProgress(75, "Exporting terrain textures..");
+            */
+            
+            //exportworker.ReportProgress(75, "Exporting terrain textures..");
 
             var mtlsw = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file).Replace(" ", "") + ".mtl"));
 
@@ -228,7 +249,7 @@ namespace OBJExporterUI.Exporters.OBJ
 
             mtlsw.Close();
 
-            exportworker.ReportProgress(85, "Exporting terrain geometry..");
+            //exportworker.ReportProgress(85, "Exporting terrain geometry..");
 
             var indices = indicelist.ToArray();
 
