@@ -94,7 +94,8 @@ namespace Exporters.OBJ
                     for (var j = 0; j < (((i % 2) != 0) ? 8 : 9); j++)
                     {
                         var v = new Structs.Vertex();
-                        v.Normal = new Vector3(chunk.normals.normal_2[idx] / 127f, chunk.normals.normal_0[idx] / 127f, chunk.normals.normal_1[idx] / 127f);
+                        //v.Normal = new Vector3(chunk.normals.normal_2[idx] / 127f, chunk.normals.normal_0[idx] / 127f, chunk.normals.normal_1[idx] / 127f);
+                        v.Normal = new Vector3(chunk.normals.normal_0[idx] / 127f, chunk.normals.normal_2[idx] / 127f, chunk.normals.normal_1[idx] / 127f);
                         v.Position = new Vector3(chunk.header.position.Y - (j * UnitSize), chunk.vertices.vertices[idx++] + chunk.header.position.Z, chunk.header.position.X - (i * UnitSize * 0.5f));
                         if ((i % 2) != 0) v.Position.X -= 0.5f * UnitSize;
                         if(bakeQuality == "low" || bakeQuality == "medium")
