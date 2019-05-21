@@ -5,11 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-//namespace OBJExporterUI
-namespace Exporters
+namespace OBJExporterUI
 {
     public class Structs
     {
+        public struct MapTile
+        {
+            public uint wdtFileDataID;
+            public byte tileX;
+            public byte tileY;
+        }
+
         public struct RenderBatch
         {
             public uint firstFace;
@@ -21,17 +27,32 @@ namespace Exporters
 
         public struct Vertex
         {
-            public Vector3 Position;
-            public Vector3 Normal;
-            public Vector2 TexCoord;
-            public Vector3 Color;
+            public Vector3D Position;
+            public Vector3D Normal;
+            public Vector2D TexCoord;
+            public Vector3D Color;
         }
 
+        public struct Vector3D
+        {
+            public double X;
+            public double Y;
+            public double Z;
+        }
+
+        public struct Vector2D
+        {
+            public double X;
+            public double Y;
+        }
         public struct Material
         {
             public string filename;
-            //public WoWFormatLib.Structs.M2.TextureFlags flags;
+            public WoWFormatLib.Structs.M2.TextureFlags flags;
             public int textureID;
+            public uint shaderID;
+            public uint blendMode;
+            public uint terrainType;
             public bool transparent;
         }
 
