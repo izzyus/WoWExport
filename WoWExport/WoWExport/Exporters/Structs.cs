@@ -5,7 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OBJExporterUI
+//namespace OBJExporterUI
+namespace Exporters
 {
     public class Structs
     {
@@ -48,7 +49,7 @@ namespace OBJExporterUI
         public struct Material
         {
             public string filename;
-            public WoWFormatLib.Structs.M2.TextureFlags flags;
+            //public WoWFormatLib.Structs.M2.TextureFlags flags;
             public int textureID;
             public uint shaderID;
             public uint blendMode;

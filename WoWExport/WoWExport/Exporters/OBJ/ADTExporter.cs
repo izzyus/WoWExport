@@ -1,4 +1,4 @@
-﻿using CASCLib;
+﻿//using CASCLib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,68 +7,85 @@ using System.IO;
 using System.Linq;
 using WoWFormatLib.FileReaders;
 
-namespace OBJExporterUI.Exporters.OBJ
+//namespace OBJExporterUI.Exporters.OBJ
+namespace Exporters.OBJ
 {
     public class ADTExporter
     {
-        public static void ExportADT(uint wdtFileDataID, byte tileX, byte tileY, BackgroundWorker exportworker = null)
+        //public static void ExportADT(uint wdtFileDataID, byte tileX, byte tileY, BackgroundWorker exportworker = null)
+        public void exportADT(string file, string outdir, string bakeQuality)
         {
+            /*
             if (exportworker == null)
             {
                 exportworker = new BackgroundWorker();
                 exportworker.WorkerReportsProgress = true;
             }
-
-            var outdir = ConfigurationManager.AppSettings["outdir"];
-
+            */
+            //var outdir = ConfigurationManager.AppSettings["outdir"];
+            /*
             var customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-
+            */
             var MaxSize = 51200 / 3.0;
             var TileSize = MaxSize / 32.0;
             var ChunkSize = TileSize / 16.0;
             var UnitSize = ChunkSize / 8.0;
             var UnitSizeHalf = UnitSize / 2.0;
-
+            /*
             if (!Listfile.TryGetFilename(wdtFileDataID, out string wdtFilename))
             {
                 Logger.WriteLine("ADT OBJ Exporter: WDT {0} has no known filename, skipping export!", wdtFileDataID);
                 return;
             }
+            */
+            //var mapName = Path.GetFileNameWithoutExtension(wdtFilename);
+            //var file = "world/maps/" + mapName + "/" + mapName + "_" + tileX.ToString() + "_" + tileY.ToString() + ".adt";
 
-            var mapName = Path.GetFileNameWithoutExtension(wdtFilename);
-            var file = "world/maps/" + mapName + "/" + mapName + "_" + tileX.ToString() + "_" + tileY.ToString() + ".adt";
+            string mapname = file;
+            mapname = mapname.Substring(mapname.LastIndexOf("\\", mapname.Length - 2) + 1);
+            mapname = mapname.Substring(0, mapname.Length - 4);
 
             var reader = new ADTReader();
-            reader.LoadADT(wdtFileDataID, tileX, tileY, true, wdtFilename);
+            //reader.LoadADT(wdtFileDataID, tileX, tileY, true, wdtFilename);
+
+            var ADTfile = file;
+            var WDTfile = file.Substring(0, file.Length - 10) + ".wdt";
+            var ADTobj = file.Replace(".adt", "_obj0.adt");
+            var ADTtex = file.Replace(".adt", "_tex0.adt");
+
+            reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
 
             if (reader.adtfile.chunks == null)
             {
-                Logger.WriteLine("ADT OBJ Exporter: File {0} has no chunks, skipping export!", file);
-                return;
+                //Logger.WriteLine("ADT OBJ Exporter: File {0} has no chunks, skipping export!", file);
+                throw new Exception("ADT OBJ Exporter: File has no chunks, skipping export!");
+                //return;
             }
 
-            Logger.WriteLine("ADT OBJ Exporter: Starting export of {0}..", file);
+            //Logger.WriteLine("ADT OBJ Exporter: Starting export of {0}..", file);
 
             if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file))))
             {
                 Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file)));
             }
 
-            exportworker.ReportProgress(0, "Loading ADT " + file);
+            //exportworker.ReportProgress(0, "Loading ADT " + file);
 
             var renderBatches = new List<Structs.RenderBatch>();
             var verticelist = new List<Structs.Vertex>();
             var indicelist = new List<int>();
             var materials = new Dictionary<int, string>();
 
-            ConfigurationManager.RefreshSection("appSettings");
-            var bakeQuality = ConfigurationManager.AppSettings["bakeQuality"];
+            //ConfigurationManager.RefreshSection("appSettings");
+            //var bakeQuality = ConfigurationManager.AppSettings["bakeQuality"];
 
             // Calculate ADT offset in world coordinates
-            var adtStartX = ((reader.adtfile.x - 32) * TileSize) * -1;
-            var adtStartY = ((reader.adtfile.y - 32) * TileSize) * -1;
+            //var adtStartX = ((reader.adtfile.x - 32) * TileSize) * -1;
+            //var adtStartY = ((reader.adtfile.y - 32) * TileSize) * -1;
+            var adtStartX = reader.adtfile.chunks[0].header.position.X;
+            var adtStartY = reader.adtfile.chunks[0].header.position.Y;
 
             // Calculate first chunk offset in world coordinates
             var initialChunkX = adtStartY + (reader.adtfile.chunks[0].header.indexX * ChunkSize) * -1;
@@ -222,7 +239,7 @@ namespace OBJExporterUI.Exporters.OBJ
                     ci++;
                 }
             }
-
+            /*
             ConfigurationManager.RefreshSection("appSettings");
 
             bool exportWMO = ConfigurationManager.AppSettings["exportWMO"] == "True";
@@ -405,8 +422,8 @@ namespace OBJExporterUI.Exporters.OBJ
 
                 doodadSW.Close();
             }
-
-            exportworker.ReportProgress(75, "Exporting terrain textures..");
+            */
+            //exportworker.ReportProgress(75, "Exporting terrain textures..");
 
             if (bakeQuality != "none")
             {
@@ -425,7 +442,7 @@ namespace OBJExporterUI.Exporters.OBJ
                 mtlsw.Close();
             }
 
-            exportworker.ReportProgress(85, "Exporting terrain geometry..");
+            //exportworker.ReportProgress(85, "Exporting terrain geometry..");
 
             var indices = indicelist.ToArray();
 
@@ -478,7 +495,7 @@ namespace OBJExporterUI.Exporters.OBJ
 
             objsw.Close();
 
-            Logger.WriteLine("ADT OBJ Exporter: Finished with export of {0}..", file);
+            //Logger.WriteLine("ADT OBJ Exporter: Finished with export of {0}..", file);
         }
     }
 }
