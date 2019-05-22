@@ -92,6 +92,7 @@ namespace WoWFormatLib.Structs.ADT
         public uint offset;
         public uint size;
         public uint flags;
+        public uint AsyncId;
     }
     //--
     public struct MCNK

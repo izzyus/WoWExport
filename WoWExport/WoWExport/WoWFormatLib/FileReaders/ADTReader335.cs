@@ -87,16 +87,6 @@ namespace WoWFormatLib.FileReaders
                             }
                             break;
                         /* //<-------------------------------------------------------------------
-                    case "MCNK":
-                        //adtfile.chunks[MCNKi] = ReadMCNKChunk(chunkSize, bin);
-                        //MCNKi++;
-                        break;
-                    case "MHDR":
-                        adtfile.header = bin.Read<MHDR>();
-                        break;
-                    case "MH2O":
-                        //adtfile.mh2o = ReadMH20SubChunk(chunkSize, bin);
-                        break;
                     case "MFBO":
                     //model.blob stuff
                     case "MBMH":
@@ -106,26 +96,35 @@ namespace WoWFormatLib.FileReaders
                         break;
                         */ // <-------------------------------------------------------------------
                         case "MHDR":
+                            adtfile.header = bin.Read<MHDR>();
                             break;
                         case "MCIN": // <-----
                             adtfile.mcinChunks[MCINi] = readMCINChunk(chunkSize, bin);
                             MCINi++;
                             break;
                         case "MTEX":
+                            adtfile.textures = ReadMTEXChunk(chunkSize, bin);
                             break;
                         case "MMDX":
+                            adtfile.objects.m2Names = ReadMMDXChunk(chunkSize, bin);
                             break;
                         case "MMID":
+                            adtfile.objects.m2NameOffsets = ReadMMIDChunk(chunkSize, bin);
                             break;
                         case "MWMO":
+                            adtfile.objects.wmoNames = ReadMWMOChunk(chunkSize, bin);
                             break;                      
                         case "MWID":
+                            adtfile.objects.wmoNameOffsets = ReadMWIDChunk(chunkSize, bin);
                             break;
                         case "MDDF":
+                            adtfile.objects.models = ReadMDDFChunk(chunkSize, bin);
                             break;
                         case "MODF":
+                            adtfile.objects.worldModels = ReadMODFChunk(chunkSize, bin);
                             break;
                         case "MH2O":
+                            adtfile.mh2o = ReadMH20SubChunk(chunkSize, bin);
                             break;
                         case "MCNK":
                             //adtfile.chunks[MCNKi] = ReadMCNKChunk();
@@ -168,7 +167,7 @@ namespace WoWFormatLib.FileReaders
                 offset = bin.ReadUInt32(),
                 size = bin.ReadUInt32(),
                 flags = bin.ReadUInt32(),
-
+                AsyncId = bin.ReadUInt32(),
             };
             return mcinChunk;
         }
@@ -197,15 +196,14 @@ namespace WoWFormatLib.FileReaders
 
                     switch (subChunkName)
                     {
-                        
                         case "MCVT":
                             mapchunk.vertices = ReadMCVTSubChunk(subbin);
                             break;
-
                         case "MCNR":
                             mapchunk.normals = ReadMCNRSubChunk(subbin);
                             subpos = subpos + 13; //The weird data that the wiki speaks about [Thanks Marl!]
-                            break;    
+                            break;
+
                         /* // <-----
                         case "MCCV":
                             mapchunk.vertexShading = ReadMCCVSubChunk(subbin);
@@ -217,14 +215,28 @@ namespace WoWFormatLib.FileReaders
                         case "MCLV":
                             continue;
                         */  // <-----
+
+                        //----------------------------------------------------------------------------
+                        // To be properly implemented
+                        //----------------------------------------------------------------------------
                         case "MCLY":
+                            //mapchunk.layers = ReadMCLYSubChunk(subChunkSize, subbin);
                             break;
+                        //----------------------------------------------------------------------------
+
                         case "MCRF":
                             break;
                         case "MCSH":
                             break;
+
+                        //----------------------------------------------------------------------------
+                        // To be properly implemented
+                        //----------------------------------------------------------------------------
                         case "MCAL":
+                            //mapchunk.alphaLayer = ReadMCALSubChunk(subChunkSize, subbin, mapchunk);
                             break;
+                        //----------------------------------------------------------------------------
+
                         case "MCSE":
                             mapchunk.soundEmitters = ReadMCSESubChunk(subChunkSize, subbin);
                             break;
