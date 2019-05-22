@@ -129,8 +129,8 @@ namespace WoWFormatLib.FileReaders
                             break;
                         case "MCNK":
                             //adtfile.chunks[MCNKi] = ReadMCNKChunk();
-                            adtfile.chunks[MCNKi] = ReadMCNKChunk(adtfile.mcinChunks[MCNKi].size, bin);
-                            //adtfile.chunks[MCNKi] = ReadMCNKChunk(chunkSize, bin);
+                            //adtfile.chunks[MCNKi] = ReadMCNKChunk(adtfile.mcinChunks[MCNKi].size, bin);
+                            adtfile.chunks[MCNKi] = ReadMCNKChunk(chunkSize, bin);
                             MCNKi++;
                             break;
                         default:
@@ -201,14 +201,14 @@ namespace WoWFormatLib.FileReaders
                         case "MCVT":
                             mapchunk.vertices = ReadMCVTSubChunk(subbin);
                             break;
-                        case "MCCV":
-                            mapchunk.vertexShading = ReadMCCVSubChunk(subbin);
-                            break;
+
                         case "MCNR":
                             mapchunk.normals = ReadMCNRSubChunk(subbin);
-                            break;
-                        case "MCSE":
-                            mapchunk.soundEmitters = ReadMCSESubChunk(subChunkSize, subbin);
+                            subpos = subpos + 13; //The weird data that the wiki speaks about [Thanks Marl!]
+                            break;    
+                        /* // <-----
+                        case "MCCV":
+                            mapchunk.vertexShading = ReadMCCVSubChunk(subbin);
                             break;
                         case "MCBB":
                             mapchunk.blendBatches = ReadMCBBSubChunk(subChunkSize, subbin);
@@ -216,7 +216,20 @@ namespace WoWFormatLib.FileReaders
                         case "MCLQ":
                         case "MCLV":
                             continue;
-                            
+                        */  // <-----
+                        case "MCLY":
+                            break;
+                        case "MCRF":
+                            break;
+                        case "MCSH":
+                            break;
+                        case "MCAL":
+                            break;
+                        case "MCSE":
+                            mapchunk.soundEmitters = ReadMCSESubChunk(subChunkSize, subbin);
+                            break;
+                        case "MCNK": //wait, what??
+                            break;
                         default:
                             throw new Exception(string.Format("Found unknown header at offset {1} \"{0}\" while we should've already read them all! (Total size: {2})", subChunkName, subpos.ToString(), size));
                     }
