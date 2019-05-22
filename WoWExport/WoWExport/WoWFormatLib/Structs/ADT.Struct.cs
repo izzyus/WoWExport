@@ -9,6 +9,9 @@ namespace WoWFormatLib.Structs.ADT
         public MHDR header;
         public MTEX textures;
         public MTXP[] texParams;
+
+        public MCIN[] mcinChunks; // <-------------------------------------
+
         public MCNK[] chunks;
         public TexMCNK[] texChunks;
         public MH2O mh2o;
@@ -83,7 +86,14 @@ namespace WoWFormatLib.Structs.ADT
         public uint ofsMCLV;
         public uint unused;
     }
-
+    //-- Added for 335 compat
+    public struct MCIN
+    {
+        public uint offset;
+        public uint size;
+        public uint flags;
+    }
+    //--
     public struct MCNK
     {
         public MCNKheader header;

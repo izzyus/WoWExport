@@ -60,7 +60,8 @@ namespace WoWExport
             radioButton2.Text = "Uniform ARGB";
             radioButton3.Text = "Non-Uniform";
 
-
+            //To be deleted later
+            button3.Text = "Crash Me!";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -329,6 +330,14 @@ namespace WoWExport
                 //----------------------------------------------------------------------------------------------------------
             }
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ADTReader335 reader = new ADTReader335();
+            //reader.LoadADT(ADTfile, WDTfile);
+            reader.LoadADT("D:\\mpqediten32\\335\\Work\\World\\Maps\\Azeroth\\Azeroth_31_60.adt", "D:\\mpqediten32\\335\\Work\\World\\Maps\\Azeroth\\Azeroth.wdt");
+            MessageBox.Show("V:"+reader.adtfile.version);
         }
     }
 }
