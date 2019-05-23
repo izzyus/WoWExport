@@ -131,7 +131,7 @@ namespace WoWFormatLib.FileReaders
                     case "MAIN":
                         ReadMAINChunk(bin, chunkSize, filename);
                         break;
-                    case "MWMO":
+                    case "MWMO": //To be fixed
                         //ReadMWMOChunk(bin);
                         break;
                     case "MPHD":

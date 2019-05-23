@@ -62,6 +62,7 @@ namespace WoWFormatLib.FileReaders
                 var MCNKi = 0;
                 var MCINi = 0;
                 adtfile.chunks = new MCNK[16 * 16];
+
                 adtfile.mcinChunks = new MCIN[16 * 16];
 
                 while (position < adt.Length)
@@ -86,7 +87,7 @@ namespace WoWFormatLib.FileReaders
                                 adtfile.version = version;
                             }
                             break;
-                        /* //<-------------------------------------------------------------------
+                        /* // <-------------------------------------------------------------------
                     case "MFBO":
                     //model.blob stuff
                     case "MBMH":
@@ -98,10 +99,12 @@ namespace WoWFormatLib.FileReaders
                         case "MHDR":
                             adtfile.header = bin.Read<MHDR>();
                             break;
+
                         case "MCIN": // <-----
                             adtfile.mcinChunks[MCINi] = readMCINChunk(chunkSize, bin);
                             MCINi++;
                             break;
+
                         case "MTEX":
                             adtfile.textures = ReadMTEXChunk(chunkSize, bin);
                             break;
@@ -127,8 +130,7 @@ namespace WoWFormatLib.FileReaders
                             adtfile.mh2o = ReadMH20SubChunk(chunkSize, bin);
                             break;
                         case "MCNK":
-                            //adtfile.chunks[MCNKi] = ReadMCNKChunk();
-                            //adtfile.chunks[MCNKi] = ReadMCNKChunk(adtfile.mcinChunks[MCNKi].size, bin);
+                            //adtfile.chunks[MCNKi] = ReadMCNKChunk(adtfile.mcinChunks[MCNKi].size, bin); //Bad idea (MCIN size = 8 bytes longer than MCNK)
                             adtfile.chunks[MCNKi] = ReadMCNKChunk(chunkSize, bin);
                             MCNKi++;
                             break;
@@ -159,7 +161,7 @@ namespace WoWFormatLib.FileReaders
             */
         }
 
-        
+        //Added
         private MCIN readMCINChunk(uint size, BinaryReader bin)
         {
             var mcinChunk = new MCIN()
@@ -171,8 +173,7 @@ namespace WoWFormatLib.FileReaders
             };
             return mcinChunk;
         }
-        
-
+        //--
 
         private MCNK ReadMCNKChunk(uint size, BinaryReader bin)
         {
@@ -211,7 +212,7 @@ namespace WoWFormatLib.FileReaders
                         case "MCBB":
                             mapchunk.blendBatches = ReadMCBBSubChunk(subChunkSize, subbin);
                             break;
-                        case "MCLQ":
+                        
                         case "MCLV":
                             continue;
                         */  // <-----
@@ -237,11 +238,12 @@ namespace WoWFormatLib.FileReaders
                             break;
                         //----------------------------------------------------------------------------
 
+                        case "MCLQ": //FIND PROPPER PLACE IN STACK
+
                         case "MCSE":
                             mapchunk.soundEmitters = ReadMCSESubChunk(subChunkSize, subbin);
                             break;
-                        case "MCNK": //wait, what??
-                            break;
+
                         default:
                             throw new Exception(string.Format("Found unknown header at offset {1} \"{0}\" while we should've already read them all! (Total size: {2})", subChunkName, subpos.ToString(), size));
                     }
@@ -332,6 +334,7 @@ namespace WoWFormatLib.FileReaders
             }
             return chunk;
         }
+        
         /* OBJ */
 
         private void ReadObjFile(Stream adtObjStream)
