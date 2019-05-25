@@ -16,6 +16,8 @@ namespace WoWFormatLib.FileReaders
         public List<string> wmoFiles;
         private Structs.WDT.WDT wdt;
 
+        public int currentChunk; //very ghetto, much wow
+
         /* ROOT */
         //public void LoadADT(string filename, bool loadSecondaryADTs = true)
         //public void LoadADT(string filename, string wdtfilename, string objfilename, string texfilename, bool loadSecondaryADTs = true)
@@ -61,9 +63,12 @@ namespace WoWFormatLib.FileReaders
                 long position = 0;
                 var MCNKi = 0;
                 var MCINi = 0;
+                currentChunk = 0; //very ghetto, much wow
+
                 adtfile.chunks = new MCNK[16 * 16];
 
-                adtfile.mcinChunks = new MCIN[16 * 16];
+                adtfile.mcinChunks = new MCIN[16 * 16]; // <------
+                adtfile.texChunks = new TexMCNK[16 * 16]; // <------ You are not supposed to be in here (actually yes, but also no)
 
                 while (position < adt.Length)
                 {
@@ -133,6 +138,7 @@ namespace WoWFormatLib.FileReaders
                             //adtfile.chunks[MCNKi] = ReadMCNKChunk(adtfile.mcinChunks[MCNKi].size, bin); //Bad idea (MCIN size = 8 bytes longer than MCNK)
                             adtfile.chunks[MCNKi] = ReadMCNKChunk(chunkSize, bin);
                             MCNKi++;
+                            currentChunk++; //very ghetto, much wow
                             break;
                         default:
                             throw new Exception(string.Format("{2} Found unknown header at offset {1} \"{0}\" while we should've already read them all!", chunkName, position, filename));
@@ -222,6 +228,7 @@ namespace WoWFormatLib.FileReaders
                         //----------------------------------------------------------------------------
                         case "MCLY":
                             //mapchunk.layers = ReadMCLYSubChunk(subChunkSize, subbin);
+                            adtfile.texChunks[currentChunk].layers = ReadMCLYSubChunk(subChunkSize, subbin); //very ghetto, much wow
                             break;
                         //----------------------------------------------------------------------------
 
@@ -235,10 +242,11 @@ namespace WoWFormatLib.FileReaders
                         //----------------------------------------------------------------------------
                         case "MCAL":
                             //mapchunk.alphaLayer = ReadMCALSubChunk(subChunkSize, subbin, mapchunk);
+                            adtfile.texChunks[currentChunk].alphaLayer = ReadMCALSubChunk(subChunkSize, subbin, adtfile.texChunks[currentChunk]); //very ghetto, much wow
                             break;
                         //----------------------------------------------------------------------------
 
-                        case "MCLQ": //FIND PROPPER PLACE IN STACK
+                        case "MCLQ": //FIND PROPER PLACE IN STACK (not that it matters)
 
                         case "MCSE":
                             mapchunk.soundEmitters = ReadMCSESubChunk(subChunkSize, subbin);
