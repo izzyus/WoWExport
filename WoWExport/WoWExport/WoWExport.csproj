@@ -61,8 +61,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WoWFormatLib\FileReaders\ADTReader335.cs" />
     <Compile Include="WoWFormatLib\FileReaders\ADTReader.cs" />
+    <Compile Include="WoWFormatLib\FileReaders\BLPReader.cs" />
     <Compile Include="WoWFormatLib\FileReaders\WDTReader335.cs" />
     <Compile Include="WoWFormatLib\FileReaders\WDTReader.cs" />
+    <Compile Include="WoWFormatLib\SereniaBLPLib\BlpFile.cs" />
+    <Compile Include="WoWFormatLib\SereniaBLPLib\DXTDecompression.cs" />
     <Compile Include="WoWFormatLib\Structs\ADT.Struct.cs" />
     <Compile Include="WoWFormatLib\Structs\ADTobj.Struct.cs" />
     <Compile Include="WoWFormatLib\Structs\ADTtex.Struct.cs" />
