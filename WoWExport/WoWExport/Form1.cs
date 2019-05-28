@@ -24,6 +24,7 @@ namespace WoWExport
 
         public List<Bitmap> AlphaLayers = new List<Bitmap>();
         public List<String> AlphaLayersNames = new List<String>();
+        public List<String> GroundTextures = new List<String>();
         public string filePath = string.Empty;
 
         public bool exportLayersCSV = false;
@@ -142,6 +143,7 @@ namespace WoWExport
 
                     //Add in the listbox all the textures (+path) used by the adt file:
                     listBox1.Items.AddRange(reader.adtfile.textures.filenames);
+                    GroundTextures = reader.adtfile.textures.filenames.ToList();
 
                     //Generate the alphamaps:
                     ADT_Alpha AlphaMapsGenerator = new ADT_Alpha();
@@ -240,6 +242,54 @@ namespace WoWExport
                     }
                 }
 
+
+                //----------------------------------------------------------------------------------------------------------
+                //Save ground textures
+                //----------------------------------------------------------------------------------------------------------
+
+                if (!Directory.Exists(textBox1.Text + "\\" + mapname + "\\textures\\"))
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(textBox1.Text + "\\" + mapname + "\\textures\\");
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Could not create folder: " + textBox1.Text + "\\" + mapname + "\\textures\\");
+                    }
+
+                }
+
+                foreach (string texture in GroundTextures)
+                {
+                    //MessageBox.Show("texture: " + texture);
+                    var blpreader = new BLPReader();
+                    try
+                    {
+                        
+                        if (!File.Exists(textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png")))
+                        {
+                            if(File.Exists(@"D:\mpqediten32\Work\" + texture))
+                            { 
+                            blpreader.LoadBLP(@"D:\mpqediten32\Work\" + texture);
+                            blpreader.bmp.Save(textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
+                            }
+                            else
+                            {
+                                MessageBox.Show(@"Missing file: D:\mpqediten32\Work\" + texture);
+                            }
+                        }
+
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Could not save file: " + textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
+                    }
+
+                }
+
+
+
                 //----------------------------------------------------------------------------------------------------------
                 //Create a folder for the alphamaps (if none-xistent) to save the alphas separately
                 //----------------------------------------------------------------------------------------------------------
@@ -251,7 +301,7 @@ namespace WoWExport
                     }
                     catch
                     {
-                        MessageBox.Show(textBox1.Text + "\\" + mapname + "\\alphamaps\\");
+                        MessageBox.Show("Could not create folder: " + textBox1.Text + "\\" + mapname + "\\alphamaps\\");
                     }
 
                 }
