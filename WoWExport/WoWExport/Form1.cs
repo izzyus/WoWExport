@@ -260,32 +260,30 @@ namespace WoWExport
 
                 }
 
+                var blpreader = new BLPReader();
                 foreach (string texture in GroundTextures)
                 {
                     //MessageBox.Show("texture: " + texture);
-                    var blpreader = new BLPReader();
-                    try
-                    {
-                        
+
                         if (!File.Exists(textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png")))
                         {
                             if(File.Exists(@"D:\mpqediten32\Work\" + texture))
-                            { 
-                            blpreader.LoadBLP(@"D:\mpqediten32\Work\" + texture);
-                            blpreader.bmp.Save(textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
+                            {
+                                try
+                                {
+                                    blpreader.LoadBLP(@"D:\mpqediten32\Work\" + texture);
+                                    blpreader.bmp.Save(textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
+                                }
+                                catch
+                                {
+                                    MessageBox.Show("Could not save file: " + textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
+                                }
                             }
                             else
                             {
                                 MessageBox.Show(@"Missing file: D:\mpqediten32\Work\" + texture);
                             }
                         }
-
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not save file: " + textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
-                    }
-
                 }
 
 
