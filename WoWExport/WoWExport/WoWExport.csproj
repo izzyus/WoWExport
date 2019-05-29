@@ -64,12 +64,14 @@
     <Compile Include="WoWFormatLib\FileReaders\BLPReader.cs" />
     <Compile Include="WoWFormatLib\FileReaders\WDTReader335.cs" />
     <Compile Include="WoWFormatLib\FileReaders\WDTReader.cs" />
+    <Compile Include="WoWFormatLib\FileReaders\WMOReader.cs" />
     <Compile Include="WoWFormatLib\SereniaBLPLib\BlpFile.cs" />
     <Compile Include="WoWFormatLib\SereniaBLPLib\DXTDecompression.cs" />
     <Compile Include="WoWFormatLib\Structs\ADT.Struct.cs" />
     <Compile Include="WoWFormatLib\Structs\ADTobj.Struct.cs" />
     <Compile Include="WoWFormatLib\Structs\ADTtex.Struct.cs" />
     <Compile Include="WoWFormatLib\Structs\WDT.struct.cs" />
+    <Compile Include="WoWFormatLib\Structs\WMO.Struct.cs" />
     <Compile Include="WoWFormatLib\Utils\ABlock.cs" />
     <Compile Include="WoWFormatLib\Utils\Quaternion.cs" />
     <Compile Include="WoWFormatLib\Utils\RGBColor.cs" />
