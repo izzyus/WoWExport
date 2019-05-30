@@ -382,14 +382,15 @@ namespace WoWExport
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ADTReader335 reader = new ADTReader335();
+            //ADTReader335 reader = new ADTReader335();
             //reader.LoadADT(ADTfile, WDTfile);
-            reader.LoadADT("D:\\mpqediten32\\335\\Work\\World\\Maps\\Azeroth\\Azeroth_31_60.adt", "D:\\mpqediten32\\335\\Work\\World\\Maps\\Azeroth\\Azeroth.wdt");
-            
+            //reader.LoadADT("D:\\mpqediten32\\335\\Work\\World\\Maps\\Azeroth\\Azeroth_31_60.adt", "D:\\mpqediten32\\335\\Work\\World\\Maps\\Azeroth\\Azeroth.wdt");
+
             //MessageBox.Show("V:"+reader.adtfile.version); //debug
             //listBox1.Items.AddRange(reader.m2Files.ToArray()); //debug
             //listBox1.Items.AddRange(reader.wmoFiles.ToArray()); //debug
-
+            WMOExporter Xporter = new WMOExporter();
+            Xporter.ExportWMO(@"D:\mpqediten32\Work\World\wmo\Azeroth\Buildings\Duskwood_Inn\Duskwood_Inn.wmo", textBox1.Text + "//");
         }
     }
 }
