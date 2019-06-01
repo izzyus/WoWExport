@@ -18,13 +18,15 @@ namespace WoWFormatLib.FileReaders
         {
             filename = Path.ChangeExtension(filename, "M2");
 
-            if (!CASC.FileExists(filename))
+            //if (!CASC.FileExists(filename))
+            if (!File.Exists(filename))
             {
-                new WoWFormatLib.Utils.MissingFile(filename);
+                //new WoWFormatLib.Utils.MissingFile(filename);
                 return;
             }
 
-            Stream m2 = CASC.OpenFile(filename);
+            //Stream m2 = CASC.OpenFile(filename);
+            Stream m2 = File.OpenRead(filename);
 
             BinaryReader bin = new BinaryReader(m2);
 
@@ -181,9 +183,10 @@ namespace WoWFormatLib.FileReaders
                 {
                     //this check doesnt find all of them yet, needs actual flag parsing
                     string animfilename = model.filename.Replace(".M2", animations[i].animationID.ToString().PadLeft(4, '0') + "-" + animations[i].subAnimationID.ToString().PadLeft(2, '0') + ".anim");
-                    if (!CASC.FileExists(animfilename))
+                    //if (!CASC.FileExists(animfilename))
+                    if (!File.Exists(animfilename))
                     {
-                        new WoWFormatLib.Utils.MissingFile(animfilename);
+                        //new WoWFormatLib.Utils.MissingFile(animfilename);
                     }
                 }
             }
@@ -372,9 +375,10 @@ namespace WoWFormatLib.FileReaders
             for (int i = 0; i < num; i++)
             {
                 var skinfilename = filename.Replace(".M2", i.ToString().PadLeft(2, '0') + ".skin");
-                if (!CASC.FileExists(skinfilename))
+                //if (!CASC.FileExists(skinfilename))
+                if (!File.Exists(skinfilename))
                 {
-                    new WoWFormatLib.Utils.MissingFile(skinfilename);
+                    //new WoWFormatLib.Utils.MissingFile(skinfilename);
                 }
                 else
                 {
@@ -428,10 +432,11 @@ namespace WoWFormatLib.FileReaders
                     if (!filename.Equals(""))
                     {
                         textures[i].filename = filename;
-                        if (!CASC.FileExists(filename))
+                        //if (!CASC.FileExists(filename))
+                        if (!File.Exists(filename))
                         {
-                            Console.WriteLine("BLP file does not exist!!! {0}", filename);
-                            new WoWFormatLib.Utils.MissingFile(filename);
+                            //Console.WriteLine("BLP file does not exist!!! {0}", filename);
+                            //new WoWFormatLib.Utils.MissingFile(filename);
                         }
                     }
                     else

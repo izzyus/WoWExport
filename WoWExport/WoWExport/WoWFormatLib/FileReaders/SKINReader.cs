@@ -16,13 +16,15 @@ namespace WoWFormatLib.FileReaders
         public void LoadSKIN(string filename)
         {
             filename = Path.ChangeExtension(filename, ".skin");
-            
-            if (!CASC.FileExists(filename))
+
+            //if (!CASC.FileExists(filename))
+            if (!File.Exists(filename))
             {
-                new WoWFormatLib.Utils.MissingFile(filename);
+                //new WoWFormatLib.Utils.MissingFile(filename);
             }
 
-            BinaryReader bin = new BinaryReader(CASC.OpenFile(filename));
+            //BinaryReader bin = new BinaryReader(CASC.OpenFile(filename));
+            BinaryReader bin = new BinaryReader(File.OpenRead(filename));
 
             var header = new string(bin.ReadChars(4));
             if (header != "SKIN")
