@@ -389,8 +389,26 @@ namespace WoWExport
             //MessageBox.Show("V:"+reader.adtfile.version); //debug
             //listBox1.Items.AddRange(reader.m2Files.ToArray()); //debug
             //listBox1.Items.AddRange(reader.wmoFiles.ToArray()); //debug
-            WMOExporter Xporter = new WMOExporter();
-            Xporter.ExportWMO(@"D:\mpqediten32\Work\World\wmo\Azeroth\Buildings\Duskwood_Inn\Duskwood_Inn.wmo", textBox1.Text + "//");
+            //WMOExporter Xporter = new WMOExporter();
+            //Xporter.ExportWMO(@"D:\mpqediten32\Work\World\wmo\Azeroth\Buildings\Duskwood_Inn\Duskwood_Inn.wmo", textBox1.Text + "//");
+            M2Reader Reader = new M2Reader();
+            Reader.LoadM2(@"D:\test\335\World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2");
+            MessageBox.Show("Version: " + Reader.model.version + Environment.NewLine +
+                            "Name: " + Reader.model.name + Environment.NewLine +
+                            "Sequences: " + Reader.model.sequences.Count() + Environment.NewLine +
+                            "Animations: " + Reader.model.animations.Count() + Environment.NewLine +
+                            "Bones: " + Reader.model.bones.Count() + Environment.NewLine +
+                            "Vertices: " + Reader.model.vertices.Count() + Environment.NewLine +
+                            "Skins: " + Reader.model.skins.Count() + Environment.NewLine +
+                            "Textures: " + Reader.model.textures.Count(), "Info");
+            for (int i = 0; i < Reader.model.textures.Count(); i++)
+            {
+                MessageBox.Show("Texture " + i + ": " + Reader.model.textures[i].filename);
+            }
+            for (int i = 0; i < Reader.model.skins.Count(); i++)
+            {
+                MessageBox.Show("Skin " + i + ": " + Reader.model.skins[i].filename);
+            }
         }
     }
 }
