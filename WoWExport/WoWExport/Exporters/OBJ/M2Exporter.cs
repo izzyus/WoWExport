@@ -136,9 +136,14 @@ namespace Exporters.OBJ
 
             foreach (var vertex in vertices)
             {
+                /*
                 objsw.WriteLine("v " + vertex.Position.X + " " + vertex.Position.Y + " " + vertex.Position.Z);
                 objsw.WriteLine("vt " + vertex.TexCoord.X + " " + -vertex.TexCoord.Y);
                 objsw.WriteLine("vn " + vertex.Normal.X.ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
+                */
+                objsw.WriteLine("v " + -vertex.Position.X + " " + vertex.Position.Y + " " + -vertex.Position.Z);
+                objsw.WriteLine("vt " + vertex.TexCoord.X + " " + (vertex.TexCoord.Y -1)*-1); //the last part is for fixing the UV going outside of 0-1 space
+                objsw.WriteLine("vn " + (-vertex.Normal.X).ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
             }
 
             var indicelist = new List<uint>();
