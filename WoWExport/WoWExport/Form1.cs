@@ -389,8 +389,9 @@ namespace WoWExport
             //MessageBox.Show("V:"+reader.adtfile.version); //debug
             //listBox1.Items.AddRange(reader.m2Files.ToArray()); //debug
             //listBox1.Items.AddRange(reader.wmoFiles.ToArray()); //debug
-            //WMOExporter Xporter = new WMOExporter();
-            //Xporter.ExportWMO(@"D:\mpqediten32\Work\World\wmo\Azeroth\Buildings\Duskwood_Inn\Duskwood_Inn.wmo", textBox1.Text + "//");
+            WMOExporter Xporter = new WMOExporter();
+            Xporter.ExportWMO(@"D:\mpqediten32\Work\World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "//");
+            /*
             M2Reader Reader = new M2Reader();
             Reader.LoadM2(@"D:\test\335\World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2");
             MessageBox.Show("Version: " + Reader.model.version + Environment.NewLine +
@@ -411,6 +412,7 @@ namespace WoWExport
             }
             M2Exporter Xporter = new M2Exporter();
             Xporter.ExportM2(@"D:\test\335\World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
+            */
         }
     }
 }
