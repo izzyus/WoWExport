@@ -409,6 +409,8 @@ namespace WoWExport
             {
                 MessageBox.Show("Skin " + i + ": " + Reader.model.skins[i].filename);
             }
+            M2Exporter Xporter = new M2Exporter();
+            Xporter.ExportM2(@"D:\test\335\World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
         }
     }
 }

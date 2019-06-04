@@ -27,7 +27,7 @@ namespace Exporters.OBJ
         }
         */
         //public static void ExportM2(uint fileDataID, BackgroundWorker exportworker = null, string destinationOverride = null, string filename = "")
-        public static void ExportM2(string filename, string outdir, string destinationOverride = null)
+        public void ExportM2(string filename, string outdir, string destinationOverride = null)
         {
             /*
             if (exportworker == null)
