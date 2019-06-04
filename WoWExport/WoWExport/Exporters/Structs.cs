@@ -49,7 +49,7 @@ namespace Exporters
         public struct Material
         {
             public string filename;
-            //public WoWFormatLib.Structs.M2.TextureFlags flags;
+            public WoWFormatLib.Structs.M2.TextureFlags flags;
             public int textureID;
             public uint shaderID;
             public uint blendMode;

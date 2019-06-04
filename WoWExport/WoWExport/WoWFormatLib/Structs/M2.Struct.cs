@@ -1,5 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+        DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+                    Version 2, December 2004
+
+ Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
+
+ Everyone is permitted to copy and distribute verbatim or modified
+ copies of this license document, and changing it is allowed as long
+ as the name is changed.
+
+            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+  0. You just DO WHAT THE FUCK YOU WANT TO.
+*/
+using System;
 using WoWFormatLib.Utils;
 
 namespace WoWFormatLib.Structs.M2
@@ -7,6 +21,15 @@ namespace WoWFormatLib.Structs.M2
     public struct M2Model
     {
         public uint version;
+
+        public int physFileID;
+        public int skelFileID;
+
+        public int[] boneFileDataIDs;
+        public int[] skinFileDataIDs;
+        public int[] lod_skinFileDataIDs;
+        public AFID[] animFileData;
+
         public string filename;
         public string name;
         public GlobalModelFlags flags;
@@ -17,7 +40,7 @@ namespace WoWFormatLib.Structs.M2
         public KeyBoneLookup[] keybonelookup;
         public Vertice[] vertices;
         public uint nViews;
-        public WoWFormatLib.Structs.SKIN.SKIN[] skins;
+        public SKIN.SKIN[] skins;
         public Color[] colors;
         public Texture[] textures;
         public Transparency[] transparency;
@@ -36,6 +59,7 @@ namespace WoWFormatLib.Structs.M2
         public Vector3[] boundingbox;
         public float boundingradius;
         public BoundingTriangle[] boundingtriangles;
+        public BoundingVertex[] boundingvertices;
         public BoundingNormal[] boundingnormals;
         public Attachment[] attachments;
         public AttachLookup[] attachlookup;
@@ -47,14 +71,32 @@ namespace WoWFormatLib.Structs.M2
         public ParticleEmitter[] particleemitters;
     }
 
+    /* Retrieved from https://wowdev.wiki/M2 */
     [Flags]
-    public enum GlobalModelFlags
+    public enum GlobalModelFlags : uint
     {
-        Flag_0x1_TiltX = 0x1,
-        Flag_0x2_TiltY = 0x2,
-        Flag_0x4 = 0x4,
-        Flag_0x8_ExtraHeaderField = 0x8,
-        Flag_0x10 = 0x10,
+        Flag_TiltX                      = 0x1,
+        Flag_TiltY                      = 0x2,
+        Flag_0x4                        = 0x4,
+        Flag_UseTextureCombinerCombos   = 0x8,
+        Flag_0x10                       = 0x10,
+        Flag_LoadPhysData               = 0x20,
+        Flag_0x40                       = 0x40,
+        Flag_0x80                       = 0x80,     // set on all models since cata alpha
+        Flag_CameraRelated              = 0x100,
+        Flag_NewParticleRecord          = 0x200,
+        Flag_0x400                      = 0x400,
+        Flag_TextureTransUseBoneSeq     = 0x800,    // When set, texture transforms are animated using the sequence being played on the bone found by index in tex_unit_lookup_table[textureTransformIndex], instead of using the sequence being played on the model's first bone. Example model: 6DU_HellfireRaid_FelSiege03_Creature
+        Flag_0x1000                     = 0x1000,
+        Flag_0x2000                     = 0x2000,   // seen in various legion models
+        Flag_0x4000                     = 0x4000,
+        Flag_0x8000                     = 0x8000,   // seen in UI_MainMenu_Legion
+        Flag_0x10000                    = 0x10000,
+        Flag_0x20000                    = 0x20000,
+        Flag_0x40000                    = 0x40000,
+        Flag_0x80000                    = 0x80000,
+        Flag_0x100000                   = 0x100000,
+        Flag_0x200000                   = 0x200000  // apparently: use 24500 upgraded model format: chunked .anim files, change in the exporter reordering sequence+bone blocks before name
     }
 
     [Flags]
@@ -73,13 +115,38 @@ namespace WoWFormatLib.Structs.M2
         //needs filling in
     }
 
+    public struct AFID
+    {
+        public short animID;
+        public short subAnimID;
+        public uint fileDataID;
+    }
+
+
+    [Flags]
+    public enum AnimFlags : uint
+    {
+        Flag_0x1                        = 0x1,
+        Flag_0x2                        = 0x2,
+        Flag_0x4                        = 0x4,
+        Flag_0x8                        = 0x8,
+        Flag_0x10                       = 0x10,
+        Flag_0x20                       = 0x20,
+        Flag_0x40                       = 0x40,
+        Flag_0x80                       = 0x80,
+        Flag_0x100                      = 0x100,
+        Flag_0x200                      = 0x200,
+        Flag_0x400                      = 0x400,
+        Flag_0x800                      = 0x800,
+    }
+
     public struct Animation
     {
         public ushort animationID;
         public ushort subAnimationID;
         public uint length;
         public float movingSpeed;
-        public uint flags;
+        public AnimFlags flags;
         public short probability;
         public ushort unused;
         public uint unk1;
@@ -143,8 +210,8 @@ namespace WoWFormatLib.Structs.M2
         public Vector3 normal;
         public float textureCoordX;
         public float textureCoordY;
-        public float unk_0;
-        public float unk_1;
+        public float textureCoordX2;
+        public float textureCoordY2;
     }
 
     public struct AttachLookup
@@ -163,6 +230,11 @@ namespace WoWFormatLib.Structs.M2
     public struct BoundingNormal
     {
         public Vector3 normal;
+    }
+
+    public struct BoundingVertex
+    {
+        public Vector3 vertex;
     }
 
     public struct BoundingTriangle
@@ -296,6 +368,4 @@ namespace WoWFormatLib.Structs.M2
         public TextureFlags flags;
         public string filename;
     }
-
-
 }

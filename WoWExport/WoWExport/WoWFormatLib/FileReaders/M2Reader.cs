@@ -118,7 +118,8 @@ namespace WoWFormatLib.FileReaders
             var nParticleEmitters = bin.ReadUInt32();
             var ofsParticleEmitters = bin.ReadUInt32();
 
-            if (GlobalModelFlags.Flag_0x8_ExtraHeaderField != 0) //models with flag 8 have extra field
+            //if (GlobalModelFlags.Flag_0x8_ExtraHeaderField != 0) //models with flag 8 have extra field
+            if (GlobalModelFlags.Flag_UseTextureCombinerCombos != 0) //models with flag 8 have extra field
             {
                 var nUnk2 = bin.ReadUInt32();
                 var ofsUnk2 = bin.ReadUInt32();
@@ -148,6 +149,7 @@ namespace WoWFormatLib.FileReaders
             model.translookup = readTransLookup(nTransLookup, ofsTranslookup, bin);
             model.uvanimlookup = readUVAnimLookup(nUVAnimLookup, ofsUVAnimLookup, bin);
             model.boundingtriangles = readBoundingTriangles(nBoundingTriangles, ofsBoundingTriangles, bin);
+            model.boundingvertices = ReadBoundingVertices(nBoundingVertices, ofsBoundingVertices, bin); //was missing
             model.boundingnormals = readBoundingNormals(nBoundingNormals, ofsBoundingNormals, bin);
             model.attachments = readAttachments(nAttachments, ofsAttachments, bin);
             model.attachlookup = readAttachLookup(nAttachLookup, ofsAttachLookup, bin);
@@ -247,7 +249,18 @@ namespace WoWFormatLib.FileReaders
             }
             return boundingNormals;
         }
-
+        //-- was missing
+        private BoundingVertex[] ReadBoundingVertices(uint nBoundingVertices, uint ofsBoundingVertices, BinaryReader bin)
+        {
+            bin.BaseStream.Position = ofsBoundingVertices;
+            var boundingVertices = new BoundingVertex[nBoundingVertices];
+            for (int i = 0; i < nBoundingVertices; i++)
+            {
+                boundingVertices[i] = bin.Read<BoundingVertex>();
+            }
+            return boundingVertices;
+        }
+        //--
         private BoundingTriangle[] readBoundingTriangles(uint nBoundingTriangles, uint ofsBoundingTriangles, BinaryReader bin)
         {
             bin.BaseStream.Position = ofsBoundingTriangles;
