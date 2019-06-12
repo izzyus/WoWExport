@@ -12,6 +12,7 @@ This project is **HEAVELY** based on Marlamin's tools (links below)
 * [WoWExportTools](https://github.com/Marlamin/WoWExportTools)
 * [WoWFormatTest](https://github.com/Marlamin/WoWFormatTest)
 * [SereniaBLPLib](https://github.com/WoW-Tools/SereniaBLPLib)
+* [StormLibSharp](https://github.com/robpaveza/stormlibsharp)
 
 ## Authors
 
@@ -23,4 +24,6 @@ This project is **HEAVELY** based on Marlamin's tools (links below)
 * Schlumpf
 * Xalcon
 * TOM_RUS
+* Ladislav Zezula
+* Rob Paveza
 * ..and everyone else who contributed to Marlamin's work
