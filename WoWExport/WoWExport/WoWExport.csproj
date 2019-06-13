@@ -119,7 +119,7 @@
     <Content Include="OpenTK\OpenTK.GLControl.xml" />
     <Content Include="OpenTK\OpenTK.pdb" />
     <Content Include="OpenTK\OpenTK.xml" />
-    <Content Include="StormLibSharp\StormLib.dll">
+    <Content Include="StormLib.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="StormLibSharp\StormLibSharp.dll" />

@@ -12,6 +12,7 @@ using WoWFormatLib.FileReaders;
 using Generators.ADT_Alpha;
 //Geometry
 using Exporters.OBJ;
+using StormLibSharp;
 
 namespace WoWExport
 {
@@ -389,8 +390,8 @@ namespace WoWExport
             //MessageBox.Show("V:"+reader.adtfile.version); //debug
             //listBox1.Items.AddRange(reader.m2Files.ToArray()); //debug
             //listBox1.Items.AddRange(reader.wmoFiles.ToArray()); //debug
-            WMOExporter Xporter = new WMOExporter();
-            Xporter.ExportWMO(@"D:\mpqediten32\Work\World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "//");
+            //WMOExporter Xporter = new WMOExporter();
+            //Xporter.ExportWMO(@"D:\mpqediten32\Work\World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "//");
             /*
             M2Reader Reader = new M2Reader();
             Reader.LoadM2(@"D:\test\335\World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2");
@@ -413,6 +414,7 @@ namespace WoWExport
             M2Exporter Xporter = new M2Exporter();
             Xporter.ExportM2(@"D:\test\335\World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
             */
+            MpqArchive CurrentArchive = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\art.mpq", FileAccess.Read);
         }
     }
 }
