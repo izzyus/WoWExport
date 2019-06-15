@@ -27,10 +27,12 @@ namespace WoWFormatLib.FileReaders
             }
         }
         */
-        public void LoadBLP(string filename)
+        //public void LoadBLP(string filename)
+        public void LoadBLP(Stream filename)
         {
             //using (var blp = new BlpFile(CASC.cascHandler.OpenFile(filename)))
-            var blp = new BlpFile(File.OpenRead(filename));
+            //var blp = new BlpFile(File.OpenRead(filename));
+            var blp = new BlpFile(filename);
             {
                 bmp = blp.GetBitmap(0);
             }

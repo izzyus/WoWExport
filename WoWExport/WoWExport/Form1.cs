@@ -272,7 +272,7 @@ namespace WoWExport
                             {
                                 try
                                 {
-                                    blpreader.LoadBLP(@"D:\mpqediten32\Work\" + texture);
+                                    //blpreader.LoadBLP(@"D:\mpqediten32\Work\" + texture); //TO BE FIXED <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                                     blpreader.bmp.Save(textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
                                 }
                                 catch
@@ -420,7 +420,11 @@ namespace WoWExport
 
             ArchiveMan.GameDir = @"D:\World of Warcraft - Wrath of the Lich King";
             ArchiveMan.GenerateMainListFile();
-            ArchiveMan.ReadThisFile(@"TEST\TOTALLYRAD.BLP");
+            
+            BLPReader reader = new BLPReader();
+            reader.LoadBLP(ArchiveMan.ReadThisFile(@"TEST\TOTALLYRAD.BLP"));
+
+            pictureBox1.Image = reader.bmp;
 
 
         }
