@@ -278,8 +278,10 @@ namespace Exporters.OBJ
                 {
                     var blpreader = new BLPReader();
                     //blpreader.LoadBLP(textureFileDataID);
-                    //blpreader.LoadBLP(textureUsed); //TO BE FIXED <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                    //blpreader.bmp.Save(textureSaveLocation); //TO BE FIXED <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                    //blpreader.LoadBLP(textureUsed);
+                    blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(textureUsed));
+                    //blpreader.bmp.Save(textureSaveLocation);
+                    blpreader.bmp.Save(outdir + materials[i].filename + ".png");//WIP
                 }
                 catch (Exception e)
                 {

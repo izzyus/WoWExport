@@ -421,9 +421,9 @@ namespace WoWExport
             Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King";
             Managers.ArchiveManager.GenerateMainListFile();
             
-            BLPReader reader = new BLPReader();
-            reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(@"TEST\TOTALLYRAD.BLP"));
-            pictureBox1.Image = reader.bmp;
+            //BLPReader reader = new BLPReader();
+            //reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(@"TEST\TOTALLYRAD.BLP"));
+            //pictureBox1.Image = reader.bmp;
 
 
         }
