@@ -33,6 +33,31 @@ namespace Managers
             }
         }
 
+        public static void GenerateMainListFileFromMPQ()
+        {
+            //Only generate list if empty
+            if (MainListFile.Count == 0)
+            {
+                DirectoryInfo directory = new DirectoryInfo(GameDir + "\\data\\");
+                FileInfo[] Archives = directory.GetFiles("*.mpq");
+                string listFile = null;
+
+                foreach (FileInfo fileinfo in Archives)
+                {
+                    using (MpqArchive archive = new MpqArchive(fileinfo.FullName, FileAccess.Read))
+                    {
+                        using (MpqFileStream file = archive.OpenFile("(listfile)"))
+                        using (StreamReader sr = new StreamReader(file))
+                        {
+                            listFile = sr.ReadToEnd();
+                            Console.WriteLine(listFile);
+                            MainListFile.Add(listFile.ToLower() + ";" + fileinfo.Name);
+                        }
+                    }
+                }
+            }
+        }
+
         public static Stream ReadThisFile(string filename)
         {
             //Find the goddamn file in the archive hell
