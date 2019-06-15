@@ -43,9 +43,12 @@ namespace WoWExport.Managers
             string archive = MainListFile[index];
             archive = archive.Substring(archive.LastIndexOf(';', archive.Length - 2) + 1);
 
+            //i just realised how obsolete this one is... (string filename) <-- seems familiar?
             //Get the file (+path) 
+            /*
             string file = MainListFile[index];
             file = file.Substring(0, file.LastIndexOf(';'));
+            */
 
             //Open the archive
             MpqArchive CurrentArchive = new MpqArchive(GameDir + "\\data\\" + archive, FileAccess.Read);
