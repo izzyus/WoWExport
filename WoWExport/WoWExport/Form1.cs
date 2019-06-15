@@ -414,7 +414,15 @@ namespace WoWExport
             M2Exporter Xporter = new M2Exporter();
             Xporter.ExportM2(@"D:\test\335\World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
             */
-            MpqArchive CurrentArchive = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\art.mpq", FileAccess.Read);
+            //MpqArchive CurrentArchive = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\art.mpq", FileAccess.Read);
+
+            WoWExport.Managers.ArchiveManager ArchiveMan = new WoWExport.Managers.ArchiveManager();
+
+            ArchiveMan.GameDir = @"D:\World of Warcraft - Wrath of the Lich King";
+            ArchiveMan.GenerateMainListFile();
+            ArchiveMan.ReadThisFile(@"TEST\TOTALLYRAD.BLP");
+
+
         }
     }
 }
