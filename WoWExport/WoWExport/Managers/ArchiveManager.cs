@@ -14,16 +14,20 @@ namespace WoWExport.Managers
 
         public void GenerateMainListFile()
         {
-            DirectoryInfo directory = new DirectoryInfo(@"D:\test\"); //hardcoded for debug only
-            FileInfo[] ExtractedListfiles = directory.GetFiles("*.txt"); //hardcoded for debug only
-            foreach (FileInfo fileInfo in ExtractedListfiles)
+            //Only generate list if empty
+            if (MainListFile.Count == 0)
             {
-                using (StreamReader sr = File.OpenText(fileInfo.FullName))
+                DirectoryInfo directory = new DirectoryInfo(@"D:\test\"); //hardcoded for debug only
+                FileInfo[] ExtractedListfiles = directory.GetFiles("*.txt"); //hardcoded for debug only
+                foreach (FileInfo fileInfo in ExtractedListfiles)
                 {
-                    string s = String.Empty;
-                    while ((s = sr.ReadLine()) != null)
+                    using (StreamReader sr = File.OpenText(fileInfo.FullName))
                     {
-                        MainListFile.Add(s + ";" + fileInfo.Name.Replace(".txt",".mpq"));
+                        string s = String.Empty;
+                        while ((s = sr.ReadLine()) != null)
+                        {
+                            MainListFile.Add(s + ";" + fileInfo.Name.Replace(".txt", ".mpq"));
+                        }
                     }
                 }
             }
