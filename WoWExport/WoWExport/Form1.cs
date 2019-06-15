@@ -416,14 +416,13 @@ namespace WoWExport
             */
             //MpqArchive CurrentArchive = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\art.mpq", FileAccess.Read);
 
-            WoWExport.Managers.ArchiveManager ArchiveMan = new WoWExport.Managers.ArchiveManager();
+            //WoWExport.Managers.ArchiveManager ArchiveMan = new WoWExport.Managers.ArchiveManager();
 
-            ArchiveMan.GameDir = @"D:\World of Warcraft - Wrath of the Lich King";
-            ArchiveMan.GenerateMainListFile();
+            Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King";
+            Managers.ArchiveManager.GenerateMainListFile();
             
             BLPReader reader = new BLPReader();
-            reader.LoadBLP(ArchiveMan.ReadThisFile(@"TEST\TOTALLYRAD.BLP"));
-
+            reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(@"TEST\TOTALLYRAD.BLP"));
             pictureBox1.Image = reader.bmp;
 
 

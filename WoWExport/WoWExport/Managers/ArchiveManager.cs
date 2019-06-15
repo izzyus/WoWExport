@@ -5,14 +5,14 @@ using System.Text;
 using System.IO;
 using StormLibSharp;
 
-namespace WoWExport.Managers
+namespace Managers
 {
     class ArchiveManager
     {
-        public List<String> MainListFile = new List<String>();
-        public String GameDir;
+        public static List<String> MainListFile = new List<String>();
+        public static String GameDir;
 
-        public void GenerateMainListFile()
+        public static void GenerateMainListFile()
         {
             //Only generate list if empty
             if (MainListFile.Count == 0)
@@ -33,7 +33,7 @@ namespace WoWExport.Managers
             }
         }
 
-        public Stream ReadThisFile(string filename)
+        public static Stream ReadThisFile(string filename)
         {
             //Find the goddamn file in the archive hell
             int index = MainListFile.FindIndex(a => a.Contains(filename.ToLower()));
