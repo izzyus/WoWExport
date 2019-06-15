@@ -63,6 +63,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Generators\ADT_Alpha.cs" />
+    <Compile Include="Managers\ArchiveManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WoWFormatLib\FileReaders\ADTReader335.cs" />
