@@ -26,7 +26,7 @@ namespace WoWExport.Managers
                         string s = String.Empty;
                         while ((s = sr.ReadLine()) != null)
                         {
-                            MainListFile.Add(s + ";" + fileInfo.Name.Replace(".txt", ".mpq"));
+                            MainListFile.Add(s.ToLower() + ";" + fileInfo.Name.Replace(".txt", ".mpq"));
                         }
                     }
                 }
@@ -36,7 +36,7 @@ namespace WoWExport.Managers
         public Stream ReadThisFile(string filename)
         {
             //Find the goddamn file in the archive hell
-            int index = MainListFile.FindIndex(a => a.Contains(filename));
+            int index = MainListFile.FindIndex(a => a.Contains(filename.ToLower()));
             Stream stream;
 
             //Get the archive in which the requested file resides
