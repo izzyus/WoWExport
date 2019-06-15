@@ -12,7 +12,7 @@ namespace Managers
         public static List<String> MainListFile = new List<String>();
         public static String GameDir;
 
-        public static void GenerateMainListFile()
+        public static void GenerateMainListFileFromTXT()
         {
             //Only generate list if empty
             if (MainListFile.Count == 0)
@@ -80,6 +80,27 @@ namespace Managers
             stream = CurrentArchive.OpenFile(filename);
 
             return stream;
+        }
+
+        public static void ExtractListfiles(string to)
+        {
+            string listFile = null;
+
+            DirectoryInfo directory = new DirectoryInfo(GameDir + "\\data\\");
+            FileInfo[] Archives = directory.GetFiles("*.mpq");
+            foreach (FileInfo fileinfo in Archives)
+            {
+                using (MpqArchive archive = new MpqArchive(fileinfo.FullName, FileAccess.Read))
+                {
+                    using (MpqFileStream file = archive.OpenFile("(listfile)"))
+                    using (StreamReader sr = new StreamReader(file))
+                    {
+                        listFile = sr.ReadToEnd();
+                        Console.WriteLine(listFile);
+                    }
+                    archive.ExtractFile("(listfile)", to + "\\" + fileinfo.Name.Replace(".MPQ",".txt"));
+                }
+            }
         }
     }
 }
