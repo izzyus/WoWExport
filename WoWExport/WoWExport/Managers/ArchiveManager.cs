@@ -102,5 +102,19 @@ namespace Managers
                 }
             }
         }
+
+        public static Boolean FileExists(string filename)
+        {
+            bool exists;
+            if (MainListFile.FindIndex(a => a.Contains(filename.ToLower())) != -1) // it returns -1 if the file is not found
+            {
+                exists = true;
+            }
+            else
+            {
+                exists = false;
+            }
+            return exists;
+        }
     }
 }
