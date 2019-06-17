@@ -496,18 +496,19 @@ namespace Exporters.OBJ
                             var blpreader = new BLPReader();
 
                             //blpreader.LoadBLP(reader.wmofile.textures[ti].filename);
-                            //blpreader.LoadBLP(wmo.wmofile.textures[ti].filename);                                                         // <--------------------------------------------------------------
+                            //blpreader.LoadBLP(wmo.wmofile.textures[ti].filename);
+                            blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(wmo.wmofile.textures[ti].filename));
 
                             try
                             {
                                 if (destinationOverride == null)
                                 {
                                     //blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(file), materials[i].filename + ".png"));
-                                    //blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(filename), materials[i].filename + ".png")); // <--------------------------------------------------------------
+                                    blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(filename), materials[i].filename + ".png"));
                                 }
                                 else
                                 {
-                                    //blpreader.bmp.Save(Path.Combine(outdir, destinationOverride, materials[i].filename.ToLower() + ".png")); // <--------------------------------------------------------------
+                                    blpreader.bmp.Save(Path.Combine(outdir, destinationOverride, materials[i].filename.ToLower() + ".png"));
                                 }
                             }
                             catch (Exception e)
