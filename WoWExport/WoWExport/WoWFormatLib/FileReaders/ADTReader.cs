@@ -17,13 +17,14 @@ namespace WoWFormatLib.FileReaders
         private Structs.WDT.WDT wdt;
 
         /* ROOT */
-        //public void LoadADT(string filename, bool loadSecondaryADTs = true)
-        public void LoadADT(string filename, string wdtfilename, string objfilename, string texfilename, bool loadSecondaryADTs = true)
+        public void LoadADT(string filename, bool loadSecondaryADTs = true)
+        //public void LoadADT(string filename, string wdtfilename, string objfilename, string texfilename, bool loadSecondaryADTs = true)
         {
             m2Files = new List<string>();
             wmoFiles = new List<string>();
             blpFiles = new List<string>();
-            
+
+            var WDTfile = filename.Substring(0, filename.Length - 10) + ".wdt";
             /*
             filename = Path.ChangeExtension(filename, ".adt");
 
@@ -36,12 +37,14 @@ namespace WoWFormatLib.FileReaders
             if (CASC.cascHandler.FileExists("world\\maps\\" + mapname + "\\" + mapname + ".wdt"))
             */
 
-            if(File.Exists(wdtfilename))
+            //if(File.Exists(wdtfilename))
+            if (Managers.ArchiveManager.FileExists(WDTfile))
             {
                 var wdtr = new WDTReader();
 
                 //wdtr.LoadWDT("world\\maps\\" + mapname + "\\" + mapname + ".wdt");
-                wdtr.LoadWDT(wdtfilename);
+                //wdtr.LoadWDT(wdtfilename);
+                wdtr.LoadWDT(WDTfile);
 
                 wdt = wdtr.wdtfile;
             }
@@ -51,7 +54,8 @@ namespace WoWFormatLib.FileReaders
             }
 
             //using (var adt = CASC.cascHandler.OpenFile(filename))
-            var adt = File.OpenRead(filename);
+            //var adt = File.OpenRead(filename);
+            var adt = Managers.ArchiveManager.ReadThisFile(filename);
 
             using (var bin = new BinaryReader(adt))
             {
@@ -107,13 +111,15 @@ namespace WoWFormatLib.FileReaders
             if (loadSecondaryADTs)
             {
                 //using (var adtobj0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_obj0.adt")))
-                using (var adtobj0 = File.OpenRead(objfilename))
+                //using (var adtobj0 = File.OpenRead(objfilename))
+                using (var adtobj0 = Managers.ArchiveManager.ReadThisFile(filename.Replace(".adt", "_obj0.adt")))
                 {
                     ReadObjFile(adtobj0);
                 }
 
                 //using (var adttex0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_tex0.adt")))
-                using (var adttex0 = File.OpenRead(texfilename))
+                //using (var adttex0 = File.OpenRead(texfilename))
+                using (var adttex0 = Managers.ArchiveManager.ReadThisFile(filename.Replace(".adt", "_tex0.adt")))
                 {
                     ReadTexFile(adttex0);
                 }

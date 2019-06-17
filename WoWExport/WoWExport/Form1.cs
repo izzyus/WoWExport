@@ -1,4 +1,7 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------------------------------------------------
+// This form will be debug only
+//-----------------------------------------------------------------------------------------------------------------
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -48,6 +51,7 @@ namespace WoWExport
 
             this.Text = "WoW Export";
 
+            button1.Enabled = false; //disabled indefinitely
             button1.Text = "Load";
 
             button2.Enabled = false;
@@ -140,7 +144,7 @@ namespace WoWExport
                 {
                     //Read the ADT file:
                     ADTReader reader = new ADTReader();
-                    reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
+                    //reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
 
                     //Add in the listbox all the textures (+path) used by the adt file:
                     listBox1.Items.AddRange(reader.adtfile.textures.filenames);
@@ -418,7 +422,7 @@ namespace WoWExport
 
             //WoWExport.Managers.ArchiveManager ArchiveMan = new WoWExport.Managers.ArchiveManager();
 
-            Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King";
+            Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Cataclysm";
             //Managers.ArchiveManager.GenerateMainListFile();
             Managers.ArchiveManager.GenerateMainListFileFromMPQ();
             //Managers.ArchiveManager.ExtractListfiles(textBox1.Text + "\\");
@@ -429,6 +433,10 @@ namespace WoWExport
             //pictureBox1.Image = reader.bmp;
 
             //MessageBox.Show("Exists: " + Managers.ArchiveManager.FileExists(textBox1.Text));
+            //World\maps\Azeroth\Azeroth_31_45.adt
+
+            ADTExporter Xporter = new ADTExporter();
+            Xporter.exportADT(@"World\maps\Azeroth\Azeroth_32_48.adt", textBox1.Text + "\\", "low");
 
         }
     }

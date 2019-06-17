@@ -55,7 +55,8 @@ namespace Exporters.OBJ
             var ADTobj = file.Replace(".adt", "_obj0.adt");
             var ADTtex = file.Replace(".adt", "_tex0.adt");
 
-            reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
+            //reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
+            reader.LoadADT(ADTfile);
 
             if (reader.adtfile.chunks == null)
             {
