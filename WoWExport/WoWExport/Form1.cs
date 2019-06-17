@@ -435,8 +435,11 @@ namespace WoWExport
             //MessageBox.Show("Exists: " + Managers.ArchiveManager.FileExists(textBox1.Text));
             //World\maps\Azeroth\Azeroth_31_45.adt
 
-            ADTExporter Xporter = new ADTExporter();
-            Xporter.exportADT(@"World\maps\Azeroth\Azeroth_32_48.adt", textBox1.Text + "\\", "low");
+            //ADTExporter Xporter = new ADTExporter();
+            //Xporter.exportADT(@"World\maps\Azeroth\Azeroth_32_48.adt", textBox1.Text + "\\", "low");
+
+            M2Exporter Xporter = new M2Exporter();
+            Xporter.ExportM2(@"World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
 
         }
     }

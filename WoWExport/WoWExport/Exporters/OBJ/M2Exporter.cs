@@ -48,7 +48,8 @@ namespace Exporters.OBJ
             //exportworker.ReportProgress(15, "Reading M2..");
 
             //if (!CASC.FileExists(fileDataID)) { throw new Exception("404 M2 not found!"); }
-            if (!File.Exists(filename)) { throw new Exception("404 M2 not found!"); }
+            //if (!File.Exists(filename)) { throw new Exception("404 M2 not found!"); }
+            if (!Managers.ArchiveManager.FileExists(filename)) { throw new Exception("404 M2 not found!"); }
 
             //reader.LoadM2(fileDataID);
             reader.LoadM2(filename);
@@ -280,8 +281,8 @@ namespace Exporters.OBJ
                     //blpreader.LoadBLP(textureFileDataID);
                     //blpreader.LoadBLP(textureUsed);
                     blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(textureUsed));
-                    //blpreader.bmp.Save(textureSaveLocation);
-                    blpreader.bmp.Save(outdir + materials[i].filename + ".png");//WIP
+                    blpreader.bmp.Save(textureSaveLocation);
+                    //blpreader.bmp.Save(outdir + materials[i].filename + ".png");//WIP
                 }
                 catch (Exception e)
                 {

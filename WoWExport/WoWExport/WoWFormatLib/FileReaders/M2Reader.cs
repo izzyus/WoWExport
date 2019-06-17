@@ -19,14 +19,16 @@ namespace WoWFormatLib.FileReaders
             filename = Path.ChangeExtension(filename, "M2");
 
             //if (!CASC.FileExists(filename))
-            if (!File.Exists(filename))
+            //if (!File.Exists(filename))
+            if (!Managers.ArchiveManager.FileExists(filename))
             {
                 //new WoWFormatLib.Utils.MissingFile(filename);
                 return;
             }
 
             //Stream m2 = CASC.OpenFile(filename);
-            Stream m2 = File.OpenRead(filename);
+            //Stream m2 = File.OpenRead(filename);
+            Stream m2 = Managers.ArchiveManager.ReadThisFile(filename);
 
             BinaryReader bin = new BinaryReader(m2);
 
@@ -186,7 +188,8 @@ namespace WoWFormatLib.FileReaders
                     //this check doesnt find all of them yet, needs actual flag parsing
                     string animfilename = model.filename.Replace(".M2", animations[i].animationID.ToString().PadLeft(4, '0') + "-" + animations[i].subAnimationID.ToString().PadLeft(2, '0') + ".anim");
                     //if (!CASC.FileExists(animfilename))
-                    if (!File.Exists(animfilename))
+                    //if (!File.Exists(animfilename))
+                    if (!Managers.ArchiveManager.FileExists(animfilename))
                     {
                         //new WoWFormatLib.Utils.MissingFile(animfilename);
                     }
@@ -389,7 +392,8 @@ namespace WoWFormatLib.FileReaders
             {
                 var skinfilename = filename.Replace(".M2", i.ToString().PadLeft(2, '0') + ".skin");
                 //if (!CASC.FileExists(skinfilename))
-                if (!File.Exists(skinfilename))
+                //if (!File.Exists(skinfilename))
+                if (!Managers.ArchiveManager.FileExists(skinfilename))
                 {
                     //new WoWFormatLib.Utils.MissingFile(skinfilename);
                 }
@@ -446,7 +450,8 @@ namespace WoWFormatLib.FileReaders
                     {
                         textures[i].filename = filename;
                         //if (!CASC.FileExists(filename))
-                        if (!File.Exists(filename))
+                        //if (!File.Exists(filename))
+                        if (!Managers.ArchiveManager.FileExists(filename))
                         {
                             //Console.WriteLine("BLP file does not exist!!! {0}", filename);
                             //new WoWFormatLib.Utils.MissingFile(filename);
