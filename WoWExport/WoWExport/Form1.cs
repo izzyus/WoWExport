@@ -425,7 +425,9 @@ namespace WoWExport
 
             //BLPReader reader = new BLPReader();
             //reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(@"TEST\TOTALLYRAD.BLP"));
+            //reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(textBox1.Text));
             //pictureBox1.Image = reader.bmp;
+
             //MessageBox.Show("Exists: " + Managers.ArchiveManager.FileExists(textBox1.Text));
 
         }

@@ -64,21 +64,36 @@ namespace Managers
             int index = MainListFile.FindIndex(a => a.Contains(filename.ToLower()));
             Stream stream;
 
-            //Get the archive in which the requested file resides
-            string archive = MainListFile[index];
-            archive = archive.Substring(archive.LastIndexOf(';', archive.Length - 2) + 1);
+            if (index != -1)
+            {
+                //Get the archive in which the requested file resides
+                string archive = MainListFile[index];
+                archive = archive.Substring(archive.LastIndexOf(';', archive.Length - 2) + 1);
 
-            //i just realised how obsolete this one is... (string filename) <-- seems familiar?
-            //Get the file (+path) 
-            /*
-            string file = MainListFile[index];
-            file = file.Substring(0, file.LastIndexOf(';'));
-            */
+                //i just realised how obsolete this one is... (string filename) <-- seems familiar?
+                //Get the file (+path) 
+                /*
+                string file = MainListFile[index];
+                file = file.Substring(0, file.LastIndexOf(';'));
+                */
 
-            //Open the archive
-            MpqArchive CurrentArchive = new MpqArchive(GameDir + "\\data\\" + archive, FileAccess.Read);
-            stream = CurrentArchive.OpenFile(filename);
-
+                //Try to open the archive and read the requested file
+                try
+                {
+                    MpqArchive CurrentArchive = new MpqArchive(GameDir + "\\data\\" + archive, FileAccess.Read);
+                    stream = CurrentArchive.OpenFile(filename);
+                }
+                catch
+                {
+                    //Error while opening the archive / reading the file
+                    stream = null;
+                }
+            }
+            else
+            {
+                //File is missing...
+                stream = null;
+            }
             return stream;
         }
 
