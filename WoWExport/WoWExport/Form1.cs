@@ -438,8 +438,11 @@ namespace WoWExport
             //ADTExporter Xporter = new ADTExporter();
             //Xporter.exportADT(@"World\maps\Azeroth\Azeroth_32_48.adt", textBox1.Text + "\\", "low");
 
-            M2Exporter Xporter = new M2Exporter();
-            Xporter.ExportM2(@"World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
+            //M2Exporter Xporter = new M2Exporter();
+            //Xporter.ExportM2(@"World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
+
+            WMOExporter Xporter = new WMOExporter();
+            Xporter.ExportWMO(@"World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "//");
 
         }
     }
