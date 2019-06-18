@@ -338,7 +338,7 @@ namespace Exporters.OBJ
             }
 
             objsw.Close();
-
+            /* //No funky collision at the moment
             // Only export phys when exporting a single M2, causes issues for some users when combined with WMO/ADT
             if (destinationOverride == null)
             {
@@ -373,7 +373,7 @@ namespace Exporters.OBJ
 
                 objsw.Close();
             }
-
+            */
             // https://en.wikipedia.org/wiki/Wavefront_.obj_file#Basic_materials
             // http://wiki.unity3d.com/index.php?title=ExportOBJ
             // http://web.cse.ohio-state.edu/~hwshen/581/Site/Lab3_files/Labhelp_Obj_parser.htm
