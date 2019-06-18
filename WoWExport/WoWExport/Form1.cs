@@ -442,7 +442,7 @@ namespace WoWExport
             //Xporter.ExportM2(@"World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
 
             //WMOExporter.ExportWMO(@"World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "//");
-            //ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_30_48.adt", textBox1.Text + "//","low");
+            ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_28_52.adt", textBox1.Text + "//","low");
             //M2Exporter.ExportM2(@"WORLD\GENERIC\PASSIVEDOODADS\PARTICLEEMITTERS\HOUSESMOKE.M2", textBox1.Text + "//");
             /*
             M2Reader Reader = new M2Reader();

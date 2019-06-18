@@ -323,7 +323,9 @@ namespace Exporters.OBJ
             if (exportWMO || exportM2)
             {
                 var doodadSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file).Replace(" ", "") + "_ModelPlacementInformation.csv"));
+                //var wmoSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file).Replace(" ", "") + "_WMOPlacementInformation.csv"));
                 doodadSW.WriteLine("ModelFile;PositionX;PositionY;PositionZ;RotationX;RotationY;RotationZ;ScaleFactor;ModelId;Type");
+                //wmoSW.WriteLine("ModelFile;PositionX;PositionY;PositionZ;RotationX;RotationY;RotationZ;ScaleFactor;ModelId;Type");
 
                 if (exportWMO)
                 {
@@ -372,32 +374,35 @@ namespace Exporters.OBJ
                         else
                         {
                         */
-                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
-                            {
-                                //WMOExporter.ExportWMO(filedataid, exportworker, Path.Combine(outdir, Path.GetDirectoryName(file)), wmo.doodadSet, filename);
-                                WMOExporter.ExportWMO(filename, Path.Combine(outdir, Path.GetDirectoryName(file)), null,wmo.doodadSet);
-                            }
+                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
+                        {
+                            //WMOExporter.ExportWMO(filedataid, exportworker, Path.Combine(outdir, Path.GetDirectoryName(file)), wmo.doodadSet, filename);
+                            WMOExporter.ExportWMO(filename, Path.Combine(outdir, Path.GetDirectoryName(file)), null, wmo.doodadSet);
+                            //wmoSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
+                            doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
+                        }
 
-                            if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
-                            {
-                                doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
-                            }
+                        if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
+                        {
+                            doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
+                            //wmoSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
+                        }
                         //}
                     }
+                    //wmoSW.Close();
                 }
-            } //<<<<<<< delete me
-                /*
+            
                 if (exportM2)
                 {
-                    exportworker.ReportProgress(50, "Exporting M2s");
+                    //exportworker.ReportProgress(50, "Exporting M2s");
 
                     for (var mi = 0; mi < reader.adtfile.objects.models.entries.Count(); mi++)
                     {
                         var doodad = reader.adtfile.objects.models.entries[mi];
 
                         string filename;
-                        uint filedataid;
-
+                        //uint filedataid;
+                        /*
                         if (reader.adtfile.objects.wmoNames.filenames == null)
                         {
                             filedataid = doodad.mmidEntry;
@@ -409,17 +414,22 @@ namespace Exporters.OBJ
                         }
                         else
                         {
-                            filename = reader.adtfile.objects.wmoNames.filenames[doodad.mmidEntry];
+                        */
+                        //filename = reader.adtfile.objects.wmoNames.filenames[doodad.mmidEntry];
+                        filename = reader.adtfile.objects.m2Names.filenames[doodad.mmidEntry];
+                        /*
                             if (!Listfile.TryGetFileDataID(filename, out filedataid))
                             {
                                 Logger.WriteLine("Error! Could not find filedataid for " + filename + "!");
                                 continue;
                             }
                         }
-
+                        */
                         if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
                         {
-                            M2Exporter.ExportM2(filedataid, null, Path.Combine(outdir, Path.GetDirectoryName(file)), filename);
+                            //M2Exporter.ExportM2(filedataid, null, Path.Combine(outdir, Path.GetDirectoryName(file)), filename);
+                            M2Exporter.ExportM2(filename, Path.Combine(outdir, Path.GetDirectoryName(file)));
+                            doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + doodad.position.X + ";" + doodad.position.Y + ";" + doodad.position.Z + ";" + doodad.rotation.X + ";" + doodad.rotation.Y + ";" + doodad.rotation.Z + ";" + doodad.scale / 1024f + ";" + doodad.uniqueId + ";m2");
                         }
 
                         if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
@@ -431,7 +441,7 @@ namespace Exporters.OBJ
 
                 doodadSW.Close();
             }
-            */
+            
             //exportworker.ReportProgress(75, "Exporting terrain textures..");
 
             if (bakeQuality != "none")
