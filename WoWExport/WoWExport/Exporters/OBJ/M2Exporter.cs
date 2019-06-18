@@ -38,6 +38,9 @@ namespace Exporters.OBJ
                 };
             }
             */
+
+            filename = filename.ToLower();
+
             var customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;

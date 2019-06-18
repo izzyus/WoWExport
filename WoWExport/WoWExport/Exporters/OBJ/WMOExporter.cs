@@ -323,7 +323,8 @@ namespace Exporters.OBJ
                                 if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
                                 {
                                     //M2Exporter.exportM2(doodadFileName, null, Path.Combine(outdir, Path.GetDirectoryName(file)));
-                                    //M2Exporter.exportM2(doodadFileName, null, Path.Combine(outdir, Path.GetDirectoryName(filename))); <-- after fix, use this
+                                    //M2Exporter.exportM2(doodadFileName, Path.Combine(outdir, Path.GetDirectoryName(filename)), null);
+                                    M2Exporter.ExportM2(doodadFileName, Path.Combine(outdir, Path.GetDirectoryName(filename)));
                                 }
                             }
                             else
@@ -331,6 +332,7 @@ namespace Exporters.OBJ
                                 if (!File.Exists(Path.Combine(destinationOverride, Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
                                 {
                                     //M2Exporter.exportM2(doodadNameEntry.filename.Replace(".MDX", ".M2").Replace(".MDL", ".M2"), null, destinationOverride);
+                                    M2Exporter.ExportM2(doodadNameEntry.filename.Replace(".MDX",".M2").Replace(".MDL",".M2"), destinationOverride, null);
                                 }
                             }
 

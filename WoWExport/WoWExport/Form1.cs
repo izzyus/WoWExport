@@ -441,9 +441,29 @@ namespace WoWExport
             //M2Exporter Xporter = new M2Exporter();
             //Xporter.ExportM2(@"World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
 
-            //WMOExporter.ExportWMO(@"World\wmo\Azeroth\Buildings\Stormwind\stormwind.wmo", textBox1.Text + "//");
-            ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_30_48.adt", textBox1.Text + "//","low");
-            
+            //WMOExporter.ExportWMO(@"World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "//");
+            //ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_30_48.adt", textBox1.Text + "//","low");
+            //M2Exporter.ExportM2(@"WORLD\GENERIC\PASSIVEDOODADS\PARTICLEEMITTERS\HOUSESMOKE.M2", textBox1.Text + "//");
+            /*
+            M2Reader Reader = new M2Reader();
+            Reader.LoadM2(@"WORLD\GENERIC\PASSIVEDOODADS\PARTICLEEMITTERS\HOUSESMOKE.M2");
+            MessageBox.Show("Version: " + Reader.model.version + Environment.NewLine +
+                            "Name: " + Reader.model.name + Environment.NewLine +
+                            "Sequences: " + Reader.model.sequences.Count() + Environment.NewLine +
+                            "Animations: " + Reader.model.animations.Count() + Environment.NewLine +
+                            "Bones: " + Reader.model.bones.Count() + Environment.NewLine +
+                            "Vertices: " + Reader.model.vertices.Count() + Environment.NewLine +
+                            "Skins: " + Reader.model.skins.Count() + Environment.NewLine +
+                            "Textures: " + Reader.model.textures.Count(), "Info");
+            for (int i = 0; i < Reader.model.textures.Count(); i++)
+            {
+                MessageBox.Show("Texture " + i + ": " + Reader.model.textures[i].filename);
+            }
+            for (int i = 0; i < Reader.model.skins.Count(); i++)
+            {
+                MessageBox.Show("Skin " + i + ": " + Reader.model.skins[i].filename);
+            }
+            */
 
         }
     }
