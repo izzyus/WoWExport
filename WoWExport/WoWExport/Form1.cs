@@ -374,7 +374,7 @@ namespace WoWExport
                 //----------------------------------------------------------------------------------------------------------
 
                 ADTExporter Xporter = new ADTExporter();
-                Xporter.exportADT(filePath, textBox1.Text + "\\", "low");
+                //Xporter.exportADT(filePath, textBox1.Text + "\\", "low");
 
                 //----------------------------------------------------------------------------------------------------------
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -441,8 +441,9 @@ namespace WoWExport
             //M2Exporter Xporter = new M2Exporter();
             //Xporter.ExportM2(@"World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
 
-            WMOExporter Xporter = new WMOExporter();
-            Xporter.ExportWMO(@"World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "//");
+            //WMOExporter.ExportWMO(@"World\wmo\Azeroth\Buildings\Stormwind\stormwind.wmo", textBox1.Text + "//");
+            ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_30_48.adt", textBox1.Text + "//","low");
+            
 
         }
     }

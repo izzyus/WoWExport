@@ -27,7 +27,7 @@ namespace Exporters.OBJ
         }
         */
         //public static void ExportWMO(uint filedataid, BackgroundWorker exportworker = null, string destinationOverride = null, ushort doodadSetExportID = ushort.MaxValue, string filename = "")
-        public void ExportWMO(string filename, string outdir, string destinationOverride = null, ushort doodadSetExportID = ushort.MaxValue)
+        public static void ExportWMO(string filename, string outdir, string destinationOverride = null, ushort doodadSetExportID = ushort.MaxValue)
         {
             /*
             if (exportworker == null)
@@ -54,11 +54,11 @@ namespace Exporters.OBJ
             var wmo = new WMOReader();
             wmo.LoadWMO(filename);
 
-            /*
+            
             var customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-            */
+            
             //exportworker.ReportProgress(30, "Reading WMO..");
 
             uint totalVertices = 0;

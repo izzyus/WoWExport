@@ -13,7 +13,7 @@ namespace Exporters.OBJ
     public class ADTExporter
     {
         //public static void ExportADT(uint wdtFileDataID, byte tileX, byte tileY, BackgroundWorker exportworker = null)
-        public void exportADT(string file, string outdir, string bakeQuality)
+        public static void exportADT(string file, string outdir, string bakeQuality)
         {
             /*
             if (exportworker == null)
@@ -23,11 +23,11 @@ namespace Exporters.OBJ
             }
             */
             //var outdir = ConfigurationManager.AppSettings["outdir"];
-            /*
+            
             var customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-            */
+            
             var MaxSize = 51200 / 3.0;
             var TileSize = MaxSize / 32.0;
             var ChunkSize = TileSize / 16.0;
@@ -240,13 +240,17 @@ namespace Exporters.OBJ
                     ci++;
                 }
             }
+
+            //ConfigurationManager.RefreshSection("appSettings");
+
+            //bool exportWMO = ConfigurationManager.AppSettings["exportWMO"] == "True";
+            //bool exportM2 = ConfigurationManager.AppSettings["exportM2"] == "True";
+            //bool exportFoliage = ConfigurationManager.AppSettings["exportFoliage"] == "True";
+            bool exportWMO = true;
+            bool exportM2 = false;
             /*
-            ConfigurationManager.RefreshSection("appSettings");
-
-            bool exportWMO = ConfigurationManager.AppSettings["exportWMO"] == "True";
-            bool exportM2 = ConfigurationManager.AppSettings["exportM2"] == "True";
-            bool exportFoliage = ConfigurationManager.AppSettings["exportFoliage"] == "True";
-
+            bool exportFoliage = false;
+            
             if (exportFoliage)
             {
                 exportworker.ReportProgress(65, "Exporting foliage");
@@ -315,7 +319,7 @@ namespace Exporters.OBJ
                     throw e;
                 }
             }
-
+            */
             if (exportWMO || exportM2)
             {
                 var doodadSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file).Replace(" ", "") + "_ModelPlacementInformation.csv"));
@@ -323,15 +327,17 @@ namespace Exporters.OBJ
 
                 if (exportWMO)
                 {
-                    exportworker.ReportProgress(25, "Exporting WMOs");
+                    //exportworker.ReportProgress(25, "Exporting WMOs");
 
                     for (var mi = 0; mi < reader.adtfile.objects.worldModels.entries.Count(); mi++)
                     {
                         var wmo = reader.adtfile.objects.worldModels.entries[mi];
 
-                        var filename = "";
-                        uint filedataid = 0;
+                        //var filename = "";
+                        var filename = reader.adtfile.objects.wmoNames.filenames[wmo.mwidEntry];
 
+                        //uint filedataid = 0;
+                        /*
                         if (reader.adtfile.objects.wmoNames.filenames == null)
                         {
                             filedataid = wmo.mwidEntry;
@@ -351,7 +357,6 @@ namespace Exporters.OBJ
                                 continue;
                             }
                         }
-
                         if (string.IsNullOrEmpty(filename))
                         {
                             if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), filedataid.ToString() + ".obj")))
@@ -366,19 +371,22 @@ namespace Exporters.OBJ
                         }
                         else
                         {
+                        */
                             if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
                             {
-                                WMOExporter.ExportWMO(filedataid, exportworker, Path.Combine(outdir, Path.GetDirectoryName(file)), wmo.doodadSet, filename);
+                                //WMOExporter.ExportWMO(filedataid, exportworker, Path.Combine(outdir, Path.GetDirectoryName(file)), wmo.doodadSet, filename);
+                                WMOExporter.ExportWMO(filename, Path.Combine(outdir, Path.GetDirectoryName(file)), null,wmo.doodadSet);
                             }
 
                             if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
                             {
                                 doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
                             }
-                        }
+                        //}
                     }
                 }
-
+            } //<<<<<<< delete me
+                /*
                 if (exportM2)
                 {
                     exportworker.ReportProgress(50, "Exporting M2s");
