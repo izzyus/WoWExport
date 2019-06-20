@@ -249,8 +249,8 @@ namespace Exporters.OBJ
             //bool exportWMO = ConfigurationManager.AppSettings["exportWMO"] == "True";
             //bool exportM2 = ConfigurationManager.AppSettings["exportM2"] == "True";
             //bool exportFoliage = ConfigurationManager.AppSettings["exportFoliage"] == "True";
-            bool exportWMO = false;
-            bool exportM2 = false;
+            bool exportWMO = true;
+            bool exportM2 = true;
             /*
             bool exportFoliage = false;
             
