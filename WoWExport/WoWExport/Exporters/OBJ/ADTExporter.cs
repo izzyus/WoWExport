@@ -89,8 +89,11 @@ namespace Exporters.OBJ
             var adtStartY = reader.adtfile.chunks[0].header.position.Y;
 
             // Calculate first chunk offset in world coordinates
-            var initialChunkX = adtStartY + (reader.adtfile.chunks[0].header.indexX * ChunkSize) * -1;
-            var initialChunkY = adtStartX + (reader.adtfile.chunks[0].header.indexY * ChunkSize) * -1;
+            //var initialChunkX = adtStartY + (reader.adtfile.chunks[0].header.indexX * ChunkSize) * -1;
+            //var initialChunkY = adtStartX + (reader.adtfile.chunks[0].header.indexY * ChunkSize) * -1;
+
+            var initialChunkX = adtStartX + (reader.adtfile.chunks[0].header.indexX * ChunkSize) * -1;
+            var initialChunkY = adtStartY + (reader.adtfile.chunks[0].header.indexY * ChunkSize) * -1;
 
             uint ci = 0;
             for (var x = 0; x < 16; x++)
@@ -246,8 +249,8 @@ namespace Exporters.OBJ
             //bool exportWMO = ConfigurationManager.AppSettings["exportWMO"] == "True";
             //bool exportM2 = ConfigurationManager.AppSettings["exportM2"] == "True";
             //bool exportFoliage = ConfigurationManager.AppSettings["exportFoliage"] == "True";
-            bool exportWMO = true;
-            bool exportM2 = true;
+            bool exportWMO = false;
+            bool exportM2 = false;
             /*
             bool exportFoliage = false;
             
