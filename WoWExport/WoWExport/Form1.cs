@@ -423,7 +423,11 @@ namespace WoWExport
             //WoWExport.Managers.ArchiveManager ArchiveMan = new WoWExport.Managers.ArchiveManager();
 
             Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Cataclysm";
+            //Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King";
             //Managers.ArchiveManager.GenerateMainListFile();
+
+            Managers.ArchiveManager.LoadArchives();
+
             Managers.ArchiveManager.GenerateMainListFileFromMPQ();
             //Managers.ArchiveManager.ExtractListfiles(textBox1.Text + "\\");
 
@@ -441,10 +445,21 @@ namespace WoWExport
             //M2Exporter Xporter = new M2Exporter();
             //Xporter.ExportM2(@"World\AZEROTH\ELWYNN\PASSIVEDOODADS\ELWYNNFENCES\ElwynnWoodPost01.m2", textBox1.Text + "\\");
 
-            //WMOExporter.ExportWMO(@"World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "//");
+            //WMOExporter.ExportWMO(@"World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "\\");
             //ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_28_52.adt", textBox1.Text + "//","low");
-            
-            ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_31_49.adt", textBox1.Text + "//", "low");
+
+            //ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_31_49.adt", textBox1.Text + "//", "low");
+
+            /*
+            ADTReader reader = new ADTReader();
+            reader.LoadADT(@"World\maps\Azeroth\azeroth_31_49.adt");
+            for (var mi = 0; mi < reader.adtfile.objects.worldModels.entries.Count(); mi++)
+            {
+                var wmo = reader.adtfile.objects.worldModels.entries[mi];
+                MessageBox.Show(" X:" + wmo.position.X + " Y:" + wmo.position.Y + " Z:" + wmo.position.Z + " RX:" + wmo.rotation.X + " RY:" + wmo.rotation.Y + " RZ:" + wmo.rotation.Z + " S:" + wmo.scale / 1024f + " NSet:" + wmo.nameSet);
+            }
+            */
+
             //M2Exporter.ExportM2(@"WORLD\GENERIC\PASSIVEDOODADS\PARTICLEEMITTERS\HOUSESMOKE.M2", textBox1.Text + "//");
             /*
             M2Reader Reader = new M2Reader();

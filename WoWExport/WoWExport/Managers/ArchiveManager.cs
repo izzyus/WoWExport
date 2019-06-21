@@ -11,13 +11,52 @@ namespace Managers
     {
         public static List<String> MainListFile = new List<String>();
         public static String GameDir;
-        public static MpqArchive art = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\art.mpq", FileAccess.Read);
-        public static MpqArchive expansion1 = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\expansion1.MPQ", FileAccess.Read);
-        public static MpqArchive expansion2 = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\expansion2.MPQ", FileAccess.Read);
-        public static MpqArchive expansion3 = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\expansion3.MPQ", FileAccess.Read);
-        public static MpqArchive world = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\world.mpq", FileAccess.Read);
-        public static MpqArchive world2 = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\world2.mpq", FileAccess.Read);
 
+        //Cataclysm
+        public static MpqArchive art;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\art.mpq", FileAccess.Read);
+        public static MpqArchive expansion1;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\expansion1.MPQ", FileAccess.Read);
+        public static MpqArchive expansion2;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\expansion2.MPQ", FileAccess.Read);
+        public static MpqArchive expansion3;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\expansion3.MPQ", FileAccess.Read);
+        public static MpqArchive world;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\world.mpq", FileAccess.Read);
+        public static MpqArchive world2;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\world2.mpq", FileAccess.Read);
+
+        //Lich King
+        public static MpqArchive common;// = new MpqArchive(@"D:\World of Warcraft - Wrath of the Lich King\Data\common.MPQ", FileAccess.Read);
+        public static MpqArchive common2;// = new MpqArchive(@"D:\World of Warcraft - Wrath of the Lich King\Data\common-2.MPQ", FileAccess.Read);
+        public static MpqArchive expansion;// = new MpqArchive(@"D:\World of Warcraft - Wrath of the Lich King\Data\expansion.MPQ", FileAccess.Read);
+        public static MpqArchive lichking;// = new MpqArchive(@"D:\World of Warcraft - Wrath of the Lich King\Data\lichking.MPQ", FileAccess.Read);
+        public static MpqArchive patch;// = new MpqArchive(@"D:\World of Warcraft - Wrath of the Lich King\Data\patch.MPQ", FileAccess.Read);
+        public static MpqArchive patch2;// = new MpqArchive(@"D:\World of Warcraft - Wrath of the Lich King\Data\patch-2.MPQ", FileAccess.Read);
+        public static MpqArchive patch3;// = new MpqArchive(@"D:\World of Warcraft - Wrath of the Lich King\Data\patch-3.MPQ", FileAccess.Read);
+
+        public static void LoadArchives()
+        {
+            if(GameDir == null)
+            {
+                throw new Exception("Game directory not initialized, unable to load archives");
+            }
+            else
+            {
+                //Cataclysm
+                art = new MpqArchive(GameDir + @"\Data\art.mpq", FileAccess.Read);
+                expansion1 = new MpqArchive(GameDir + @"\Data\expansion1.MPQ", FileAccess.Read);
+                expansion2 = new MpqArchive(GameDir + @"\Data\expansion2.MPQ", FileAccess.Read);
+                expansion3 = new MpqArchive(GameDir + @"\Data\expansion3.MPQ", FileAccess.Read);
+                world = new MpqArchive(GameDir + @"\Data\world.mpq", FileAccess.Read);
+                world2 = new MpqArchive(GameDir + @"\Data\world2.mpq", FileAccess.Read);
+
+                //Lich King
+                common = new MpqArchive(GameDir + @"\Data\common.MPQ", FileAccess.Read);
+                common2 = new MpqArchive(GameDir + @"\Data\common-2.MPQ", FileAccess.Read);
+                expansion = new MpqArchive(GameDir + @"\Data\expansion.MPQ", FileAccess.Read);
+                lichking = new MpqArchive(GameDir + @"\Data\lichking.MPQ", FileAccess.Read);
+                patch = new MpqArchive(GameDir + @"\Data\patch.MPQ", FileAccess.Read);
+                patch2 = new MpqArchive(GameDir + @"\Data\patch-2.MPQ", FileAccess.Read);
+                patch3 = new MpqArchive(GameDir + @"\Data\patch-3.MPQ", FileAccess.Read);
+            }
+
+        }
+        //Kind of obsolete at this point
         public static void GenerateMainListFileFromTXT()
         {
             //Only generate list if empty
@@ -98,9 +137,10 @@ namespace Managers
                     stream = null;
                 }
                 */
-
-                switch (archive.Substring(0, archive.Length - 4))
+                switch (archive.Substring(0, archive.Length - 4).Replace("-", ""))
+                //switch (archive.Substring(0, archive.Length - 4))
                 {
+                    //Cataclysm
                     case "art":
                         stream = art.OpenFile(filename);
                         break;
@@ -118,6 +158,30 @@ namespace Managers
                         break;
                     case "world2":
                         stream = world2.OpenFile(filename);
+                        break;
+                        
+                        //Lich King
+                    case "common":
+                        stream = common.OpenFile(filename);
+                        break;
+                    case "common2":
+                        stream = common2.OpenFile(filename);
+                        break;
+
+                    case "expansion":
+                        stream = expansion.OpenFile(filename);
+                        break;
+                    case "lichking":
+                        stream = lichking.OpenFile(filename);
+                        break;
+                    case "patch":
+                        stream = patch.OpenFile(filename);
+                        break;
+                    case "patch2":
+                        stream = patch2.OpenFile(filename);
+                        break;
+                    case "patch3":
+                        stream = patch3.OpenFile(filename);
                         break;
                 }
             }
