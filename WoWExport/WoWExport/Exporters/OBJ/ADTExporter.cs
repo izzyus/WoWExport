@@ -249,8 +249,9 @@ namespace Exporters.OBJ
             //bool exportWMO = ConfigurationManager.AppSettings["exportWMO"] == "True";
             //bool exportM2 = ConfigurationManager.AppSettings["exportM2"] == "True";
             //bool exportFoliage = ConfigurationManager.AppSettings["exportFoliage"] == "True";
-            bool exportWMO = true;
-            bool exportM2 = true;
+            bool exportWMO = false;
+            bool exportM2 = false;
+            bool exportTextures = true;
             /*
             bool exportFoliage = false;
             
@@ -444,7 +445,43 @@ namespace Exporters.OBJ
 
                 doodadSW.Close();
             }
-            
+
+            if (exportTextures) //Export ground textures
+            {
+                if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures")))
+                {
+                    Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures"));
+                }
+
+                List<String>GroundTextures = reader.adtfile.textures.filenames.ToList();
+
+                var blpreader = new BLPReader();
+                foreach (string texture in GroundTextures)
+                {
+                    if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png")));
+                    {
+                        //if (File.Exists(@"D:\mpqediten32\Work\" + texture))
+                        if(Managers.ArchiveManager.FileExists(texture))
+                        {
+                            try
+                            {
+                                blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(texture));
+                                blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png"));
+                            }
+                            catch(Exception e)
+                            {
+                                //error on save
+                                throw new Exception(e.Message);
+                            }
+                        }
+                        else
+                        {
+                            //missing file
+                        }
+                    }
+                }
+            }
+
             //exportworker.ReportProgress(75, "Exporting terrain textures..");
 
             if (bakeQuality != "none")
