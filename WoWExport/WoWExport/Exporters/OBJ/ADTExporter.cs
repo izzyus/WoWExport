@@ -252,6 +252,8 @@ namespace Exporters.OBJ
             bool exportWMO = false;
             bool exportM2 = false;
             bool exportTextures = true;
+            bool exportAlphaMaps = true;
+            bool exportLayersCSV = true;
             /*
             bool exportFoliage = false;
             
@@ -445,7 +447,12 @@ namespace Exporters.OBJ
 
                 doodadSW.Close();
             }
-
+#region Alpha&Tex
+            //----------------------------------------------------------------------------------------------------------
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///TEXTURE & ALPHA RELATED START
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //----------------------------------------------------------------------------------------------------------
             if (exportTextures) //Export ground textures
             {
                 if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures")))
@@ -482,6 +489,81 @@ namespace Exporters.OBJ
                 }
             }
 
+            if (exportAlphaMaps)
+            {
+                Generators.ADT_Alpha.ADT_Alpha AlphaMapsGenerator = new Generators.ADT_Alpha.ADT_Alpha();
+                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile, 3);
+
+                List<System.Drawing.Bitmap> AlphaLayers = new List<System.Drawing.Bitmap>();
+                List<String> AlphaLayersNames = new List<String>();
+
+                AlphaLayers = AlphaMapsGenerator.AlphaLayers;
+                AlphaLayersNames = AlphaMapsGenerator.AlphaLayersNames;
+
+                if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps")))
+                {
+                    Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps"));
+                }
+
+
+                if (AlphaLayers != null)
+                {
+                    for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
+                    {
+                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", AlphaLayersNames[m].Replace(";", "_") + ".png")))
+                        {
+                            try
+                            {
+                                AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", AlphaLayersNames[m].Replace(";", "_") + ".png"));
+                            }
+                            catch
+                            {
+                                //MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                            }
+                        }
+                    }
+                }
+
+
+                if (exportLayersCSV)
+                {
+
+                    if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv")))
+                    {
+                        File.Delete(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv"));
+                    }
+
+                    string LineOfText = "";
+                    int cchunk = 0;
+                    for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
+                    {
+                        var line = AlphaLayersNames[i];
+                        var values = line.Split(';');
+                        var chunk = int.Parse(values[0]);
+                        if (chunk == cchunk)
+                        {
+                            LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
+                        }
+                        else //Next Chunk
+                        {
+                            File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+                            LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";
+                            cchunk++;
+                        }
+                    }
+                    //Last entry, i have no idea how to do it properly so i am doing it like this
+                    File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
+
+                }
+            }
+
+            //----------------------------------------------------------------------------------------------------------
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///TEXTURE & ALPHA RELATED END
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            //----------------------------------------------------------------------------------------------------------
+#endregion
             //exportworker.ReportProgress(75, "Exporting terrain textures..");
 
             if (bakeQuality != "none")
