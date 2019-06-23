@@ -29,6 +29,8 @@ namespace Exporters.OBJ
         //public static void ExportWMO(uint filedataid, BackgroundWorker exportworker = null, string destinationOverride = null, ushort doodadSetExportID = ushort.MaxValue, string filename = "")
         public static void ExportWMO(string filename, string outdir, string destinationOverride = null, ushort doodadSetExportID = ushort.MaxValue)
         {
+            filename = filename.ToLower();
+
             /*
             if (exportworker == null)
             {
