@@ -249,11 +249,11 @@ namespace Exporters.OBJ
             //bool exportWMO = ConfigurationManager.AppSettings["exportWMO"] == "True";
             //bool exportM2 = ConfigurationManager.AppSettings["exportM2"] == "True";
             //bool exportFoliage = ConfigurationManager.AppSettings["exportFoliage"] == "True";
-            bool exportWMO = true;
-            bool exportM2 = true;
-            bool exportTextures = true;
+            bool exportWMO = false;
+            bool exportM2 = false;
+            bool exportTextures = false;
             bool exportAlphaMaps = true;
-            bool exportLayersCSV = true;
+            bool exportLayersCSV = false;
             /*
             bool exportFoliage = false;
             
@@ -527,11 +527,11 @@ namespace Exporters.OBJ
                 {
                     for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
                     {
-                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", AlphaLayersNames[m].Replace(";", "_") + ".png")))
+                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png")))
                         {
                             try
                             {
-                                AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", AlphaLayersNames[m].Replace(";", "_") + ".png"));
+                                AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png"));
                             }
                             catch
                             {
