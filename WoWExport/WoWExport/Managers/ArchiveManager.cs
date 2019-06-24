@@ -19,6 +19,8 @@ namespace Managers
         public static MpqArchive expansion3;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\expansion3.MPQ", FileAccess.Read);
         public static MpqArchive world;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\world.mpq", FileAccess.Read);
         public static MpqArchive world2;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\world2.mpq", FileAccess.Read);
+        //Cata Locales (WIP)
+        public static MpqArchive localeenUS; //to be better implemented...
 
         //Lich King
         public static MpqArchive common;// = new MpqArchive(@"D:\World of Warcraft - Wrath of the Lich King\Data\common.MPQ", FileAccess.Read);
@@ -44,6 +46,8 @@ namespace Managers
                 expansion3 = new MpqArchive(GameDir + @"\Data\expansion3.MPQ", FileAccess.Read);
                 world = new MpqArchive(GameDir + @"\Data\world.mpq", FileAccess.Read);
                 world2 = new MpqArchive(GameDir + @"\Data\world2.mpq", FileAccess.Read);
+
+                localeenUS = new MpqArchive(GameDir + @"\Data\enUS\locale-enUS.MPQ", FileAccess.Read); //temp locale solution
 
                 //Lich King
                 common = new MpqArchive(GameDir + @"\Data\common.MPQ", FileAccess.Read);
@@ -84,11 +88,12 @@ namespace Managers
             if (MainListFile.Count == 0)
             {
                 DirectoryInfo directory = new DirectoryInfo(GameDir + "\\data\\");
-                FileInfo[] Archives = directory.GetFiles("*.mpq");
+                FileInfo[] Archives = directory.GetFiles("*.mpq",SearchOption.AllDirectories);
                 string listFile = null;
 
                 foreach (FileInfo fileinfo in Archives)
                 {
+                    Console.WriteLine(fileinfo);
                     using (MpqArchive archive = new MpqArchive(fileinfo.FullName, FileAccess.Read))
                     {
                         using (MpqFileStream file = archive.OpenFile("(listfile)"))
@@ -158,6 +163,11 @@ namespace Managers
                         break;
                     case "world2":
                         stream = world2.OpenFile(filename);
+                        break;
+                    
+                        //Cata Locales (WIP)
+                    case "localeenUS":
+                        stream = localeenUS.OpenFile(filename);
                         break;
                         
                         //Lich King
