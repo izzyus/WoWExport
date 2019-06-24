@@ -156,150 +156,307 @@ namespace Exporters.OBJ
                     }
                 }
             }
-
-            StreamWriter doodadSW;
-
-            if (destinationOverride == null)
+            #region M2Export
+            bool exportM2 = Managers.ConfigurationManager.WMOExportM2;
+            if (exportM2)
             {
-                if (!string.IsNullOrEmpty(filename))
-                {
-                    doodadSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename.Replace(" ", "")) + "_ModelPlacementInformation.csv"));
-                }
-                else
-                {
-                    //doodadSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(filename), filedataid + "_ModelPlacementInformation.csv"));
-                    doodadSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(filename), filename + "_ModelPlacementInformation.csv"));
-                }
-            }
-            else
-            {
-                if (!string.IsNullOrEmpty(filename))
-                {
-                    doodadSW = new StreamWriter(Path.Combine(outdir, destinationOverride, Path.GetFileNameWithoutExtension(filename).Replace(" ", "") + "_ModelPlacementInformation.csv"));
-                }
-                else
-                {
-                    //doodadSW = new StreamWriter(Path.Combine(outdir, destinationOverride, filedataid + "_ModelPlacementInformation.csv"));
-                    doodadSW = new StreamWriter(Path.Combine(outdir, destinationOverride, filename + "_ModelPlacementInformation.csv"));
-                }
-            }
 
-            //exportworker.ReportProgress(55, "Exporting doodads..");
+                StreamWriter doodadSW;
 
-            doodadSW.WriteLine("ModelFile;PositionX;PositionY;PositionZ;RotationW;RotationX;RotationY;RotationZ;ScaleFactor;DoodadSet");
-
-            //for (var i = 0; i < wmo.doodadSets.Count(); i++)
-            for (var i = 0; i < wmo.wmofile.doodadSets.Count(); i++)
-            {
-                //var doodadSet = wmo.doodadSets[i];
-                var doodadSet = wmo.wmofile.doodadSets[i];
-
-                var currentDoodadSetName = doodadSet.setName.Replace("Set_", "").Replace("SET_", "").Replace("$DefaultGlobal", "Default");
-
-                if (doodadSetExportID != ushort.MaxValue)
+                if (destinationOverride == null)
                 {
-                    if (i != 0 && i != doodadSetExportID)
+                    if (!string.IsNullOrEmpty(filename))
                     {
-                        Console.WriteLine("Skipping doodadset with ID " + i + " (" + currentDoodadSetName + ") because export filter is set to " + doodadSetExportID);
-                        continue;
-                    }
-                }
-
-                Console.WriteLine("At doodadset " + i + " (" + currentDoodadSetName + ")");
-                //----------------------------------------------------------------------------------------------------------
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                ///Doodads - TO BE FIXED -- replaced with an older version for the moment
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                //----------------------------------------------------------------------------------------------------------
-                /*
-                for (var j = doodadSet.firstInstanceIndex; j < (doodadSet.firstInstanceIndex + doodadSet.numDoodads); j++)
-                {
-                    //var doodadDefinition = wmo.doodadDefinitions[j];
-                    var doodadDefinition = wmo.wmofile.doodadDefinitions[j];
-
-                    var doodadFilename = "";
-                    uint doodadFileDataID = 0;
-
-                    if (wmo.doodadIds != null)
-                    {
-                        doodadFileDataID = wmo.doodadIds[doodadDefinition.offset];
-                        if (!Listfile.TryGetFilename(doodadFileDataID, out doodadFilename))
-                        {
-                            CASCLib.Logger.WriteLine("Could not find filename for " + doodadFileDataID + ", setting filename to filedataid..");
-                            doodadFilename = doodadFileDataID.ToString();
-                        }
+                        doodadSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename.Replace(" ", "")) + "_ModelPlacementInformation.csv"));
                     }
                     else
                     {
-                        CASCLib.Logger.WriteLine("Warning!! File " + filename + " ID: " + filedataid + " still has filenames!");
-                        foreach (var doodadNameEntry in wmo.doodadNames)
+                        //doodadSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(filename), filedataid + "_ModelPlacementInformation.csv"));
+                        doodadSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(filename), filename + "_ModelPlacementInformation.csv"));
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(filename))
+                    {
+                        doodadSW = new StreamWriter(Path.Combine(outdir, destinationOverride, Path.GetFileNameWithoutExtension(filename).Replace(" ", "") + "_ModelPlacementInformation.csv"));
+                    }
+                    else
+                    {
+                        //doodadSW = new StreamWriter(Path.Combine(outdir, destinationOverride, filedataid + "_ModelPlacementInformation.csv"));
+                        doodadSW = new StreamWriter(Path.Combine(outdir, destinationOverride, filename + "_ModelPlacementInformation.csv"));
+                    }
+                }
+
+                //exportworker.ReportProgress(55, "Exporting doodads..");
+
+                doodadSW.WriteLine("ModelFile;PositionX;PositionY;PositionZ;RotationW;RotationX;RotationY;RotationZ;ScaleFactor;DoodadSet");
+
+                //for (var i = 0; i < wmo.doodadSets.Count(); i++)
+                for (var i = 0; i < wmo.wmofile.doodadSets.Count(); i++)
+                {
+                    //var doodadSet = wmo.doodadSets[i];
+                    var doodadSet = wmo.wmofile.doodadSets[i];
+
+                    var currentDoodadSetName = doodadSet.setName.Replace("Set_", "").Replace("SET_", "").Replace("$DefaultGlobal", "Default");
+
+                    if (doodadSetExportID != ushort.MaxValue)
+                    {
+                        if (i != 0 && i != doodadSetExportID)
                         {
-                            if (doodadNameEntry.startOffset == doodadDefinition.offset)
+                            Console.WriteLine("Skipping doodadset with ID " + i + " (" + currentDoodadSetName + ") because export filter is set to " + doodadSetExportID);
+                            continue;
+                        }
+                    }
+
+                    Console.WriteLine("At doodadset " + i + " (" + currentDoodadSetName + ")");
+                    //----------------------------------------------------------------------------------------------------------
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    ///Doodads - TO BE FIXED -- replaced with an older version for the moment
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //----------------------------------------------------------------------------------------------------------
+                    /*
+                    for (var j = doodadSet.firstInstanceIndex; j < (doodadSet.firstInstanceIndex + doodadSet.numDoodads); j++)
+                    {
+                        //var doodadDefinition = wmo.doodadDefinitions[j];
+                        var doodadDefinition = wmo.wmofile.doodadDefinitions[j];
+
+                        var doodadFilename = "";
+                        uint doodadFileDataID = 0;
+
+                        if (wmo.doodadIds != null)
+                        {
+                            doodadFileDataID = wmo.doodadIds[doodadDefinition.offset];
+                            if (!Listfile.TryGetFilename(doodadFileDataID, out doodadFilename))
                             {
-                                doodadFilename = doodadNameEntry.filename.Replace(".MDX", ".M2").Replace(".MDL", ".M2").ToLower();
-                                if (!Listfile.TryGetFileDataID(doodadFilename, out doodadFileDataID))
+                                CASCLib.Logger.WriteLine("Could not find filename for " + doodadFileDataID + ", setting filename to filedataid..");
+                                doodadFilename = doodadFileDataID.ToString();
+                            }
+                        }
+                        else
+                        {
+                            CASCLib.Logger.WriteLine("Warning!! File " + filename + " ID: " + filedataid + " still has filenames!");
+                            foreach (var doodadNameEntry in wmo.doodadNames)
+                            {
+                                if (doodadNameEntry.startOffset == doodadDefinition.offset)
                                 {
-                                    CASCLib.Logger.WriteLine("Error! Could not find filedataid for " + doodadFilename + "!");
-                                    continue;
+                                    doodadFilename = doodadNameEntry.filename.Replace(".MDX", ".M2").Replace(".MDL", ".M2").ToLower();
+                                    if (!Listfile.TryGetFileDataID(doodadFilename, out doodadFileDataID))
+                                    {
+                                        CASCLib.Logger.WriteLine("Error! Could not find filedataid for " + doodadFilename + "!");
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (destinationOverride == null)
+                        {
+                            if (!string.IsNullOrEmpty(doodadFilename))
+                            {
+                                if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(doodadFilename) + ".obj")))
+                                {
+                                    //M2Exporter.ExportM2(doodadFileDataID, null, Path.Combine(outdir, Path.GetDirectoryName(filename)), doodadFilename);
+                                }
+
+                                if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(doodadFilename) + ".obj")))
+                                {
+                                    doodadSW.WriteLine(Path.GetFileNameWithoutExtension(doodadFilename) + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
+                                }
+                            }
+                            else
+                            {
+                                if (!File.Exists(Path.Combine(outdir, doodadFileDataID + ".obj")))
+                                {
+                                    //M2Exporter.ExportM2(doodadFileDataID, null, outdir, doodadFilename);
+                                }
+
+                                if (File.Exists(Path.Combine(outdir, doodadFileDataID + ".obj")))
+                                {
+                                    doodadSW.WriteLine(doodadFileDataID + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(doodadFilename))
+                            {
+                                if (!File.Exists(Path.Combine(destinationOverride, Path.GetFileNameWithoutExtension(doodadFilename) + ".obj")))
+                                {
+                                    //M2Exporter.ExportM2(doodadFileDataID, null, destinationOverride, doodadFilename);
+                                }
+
+                                if (File.Exists(Path.Combine(destinationOverride, Path.GetFileNameWithoutExtension(doodadFilename) + ".obj")))
+                                {
+                                    doodadSW.WriteLine(Path.GetFileNameWithoutExtension(doodadFilename) + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
+                                }
+                            }
+                            else
+                            {
+                                if (!File.Exists(Path.Combine(destinationOverride, doodadFileDataID + ".obj")))
+                                {
+                                    //M2Exporter.ExportM2(doodadFileDataID, null, destinationOverride, doodadFilename);
+                                }
+
+                                if (File.Exists(Path.Combine(destinationOverride, doodadFileDataID + ".obj")))
+                                {
+                                    doodadSW.WriteLine(doodadFileDataID + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
                                 }
                             }
                         }
                     }
-
-                    if (destinationOverride == null)
+                    */
+                    //----------------------------------------------------------------------------------------------------------
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    ///OLDER VERSION
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //----------------------------------------------------------------------------------------------------------
+                    for (var j = doodadSet.firstInstanceIndex; j < (doodadSet.firstInstanceIndex + doodadSet.numDoodads); j++)
                     {
-                        if (!string.IsNullOrEmpty(doodadFilename))
+                        //foreach (var doodadNameEntry in reader.wmofile.doodadNames)
+                        foreach (var doodadNameEntry in wmo.wmofile.doodadNames)
                         {
-                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(doodadFilename) + ".obj")))
-                            {
-                                //M2Exporter.ExportM2(doodadFileDataID, null, Path.Combine(outdir, Path.GetDirectoryName(filename)), doodadFilename);
-                            }
+                            //var doodadDefinition = reader.wmofile.doodadDefinitions[j];
+                            var doodadDefinition = wmo.wmofile.doodadDefinitions[j];
 
-                            if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(doodadFilename) + ".obj")))
+                            if (doodadNameEntry.startOffset == doodadDefinition.offset)
                             {
-                                doodadSW.WriteLine(Path.GetFileNameWithoutExtension(doodadFilename) + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
+                                var doodadFileName = doodadNameEntry.filename.Replace(".MDX", ".M2").Replace(".MDL", ".M2");
+
+                                if (destinationOverride == null)
+                                {
+                                    //if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
+                                    if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
+                                    {
+                                        //M2Exporter.exportM2(doodadFileName, null, Path.Combine(outdir, Path.GetDirectoryName(file)));
+                                        //M2Exporter.exportM2(doodadFileName, Path.Combine(outdir, Path.GetDirectoryName(filename)), null);
+                                        M2Exporter.ExportM2(doodadFileName, Path.Combine(outdir, Path.GetDirectoryName(filename)));
+                                    }
+                                }
+                                else
+                                {
+                                    if (!File.Exists(Path.Combine(destinationOverride, Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
+                                    {
+                                        //M2Exporter.exportM2(doodadNameEntry.filename.Replace(".MDX", ".M2").Replace(".MDL", ".M2"), null, destinationOverride);
+                                        M2Exporter.ExportM2(doodadNameEntry.filename.Replace(".MDX", ".M2").Replace(".MDL", ".M2"), destinationOverride, null);
+                                    }
+                                }
+
+                                doodadSW.WriteLine(Path.GetFileNameWithoutExtension(doodadNameEntry.filename).ToLower() + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
+                                break;
                             }
+                        }
+                    }
+                    //----------------------------------------------------------------------------------------------------------
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    ///OLDER VERSION
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    //----------------------------------------------------------------------------------------------------------
+                }
+
+                doodadSW.Close();
+            }
+                #endregion
+                /*
+                //exportworker.ReportProgress(65, "Exporting textures..");
+
+                var mtlsb = new StringBuilder();
+                var textureID = 0;
+
+                //if (wmo.materials == null)
+                if (wmo.wmofile.materials == null)
+                {
+                    //CASCLib.Logger.WriteLine("Unable to find materials for WMO " + filedataid + ", not exporting!");
+                    return;
+                }
+
+                //var materials = new Structs.Material[wmo.materials.Count()];
+                var materials = new Structs.Material[wmo.wmofile.materials.Count()];
+
+                //for (var i = 0; i < wmo.materials.Count(); i++)
+                for (var i = 0; i < wmo.wmofile.materials.Count(); i++)
+                {
+                    var blpreader = new BLPReader();
+
+                    //if (wmo.textures == null)
+                    if (wmo.wmofile.textures == null)
+                    {
+                        if (Listfile.TryGetFilename(wmo.materials[i].texture1, out var textureFilename))
+                        {
+                            materials[i].filename = Path.GetFileNameWithoutExtension(textureFilename);
                         }
                         else
                         {
-                            if (!File.Exists(Path.Combine(outdir, doodadFileDataID + ".obj")))
-                            {
-                                //M2Exporter.ExportM2(doodadFileDataID, null, outdir, doodadFilename);
-                            }
+                            materials[i].filename = wmo.materials[i].texture1.ToString();
+                        }
 
-                            if (File.Exists(Path.Combine(outdir, doodadFileDataID + ".obj")))
+                        blpreader.LoadBLP(wmo..materials[i].texture1);
+                    }
+                    else
+                    {
+                        //for (var ti = 0; ti < wmo.textures.Count(); ti++)
+                        for (var ti = 0; ti < wmo.wmofile.textures.Count(); ti++)
+                        {
+                            //if (wmo.textures[ti].startOffset == wmo.materials[i].texture1)
+                            if (wmo.wmofile.textures[ti].startOffset == wmo.wmofile.materials[i].texture1)
                             {
-                                doodadSW.WriteLine(doodadFileDataID + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
+                                //materials[i].filename = Path.GetFileNameWithoutExtension(wmo.textures[ti].filename);
+                                materials[i].filename = Path.GetFileNameWithoutExtension(wmo.wmofile.textures[ti].filename);
+                                //blpreader.LoadBLP(wmo.textures[ti].filename);
+                                blpreader.LoadBLP(wmo.wmofile.textures[ti].filename);
                             }
+                        }
+                    }
+
+                    materials[i].textureID = textureID + i;
+
+                    //if (wmo.materials[i].blendMode == 0)
+                    if (wmo.wmofile.materials[i].blendMode == 0)
+                    {
+                        materials[i].transparent = false;
+                    }
+                    else
+                    {
+                        materials[i].transparent = true;
+                    }
+
+                    //materials[i].blendMode = wmo.materials[i].blendMode;
+                    //materials[i].shaderID = wmo.materials[i].shader;
+                    //materials[i].terrainType = wmo.materials[i].groundType; //Inexistent in this current state
+                    materials[i].blendMode = wmo.wmofile.materials[i].blendMode;
+                    materials[i].shaderID = wmo.wmofile.materials[i].shader;
+
+                    var saveLocation = "";
+
+                    if (destinationOverride == null)
+                    {
+                        if (!string.IsNullOrEmpty(filename))
+                        {
+                            saveLocation = Path.Combine(outdir, Path.GetDirectoryName(filename), materials[i].filename + ".png");
+                        }
+                        else
+                        {
+                            saveLocation = Path.Combine(outdir, materials[i].filename + ".png");
                         }
                     }
                     else
                     {
-                        if (!string.IsNullOrEmpty(doodadFilename))
-                        {
-                            if (!File.Exists(Path.Combine(destinationOverride, Path.GetFileNameWithoutExtension(doodadFilename) + ".obj")))
-                            {
-                                //M2Exporter.ExportM2(doodadFileDataID, null, destinationOverride, doodadFilename);
-                            }
+                        saveLocation = Path.Combine(outdir, destinationOverride, materials[i].filename + ".png");
+                    }
 
-                            if (File.Exists(Path.Combine(destinationOverride, Path.GetFileNameWithoutExtension(doodadFilename) + ".obj")))
-                            {
-                                doodadSW.WriteLine(Path.GetFileNameWithoutExtension(doodadFilename) + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
-                            }
+                    if (!File.Exists(saveLocation))
+                    {
+                        try
+                        {
+                            blpreader.bmp.Save(saveLocation);
                         }
-                        else
+                        catch (Exception e)
                         {
-                            if (!File.Exists(Path.Combine(destinationOverride, doodadFileDataID + ".obj")))
-                            {
-                                //M2Exporter.ExportM2(doodadFileDataID, null, destinationOverride, doodadFilename);
-                            }
-
-                            if (File.Exists(Path.Combine(destinationOverride, doodadFileDataID + ".obj")))
-                            {
-                                doodadSW.WriteLine(doodadFileDataID + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
-                            }
+                            //CASCLib.Logger.WriteLine("Exception while saving BLP " + materials[i].filename + ": " + e.Message);
                         }
                     }
+
+                    textureID++;
                 }
                 */
                 //----------------------------------------------------------------------------------------------------------
@@ -307,158 +464,7 @@ namespace Exporters.OBJ
                 ///OLDER VERSION
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 //----------------------------------------------------------------------------------------------------------
-                for (var j = doodadSet.firstInstanceIndex; j < (doodadSet.firstInstanceIndex + doodadSet.numDoodads); j++)
-                {
-                    //foreach (var doodadNameEntry in reader.wmofile.doodadNames)
-                    foreach (var doodadNameEntry in wmo.wmofile.doodadNames)
-                    {
-                        //var doodadDefinition = reader.wmofile.doodadDefinitions[j];
-                        var doodadDefinition = wmo.wmofile.doodadDefinitions[j];
-
-                        if (doodadNameEntry.startOffset == doodadDefinition.offset)
-                        {
-                            var doodadFileName = doodadNameEntry.filename.Replace(".MDX", ".M2").Replace(".MDL", ".M2");
-
-                            if (destinationOverride == null)
-                            {
-                                //if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
-                                if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
-                                {
-                                    //M2Exporter.exportM2(doodadFileName, null, Path.Combine(outdir, Path.GetDirectoryName(file)));
-                                    //M2Exporter.exportM2(doodadFileName, Path.Combine(outdir, Path.GetDirectoryName(filename)), null);
-                                    M2Exporter.ExportM2(doodadFileName, Path.Combine(outdir, Path.GetDirectoryName(filename)));
-                                }
-                            }
-                            else
-                            {
-                                if (!File.Exists(Path.Combine(destinationOverride, Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
-                                {
-                                    //M2Exporter.exportM2(doodadNameEntry.filename.Replace(".MDX", ".M2").Replace(".MDL", ".M2"), null, destinationOverride);
-                                    M2Exporter.ExportM2(doodadNameEntry.filename.Replace(".MDX",".M2").Replace(".MDL",".M2"), destinationOverride, null);
-                                }
-                            }
-
-                            doodadSW.WriteLine(Path.GetFileNameWithoutExtension(doodadNameEntry.filename).ToLower() + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
-                            break;
-                        }
-                    }
-                }
-                //----------------------------------------------------------------------------------------------------------
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                ///OLDER VERSION
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                //----------------------------------------------------------------------------------------------------------
-            }
-
-            doodadSW.Close();
-            /*
-            //exportworker.ReportProgress(65, "Exporting textures..");
-
-            var mtlsb = new StringBuilder();
-            var textureID = 0;
-
-            //if (wmo.materials == null)
-            if (wmo.wmofile.materials == null)
-            {
-                //CASCLib.Logger.WriteLine("Unable to find materials for WMO " + filedataid + ", not exporting!");
-                return;
-            }
-
-            //var materials = new Structs.Material[wmo.materials.Count()];
-            var materials = new Structs.Material[wmo.wmofile.materials.Count()];
-
-            //for (var i = 0; i < wmo.materials.Count(); i++)
-            for (var i = 0; i < wmo.wmofile.materials.Count(); i++)
-            {
-                var blpreader = new BLPReader();
-
-                //if (wmo.textures == null)
-                if (wmo.wmofile.textures == null)
-                {
-                    if (Listfile.TryGetFilename(wmo.materials[i].texture1, out var textureFilename))
-                    {
-                        materials[i].filename = Path.GetFileNameWithoutExtension(textureFilename);
-                    }
-                    else
-                    {
-                        materials[i].filename = wmo.materials[i].texture1.ToString();
-                    }
-
-                    blpreader.LoadBLP(wmo..materials[i].texture1);
-                }
-                else
-                {
-                    //for (var ti = 0; ti < wmo.textures.Count(); ti++)
-                    for (var ti = 0; ti < wmo.wmofile.textures.Count(); ti++)
-                    {
-                        //if (wmo.textures[ti].startOffset == wmo.materials[i].texture1)
-                        if (wmo.wmofile.textures[ti].startOffset == wmo.wmofile.materials[i].texture1)
-                        {
-                            //materials[i].filename = Path.GetFileNameWithoutExtension(wmo.textures[ti].filename);
-                            materials[i].filename = Path.GetFileNameWithoutExtension(wmo.wmofile.textures[ti].filename);
-                            //blpreader.LoadBLP(wmo.textures[ti].filename);
-                            blpreader.LoadBLP(wmo.wmofile.textures[ti].filename);
-                        }
-                    }
-                }
-
-                materials[i].textureID = textureID + i;
-
-                //if (wmo.materials[i].blendMode == 0)
-                if (wmo.wmofile.materials[i].blendMode == 0)
-                {
-                    materials[i].transparent = false;
-                }
-                else
-                {
-                    materials[i].transparent = true;
-                }
-
-                //materials[i].blendMode = wmo.materials[i].blendMode;
-                //materials[i].shaderID = wmo.materials[i].shader;
-                //materials[i].terrainType = wmo.materials[i].groundType; //Inexistent in this current state
-                materials[i].blendMode = wmo.wmofile.materials[i].blendMode;
-                materials[i].shaderID = wmo.wmofile.materials[i].shader;
-
-                var saveLocation = "";
-
-                if (destinationOverride == null)
-                {
-                    if (!string.IsNullOrEmpty(filename))
-                    {
-                        saveLocation = Path.Combine(outdir, Path.GetDirectoryName(filename), materials[i].filename + ".png");
-                    }
-                    else
-                    {
-                        saveLocation = Path.Combine(outdir, materials[i].filename + ".png");
-                    }
-                }
-                else
-                {
-                    saveLocation = Path.Combine(outdir, destinationOverride, materials[i].filename + ".png");
-                }
-
-                if (!File.Exists(saveLocation))
-                {
-                    try
-                    {
-                        blpreader.bmp.Save(saveLocation);
-                    }
-                    catch (Exception e)
-                    {
-                        //CASCLib.Logger.WriteLine("Exception while saving BLP " + materials[i].filename + ": " + e.Message);
-                    }
-                }
-
-                textureID++;
-            }
-            */
-            //----------------------------------------------------------------------------------------------------------
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            ///OLDER VERSION
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //----------------------------------------------------------------------------------------------------------
-            var mtlsb = new StringBuilder();
+                var mtlsb = new StringBuilder();
             var textureID = 0;
 
             //if (reader.wmofile.materials == null)

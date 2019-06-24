@@ -249,11 +249,14 @@ namespace Exporters.OBJ
             //bool exportWMO = ConfigurationManager.AppSettings["exportWMO"] == "True";
             //bool exportM2 = ConfigurationManager.AppSettings["exportM2"] == "True";
             //bool exportFoliage = ConfigurationManager.AppSettings["exportFoliage"] == "True";
-            bool exportWMO = false;
-            bool exportM2 = false;
-            bool exportTextures = false;
-            bool exportAlphaMaps = true;
-            bool exportLayersCSV = false;
+            //bool exportWMO = false;
+            //bool exportM2 = false;
+            //bool exportTextures = false;
+            //bool exportAlphaMaps = true;
+            bool exportWMO = Managers.ConfigurationManager.ADTExportWMO;
+            bool exportM2 = Managers.ConfigurationManager.ADTExportM2;
+            bool exportTextures = Managers.ConfigurationManager.ADTexportTextures;
+            bool exportAlphaMaps = Managers.ConfigurationManager.ADTexportAlphaMaps;
             /*
             bool exportFoliage = false;
             
@@ -542,37 +545,33 @@ namespace Exporters.OBJ
                     }
                 }
 
+                //Export Layer info CSV
 
-                if (exportLayersCSV)
+                if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv")))
                 {
-
-                    if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv")))
-                    {
-                        File.Delete(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv"));
-                    }
-
-                    string LineOfText = "";
-                    int cchunk = 0;
-                    for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
-                    {
-                        var line = AlphaLayersNames[i];
-                        var values = line.Split(';');
-                        var chunk = int.Parse(values[0]);
-                        if (chunk == cchunk)
-                        {
-                            LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
-                        }
-                        else //Next Chunk
-                        {
-                            File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
-                            LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";
-                            cchunk++;
-                        }
-                    }
-                    //Last entry, i have no idea how to do it properly so i am doing it like this
-                    File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
-
+                    File.Delete(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv"));
                 }
+
+                string LineOfText = "";
+                int cchunk = 0;
+                for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
+                {
+                    var line = AlphaLayersNames[i];
+                    var values = line.Split(';');
+                    var chunk = int.Parse(values[0]);
+                    if (chunk == cchunk)
+                    {
+                        LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
+                    }
+                    else //Next Chunk
+                    {
+                        File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+                        LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";
+                        cchunk++;
+                    }
+                }
+                //Last entry, i have no idea how to do it properly so i am doing it like this
+                File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
             }
 
             //----------------------------------------------------------------------------------------------------------

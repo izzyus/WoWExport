@@ -448,6 +448,13 @@ namespace WoWExport
             //WMOExporter.ExportWMO(@"World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "\\");
             //ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_28_52.adt", textBox1.Text + "//","low");
 
+            Managers.ConfigurationManager.ADTExportM2 = true;
+            Managers.ConfigurationManager.ADTExportWMO = true;
+            //Managers.ConfigurationManager.ADTExportFoliage = false; //Obsolete atm
+            Managers.ConfigurationManager.ADTexportTextures = true;
+            Managers.ConfigurationManager.ADTexportAlphaMaps = true;
+            Managers.ConfigurationManager.WMOExportM2 = true;
+
             ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_31_49.adt", textBox1.Text + "//", "low");
 
             /*
