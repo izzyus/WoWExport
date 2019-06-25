@@ -43,6 +43,8 @@ namespace WoWExport
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
+
             //Set picturebox defaults
             panel1.AutoScroll = true;
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
@@ -68,6 +70,8 @@ namespace WoWExport
 
             //To be deleted later
             button3.Text = "Crash Me!";
+
+            LoadGame();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -422,13 +426,13 @@ namespace WoWExport
 
             //WoWExport.Managers.ArchiveManager ArchiveMan = new WoWExport.Managers.ArchiveManager();
 
-            Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Cataclysm";
+            //Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Cataclysm";
             //Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King";
             //Managers.ArchiveManager.GenerateMainListFile();
 
-            Managers.ArchiveManager.LoadArchives();
+            //Managers.ArchiveManager.LoadArchives();
 
-            Managers.ArchiveManager.GenerateMainListFileFromMPQ();
+            //Managers.ArchiveManager.GenerateMainListFileFromMPQ();
             //Managers.ArchiveManager.ExtractListfiles(textBox1.Text + "\\");
 
             //BLPReader reader = new BLPReader();
@@ -448,13 +452,13 @@ namespace WoWExport
             //WMOExporter.ExportWMO(@"World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo", textBox1.Text + "\\");
             //ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_28_52.adt", textBox1.Text + "//","low");
 
-            Managers.ConfigurationManager.ADTExportM2 = true;
-            Managers.ConfigurationManager.ADTExportWMO = true;
+            //Managers.ConfigurationManager.ADTExportM2 = true;
+            //Managers.ConfigurationManager.ADTExportWMO = true;
             //Managers.ConfigurationManager.ADTExportFoliage = false; //Obsolete atm
-            Managers.ConfigurationManager.ADTexportTextures = true;
-            Managers.ConfigurationManager.ADTexportAlphaMaps = true;
-            Managers.ConfigurationManager.WMOExportM2 = true;
-            Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
+            //Managers.ConfigurationManager.ADTexportTextures = true;
+            //Managers.ConfigurationManager.ADTexportAlphaMaps = true;
+            //Managers.ConfigurationManager.WMOExportM2 = true;
+            //Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
 
             new WoWExport.Form_ADTExport(@"World\maps\Azeroth\azeroth_31_49.adt").Show();
 
@@ -492,6 +496,20 @@ namespace WoWExport
             }
             */
 
+        }
+        private void LoadGame()
+        {
+            Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Cataclysm";
+            Managers.ArchiveManager.LoadArchives();
+            Managers.ArchiveManager.GenerateMainListFileFromMPQ();
+
+            Managers.ConfigurationManager.ADTExportM2 = true;
+            Managers.ConfigurationManager.ADTExportWMO = true;
+            Managers.ConfigurationManager.ADTExportFoliage = false; //Obsolete atm
+            Managers.ConfigurationManager.ADTexportTextures = true;
+            Managers.ConfigurationManager.ADTexportAlphaMaps = true;
+            Managers.ConfigurationManager.WMOExportM2 = true;
+            Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
         }
     }
 }
