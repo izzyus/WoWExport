@@ -7,6 +7,8 @@ namespace Managers
 {
     class ConfigurationManager
     {
+        public static String OutputDirectory;
+
         //ADT Exporter
         public static Boolean ADTExportM2 = false;
         public static Boolean ADTExportWMO = false;

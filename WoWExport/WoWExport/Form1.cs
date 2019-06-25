@@ -454,8 +454,11 @@ namespace WoWExport
             Managers.ConfigurationManager.ADTexportTextures = true;
             Managers.ConfigurationManager.ADTexportAlphaMaps = true;
             Managers.ConfigurationManager.WMOExportM2 = true;
+            Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
 
-            ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_31_49.adt", textBox1.Text + "//", "low");
+            new WoWExport.Form_ADTExport(@"World\maps\Azeroth\azeroth_31_49.adt").Show();
+
+            //ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_31_49.adt", textBox1.Text + "//", "low");
 
             /*
             ADTReader reader = new ADTReader();
