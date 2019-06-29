@@ -93,14 +93,14 @@ namespace Managers
 
                 foreach (FileInfo fileinfo in Archives)
                 {
-                    Console.WriteLine(fileinfo);
+                    //Console.WriteLine(fileinfo);
                     using (MpqArchive archive = new MpqArchive(fileinfo.FullName, FileAccess.Read))
                     {
                         using (MpqFileStream file = archive.OpenFile("(listfile)"))
                         using (StreamReader sr = new StreamReader(file))
                         {
                             listFile = sr.ReadToEnd();
-                            Console.WriteLine(listFile);
+                            //Console.WriteLine(listFile);
                             MainListFile.Add(listFile.ToLower() + ";" + fileinfo.Name);
                         }
                     }
