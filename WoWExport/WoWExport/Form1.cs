@@ -460,7 +460,11 @@ namespace WoWExport
             //Managers.ConfigurationManager.WMOExportM2 = true;
             //Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
 
-            new WoWExport.Form_ADTExport(@"World\maps\Azeroth\azeroth_31_49.adt").Show();
+            //new WoWExport.Form_ADTExport(@"World\maps\Azeroth\azeroth_31_49.adt").Show();
+
+            //Managers.md5Manager.LoadMD5();
+            //Managers.md5Manager.ExportThisFolder("ahnqiraj", Managers.ConfigurationManager.OutputDirectory);
+            //Managers.md5Manager.ExportAllMinimaps(Managers.ConfigurationManager.OutputDirectory);
 
             //ADTExporter.exportADT(@"World\maps\Azeroth\azeroth_31_49.adt", textBox1.Text + "//", "low");
 
@@ -499,7 +503,8 @@ namespace WoWExport
         }
         private void LoadGame()
         {
-            Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Cataclysm";
+            //Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Cataclysm";
+            Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King";
             Managers.ArchiveManager.LoadArchives();
             Managers.ArchiveManager.GenerateMainListFileFromMPQ();
 
