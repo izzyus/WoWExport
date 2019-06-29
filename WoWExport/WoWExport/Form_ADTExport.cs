@@ -104,6 +104,7 @@ namespace WoWExport
             {
                 throw new Exception("No output direcotry set");
             }
+            MessageBox.Show("Done");
         }
     }
 }
