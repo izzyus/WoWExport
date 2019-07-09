@@ -232,139 +232,139 @@ namespace WoWExport
                 //----------------------------------------------------------------------------------------------------------
                 //Get the mapname
                 //----------------------------------------------------------------------------------------------------------
-                string mapname = filePath;
-                mapname = mapname.Substring(mapname.LastIndexOf("\\", mapname.Length - 2) + 1);
-                mapname = mapname.Substring(0, mapname.Length - 4);
+                //string mapname = filePath;
+                //mapname = mapname.Substring(mapname.LastIndexOf("\\", mapname.Length - 2) + 1);
+                //mapname = mapname.Substring(0, mapname.Length - 4);
 
                 //----------------------------------------------------------------------------------------------------------
                 //Create a folder with the map name (if non-existent) to save all everything in
                 //----------------------------------------------------------------------------------------------------------
-                if (!Directory.Exists(textBox1.Text + "\\" + mapname))
-                {
-                    try
-                    {
-                        Directory.CreateDirectory(textBox1.Text + "\\" + mapname + "\\");
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not create folder: " + textBox1.Text + "\\" + mapname, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
+                //if (!Directory.Exists(textBox1.Text + "\\" + mapname))
+                //{
+                //    try
+                //    {
+                //        Directory.CreateDirectory(textBox1.Text + "\\" + mapname + "\\");
+                //    }
+                //    catch
+                //    {
+                //        MessageBox.Show("Could not create folder: " + textBox1.Text + "\\" + mapname, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //    }
+                //}
 
 
                 //----------------------------------------------------------------------------------------------------------
                 //Save ground textures
                 //----------------------------------------------------------------------------------------------------------
 
-                if (!Directory.Exists(textBox1.Text + "\\" + mapname + "\\textures\\"))
-                {
-                    try
-                    {
-                        Directory.CreateDirectory(textBox1.Text + "\\" + mapname + "\\textures\\");
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not create folder: " + textBox1.Text + "\\" + mapname + "\\textures\\");
-                    }
+                //if (!Directory.Exists(textBox1.Text + "\\" + mapname + "\\textures\\"))
+                //{
+                //    try
+                //    {
+                //        Directory.CreateDirectory(textBox1.Text + "\\" + mapname + "\\textures\\");
+                //    }
+                //    catch
+                //    {
+                //        MessageBox.Show("Could not create folder: " + textBox1.Text + "\\" + mapname + "\\textures\\");
+                //    }
 
-                }
+                //}
 
-                var blpreader = new BLPReader();
-                foreach (string texture in GroundTextures)
-                {
-                    //MessageBox.Show("texture: " + texture);
+                //var blpreader = new BLPReader();
+                //foreach (string texture in GroundTextures)
+                //{
+                //MessageBox.Show("texture: " + texture);
 
-                        if (!File.Exists(textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png")))
-                        {
-                            if(File.Exists(@"D:\mpqediten32\Work\" + texture))
-                            {
-                                try
-                                {
-                                    //blpreader.LoadBLP(@"D:\mpqediten32\Work\" + texture); //TO BE FIXED <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                    blpreader.bmp.Save(textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
-                                }
-                                catch
-                                {
-                                    MessageBox.Show("Could not save file: " + textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
-                                }
-                            }
-                            else
-                            {
-                                MessageBox.Show(@"Missing file: D:\mpqediten32\Work\" + texture);
-                            }
-                        }
-                }
+                //        if (!File.Exists(textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png")))
+                //        {
+                //            if(File.Exists(@"D:\mpqediten32\Work\" + texture))
+                //            {
+                //                try
+                //                {
+                //                    //blpreader.LoadBLP(@"D:\mpqediten32\Work\" + texture); //TO BE FIXED <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                //                    blpreader.bmp.Save(textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
+                //                }
+                //                catch
+                //                {
+                //                    MessageBox.Show("Could not save file: " + textBox1.Text + "\\" + mapname + "\\textures\\" + texture.Substring(texture.LastIndexOf("\\", texture.Length - 2) + 1).Replace("blp", "png"));
+                //                }
+                //            }
+                //            else
+                //            {
+                //                MessageBox.Show(@"Missing file: D:\mpqediten32\Work\" + texture);
+                //            }
+                //        }
+                //}
 
 
 
                 //----------------------------------------------------------------------------------------------------------
                 //Create a folder for the alphamaps (if none-xistent) to save the alphas separately
                 //----------------------------------------------------------------------------------------------------------
-                if (!Directory.Exists(textBox1.Text + "\\" + mapname + "\\alphamaps\\"))
-                {
-                    try
-                    {
-                        Directory.CreateDirectory(textBox1.Text + "\\" + mapname + "\\alphamaps\\");
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not create folder: " + textBox1.Text + "\\" + mapname + "\\alphamaps\\");
-                    }
+                //if (!Directory.Exists(textBox1.Text + "\\" + mapname + "\\alphamaps\\"))
+                //{
+                //    try
+                //    {
+                //        Directory.CreateDirectory(textBox1.Text + "\\" + mapname + "\\alphamaps\\");
+                //    }
+                //    catch
+                //    {
+                //        MessageBox.Show("Could not create folder: " + textBox1.Text + "\\" + mapname + "\\alphamaps\\");
+                //    }
 
-                }
+                //}
 
                 //----------------------------------------------------------------------------------------------------------
                 //Save alpha maps
                 //----------------------------------------------------------------------------------------------------------
-                for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
-                {
-                    try
-                    {
-                        //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
-                        //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
-                        //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
-                        AlphaLayers[m].Save(textBox1.Text + "\\" + mapname + "\\alphamaps\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                
+                //for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
+                //{
+                //    try
+                //    {
+                //        //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
+                //        //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m] + ".png");
+                //        //AlphaLayers[m].Save(textBox2.Text + "\\" + mapname + "\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
+                //        AlphaLayers[m].Save(textBox1.Text + "\\" + mapname + "\\alphamaps\\" + mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png");
+                //    }
+                //    catch
+                //    {
+                //        MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //    }
+                //}
+
                 //----------------------------------------------------------------------------------------------------------
                 //Export Layers CSV info
                 //----------------------------------------------------------------------------------------------------------
-                if (exportLayersCSV)
-                {
+                //if (exportLayersCSV)
+                //{
 
-                    if (File.Exists(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv"))
-                    {
-                        File.Delete(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv");
-                    }
+                //    if (File.Exists(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv"))
+                //    {
+                //        File.Delete(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv");
+                //    }
 
-                    string LineOfText = "";
-                    int cchunk = 0;
-                    for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
-                    {
-                        var line = AlphaLayersNames[i];
-                        var values = line.Split(';');
-                        var chunk = int.Parse(values[0]);
-                        if (chunk == cchunk)
-                        {
-                            LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
-                        }
-                        else //Next Chunk
-                        {
-                            //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
-                            File.AppendAllText(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
-                            LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";
-                            cchunk++;
-                        }
-                    }
-                    //Last entry, i have no idea how to do it properly so i am doing it like this
-                    //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
-                    File.AppendAllText(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
-                }
+                //    string LineOfText = "";
+                //    int cchunk = 0;
+                //    for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
+                //    {
+                //        var line = AlphaLayersNames[i];
+                //        var values = line.Split(';');
+                //        var chunk = int.Parse(values[0]);
+                //        if (chunk == cchunk)
+                //        {
+                //            LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
+                //        }
+                //        else //Next Chunk
+                //        {
+                //            //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+                //            File.AppendAllText(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
+                //            LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";
+                //            cchunk++;
+                //        }
+                //    }
+                //    //Last entry, i have no idea how to do it properly so i am doing it like this
+                //    //File.AppendAllText(textBox2.Text + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
+                //    File.AppendAllText(textBox1.Text + "\\" + mapname + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
+                //}
                 //----------------------------------------------------------------------------------------------------------
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 ///Export Button End
@@ -377,7 +377,7 @@ namespace WoWExport
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 //----------------------------------------------------------------------------------------------------------
 
-                ADTExporter Xporter = new ADTExporter();
+                //ADTExporter Xporter = new ADTExporter();
                 //Xporter.exportADT(filePath, textBox1.Text + "\\", "low");
 
                 //----------------------------------------------------------------------------------------------------------
@@ -385,8 +385,26 @@ namespace WoWExport
                 ///Geometry - end
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 //----------------------------------------------------------------------------------------------------------
-            }
 
+                string selectedItem = treeView1.SelectedNode.FullPath;
+                selectedItem = selectedItem.Substring(5, selectedItem.Length - 5); //that's because we remove from the name "root\"
+
+                switch (Path.GetExtension(selectedItem))
+                {
+                    case ".adt":
+                        new WoWExport.Form_ADTExport(selectedItem).Show();
+                        break;
+                    case ".m2":
+                        MessageBox.Show("Not implemented yet");
+                        break;
+                    case ".wmo":
+                        new WoWExport.Form_WMOExport(selectedItem).Show();
+                        break;
+                    default:
+                        MessageBox.Show("Direct file export not supported yet");
+                        break;
+                }
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -502,8 +520,6 @@ namespace WoWExport
                 MessageBox.Show("Skin " + i + ": " + Reader.model.skins[i].filename);
             }
             */
-            Generators.DisplayStructure.GenerateList();
-            treeView1.Nodes.Add(PopulateTreeNode2(Generators.DisplayStructure.MLF, "\\"));
         }
 
 
@@ -550,6 +566,13 @@ namespace WoWExport
             Managers.ArchiveManager.LoadArchives();
             Managers.ArchiveManager.GenerateMainListFileFromMPQ();
 
+
+            Generators.DisplayStructure.GenerateList();
+            treeView1.Nodes.Add(PopulateTreeNode2(Generators.DisplayStructure.MLF, "\\"));
+            treeView1.Nodes[0].Expand();
+            treeView1.Nodes[0].Text = "root";
+
+
             Managers.ConfigurationManager.ADTExportM2 = true;
             Managers.ConfigurationManager.ADTExportWMO = true;
             Managers.ConfigurationManager.ADTExportFoliage = false; //Obsolete atm
@@ -557,6 +580,18 @@ namespace WoWExport
             Managers.ConfigurationManager.ADTexportAlphaMaps = true;
             Managers.ConfigurationManager.WMOExportM2 = true;
             Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
+        }
+
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (Path.GetExtension(treeView1.SelectedNode.FullPath) != "")
+            {
+                button2.Enabled = true;
+            }
+            else
+            {
+                button2.Enabled = false;   
+            }
         }
     }
 }
