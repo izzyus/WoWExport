@@ -461,7 +461,9 @@ namespace WoWExport
             //Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
 
             //new WoWExport.Form_ADTExport(@"World\maps\Azeroth\azeroth_31_49.adt").Show();
-            new WoWExport.Form_WMOExport(@"World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo").Show();
+            //new WoWExport.Form_WMOExport(@"World\wmo\Azeroth\Buildings\human_farm\farm_closed.wmo").Show();
+
+
 
             //Managers.md5Manager.LoadMD5();
             //Managers.md5Manager.ExportThisFolder("ahnqiraj", Managers.ConfigurationManager.OutputDirectory);
@@ -504,8 +506,20 @@ namespace WoWExport
         }
         private void LoadGame()
         {
-            Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Cataclysm";
-            //Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King";
+
+            Managers.ConfigurationManager.Profile = "Cata"; //Hardcoded until full implementation
+            Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - Cataclysm"; //Hardcoded until full implementation
+            //Managers.ConfigurationManager.Profile = "LK"; //Hardcoded until full implementation
+            //Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King"; //Hardcoded until full implementation
+
+            //Extract listfiles to cache
+            if (!Directory.Exists(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles"))
+            {
+                Directory.CreateDirectory(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles");
+            }
+            Managers.ArchiveManager.ExtractListfiles(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles\\");
+
+
             Managers.ArchiveManager.LoadArchives();
             Managers.ArchiveManager.GenerateMainListFileFromMPQ();
 

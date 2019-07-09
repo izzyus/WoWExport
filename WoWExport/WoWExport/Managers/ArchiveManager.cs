@@ -10,7 +10,7 @@ namespace Managers
     class ArchiveManager
     {
         public static List<String> MainListFile = new List<String>();
-        public static String GameDir;
+        //public static String ConfigurationManager.GameDir;
 
         //Cataclysm
         public static MpqArchive art;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\art.mpq", FileAccess.Read);
@@ -33,30 +33,30 @@ namespace Managers
 
         public static void LoadArchives()
         {
-            if(GameDir == null)
+            if(ConfigurationManager.GameDir == null)
             {
                 throw new Exception("Game directory not initialized, unable to load archives");
             }
             else
             {
                 //Cataclysm
-                art = new MpqArchive(GameDir + @"\Data\art.mpq", FileAccess.Read);
-                expansion1 = new MpqArchive(GameDir + @"\Data\expansion1.MPQ", FileAccess.Read);
-                expansion2 = new MpqArchive(GameDir + @"\Data\expansion2.MPQ", FileAccess.Read);
-                expansion3 = new MpqArchive(GameDir + @"\Data\expansion3.MPQ", FileAccess.Read);
-                world = new MpqArchive(GameDir + @"\Data\world.mpq", FileAccess.Read);
-                world2 = new MpqArchive(GameDir + @"\Data\world2.mpq", FileAccess.Read);
+                art = new MpqArchive(ConfigurationManager.GameDir + @"\Data\art.mpq", FileAccess.Read);
+                expansion1 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\expansion1.MPQ", FileAccess.Read);
+                expansion2 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\expansion2.MPQ", FileAccess.Read);
+                expansion3 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\expansion3.MPQ", FileAccess.Read);
+                world = new MpqArchive(ConfigurationManager.GameDir + @"\Data\world.mpq", FileAccess.Read);
+                world2 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\world2.mpq", FileAccess.Read);
 
-                localeenUS = new MpqArchive(GameDir + @"\Data\enUS\locale-enUS.MPQ", FileAccess.Read); //temp locale solution
+                localeenUS = new MpqArchive(ConfigurationManager.GameDir + @"\Data\enUS\locale-enUS.MPQ", FileAccess.Read); //temp locale solution
 
                 //Lich King
-                common = new MpqArchive(GameDir + @"\Data\common.MPQ", FileAccess.Read);
-                common2 = new MpqArchive(GameDir + @"\Data\common-2.MPQ", FileAccess.Read);
-                expansion = new MpqArchive(GameDir + @"\Data\expansion.MPQ", FileAccess.Read);
-                lichking = new MpqArchive(GameDir + @"\Data\lichking.MPQ", FileAccess.Read);
-                patch = new MpqArchive(GameDir + @"\Data\patch.MPQ", FileAccess.Read);
-                patch2 = new MpqArchive(GameDir + @"\Data\patch-2.MPQ", FileAccess.Read);
-                patch3 = new MpqArchive(GameDir + @"\Data\patch-3.MPQ", FileAccess.Read);
+                common = new MpqArchive(ConfigurationManager.GameDir + @"\Data\common.MPQ", FileAccess.Read);
+                common2 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\common-2.MPQ", FileAccess.Read);
+                expansion = new MpqArchive(ConfigurationManager.GameDir + @"\Data\expansion.MPQ", FileAccess.Read);
+                lichking = new MpqArchive(ConfigurationManager.GameDir + @"\Data\lichking.MPQ", FileAccess.Read);
+                patch = new MpqArchive(ConfigurationManager.GameDir + @"\Data\patch.MPQ", FileAccess.Read);
+                patch2 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\patch-2.MPQ", FileAccess.Read);
+                patch3 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\patch-3.MPQ", FileAccess.Read);
             }
 
         }
@@ -87,7 +87,7 @@ namespace Managers
             //Only generate list if empty
             if (MainListFile.Count == 0)
             {
-                DirectoryInfo directory = new DirectoryInfo(GameDir + "\\data\\");
+                DirectoryInfo directory = new DirectoryInfo(ConfigurationManager.GameDir + "\\data\\");
                 FileInfo[] Archives = directory.GetFiles("*.mpq",SearchOption.AllDirectories);
                 string listFile = null;
 
@@ -133,7 +133,7 @@ namespace Managers
                 //Try to open the archive and read the requested file
                 try
                 {
-                    MpqArchive CurrentArchive = new MpqArchive(GameDir + "\\data\\" + archive, FileAccess.Read);
+                    MpqArchive CurrentArchive = new MpqArchive(ConfigurationManager.GameDir + "\\data\\" + archive, FileAccess.Read);
                     stream = CurrentArchive.OpenFile(filename);
                 }
                 catch
@@ -207,7 +207,7 @@ namespace Managers
         {
             string listFile = null;
 
-            DirectoryInfo directory = new DirectoryInfo(GameDir + "\\data\\");
+            DirectoryInfo directory = new DirectoryInfo(ConfigurationManager.GameDir + "\\data\\");
             FileInfo[] Archives = directory.GetFiles("*.mpq");
             foreach (FileInfo fileinfo in Archives)
             {
@@ -217,7 +217,7 @@ namespace Managers
                     using (StreamReader sr = new StreamReader(file))
                     {
                         listFile = sr.ReadToEnd();
-                        Console.WriteLine(listFile);
+                        //Console.WriteLine(listFile);
                     }
                     archive.ExtractFile("(listfile)", to + "\\" + fileinfo.Name.Replace(".MPQ", ".txt"));
                 }

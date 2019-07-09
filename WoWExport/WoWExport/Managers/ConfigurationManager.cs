@@ -7,6 +7,9 @@ namespace Managers
 {
     class ConfigurationManager
     {
+        public static String Profile;
+        public static String GameDir;
+
         public static String OutputDirectory;
 
         //ADT Exporter
