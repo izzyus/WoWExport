@@ -75,6 +75,7 @@
       <DependentUpon>Form_WMOExport.cs</DependentUpon>
     </Compile>
     <Compile Include="Generators\ADT_Alpha.cs" />
+    <Compile Include="Generators\DisplayStructure.cs" />
     <Compile Include="Managers\ArchiveManager.cs" />
     <Compile Include="Managers\ConfigurationManager.cs" />
     <Compile Include="Managers\md5Manager.cs" />

@@ -502,8 +502,35 @@ namespace WoWExport
                 MessageBox.Show("Skin " + i + ": " + Reader.model.skins[i].filename);
             }
             */
-
+            Generators.DisplayStructure.GenerateList();
+            treeView1.Nodes.Add(PopulateTreeNode2(Generators.DisplayStructure.MLF, "\\"));
         }
+
+
+        private TreeNode PopulateTreeNode2(List<string> paths, string pathSeparator)
+        {
+            if (paths == null)
+                return null;
+
+            TreeNode thisnode = new TreeNode();
+            TreeNode currentnode;
+            char[] cachedpathseparator = pathSeparator.ToCharArray();
+            foreach (string path in paths)
+            {
+                currentnode = thisnode;
+                foreach (string subPath in path.Split(cachedpathseparator))
+                {
+                    if (null == currentnode.Nodes[subPath])
+                        currentnode = currentnode.Nodes.Add(subPath, subPath);
+                    else
+                        currentnode = currentnode.Nodes[subPath];
+                }
+            }
+
+            return thisnode;
+        }
+
+
         private void LoadGame()
         {
 
