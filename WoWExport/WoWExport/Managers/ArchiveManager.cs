@@ -211,15 +211,19 @@ namespace Managers
             FileInfo[] Archives = directory.GetFiles("*.mpq");
             foreach (FileInfo fileinfo in Archives)
             {
-                using (MpqArchive archive = new MpqArchive(fileinfo.FullName, FileAccess.Read))
+                if (!File.Exists(to + "\\" + fileinfo.Name.Replace(".MPQ", ".txt")))
                 {
-                    using (MpqFileStream file = archive.OpenFile("(listfile)"))
-                    using (StreamReader sr = new StreamReader(file))
+                    using (MpqArchive archive = new MpqArchive(fileinfo.FullName, FileAccess.Read))
                     {
-                        listFile = sr.ReadToEnd();
-                        //Console.WriteLine(listFile);
+                        using (MpqFileStream file = archive.OpenFile("(listfile)"))
+                        using (StreamReader sr = new StreamReader(file))
+                        {
+                            listFile = sr.ReadToEnd();
+                            //Console.WriteLine(listFile);
+                        }
+                        archive.ExtractFile("(listfile)", to + "\\" + fileinfo.Name.Replace(".MPQ", ".txt"));
+                        //Console.WriteLine("Wrote to disk:" + fileinfo.Name.Replace(".MPQ", ".txt"));
                     }
-                    archive.ExtractFile("(listfile)", to + "\\" + fileinfo.Name.Replace(".MPQ", ".txt"));
                 }
             }
         }
