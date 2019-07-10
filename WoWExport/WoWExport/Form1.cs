@@ -592,6 +592,35 @@ namespace WoWExport
             {
                 button2.Enabled = false;   
             }
+
+            if (treeView1.SelectedNode.FullPath.EndsWith(".adt"))
+            {
+                try
+                {
+                    string filedirectory = treeView1.SelectedNode.FullPath.Replace("\\maps\\", "\\minimaps\\");
+                    filedirectory = filedirectory.Substring(0, filedirectory.LastIndexOf("\\")+1);
+                    filedirectory = filedirectory.Substring(5, filedirectory.Length - 5);
+
+                    string filename = Path.GetFileNameWithoutExtension(treeView1.SelectedNode.FullPath);
+                    filename = filename.Replace(filename.Substring(0, filename.IndexOf("_") + 1), "map")+ ".blp";
+                    //Console.WriteLine(filedirectory + filename);
+
+                    try
+                    {
+                        BLPReader reader = new BLPReader();
+                        reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(filedirectory + filename));
+                        pictureBox1.Image = reader.bmp;
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                catch
+                {
+
+                }
+            }
         }
     }
 }
