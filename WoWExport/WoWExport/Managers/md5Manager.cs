@@ -80,10 +80,16 @@ namespace Managers
 
         public static String TranslateThisMap(string filename)
         {
+            //Console.WriteLine(filename);
+            string filedirectory = Path.GetDirectoryName(filename);
+            filedirectory = filedirectory.Substring(filedirectory.LastIndexOf("\\") +1, filedirectory.Length - filedirectory.LastIndexOf("\\")-1);
+            //Console.WriteLine(filedirectory);
+
             filename = Path.GetFileNameWithoutExtension(filename.ToLower());
             filename = filename.Replace(filename.Substring(0, filename.IndexOf("_") + 1), "map");
-
-            int index = lines.FindIndex(a => a.Contains(filename));
+            //Console.WriteLine(filename);
+            //int index = lines.FindIndex(a => a.Contains(filename));
+            int index = lines.FindIndex(a => a.Contains(filedirectory + "\\"+ filename));
 
             if (index != -1)
             {

@@ -550,10 +550,10 @@ namespace WoWExport
         private void LoadGame()
         {
 
-            Managers.ConfigurationManager.Profile = "Cata"; //Hardcoded until full implementation
-            Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - Cataclysm"; //Hardcoded until full implementation
-            //Managers.ConfigurationManager.Profile = "LK"; //Hardcoded until full implementation
-            //Managers.ArchiveManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King"; //Hardcoded until full implementation
+            //Managers.ConfigurationManager.Profile = "Cata"; //Hardcoded until full implementation
+            //Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - Cataclysm"; //Hardcoded until full implementation
+            Managers.ConfigurationManager.Profile = "LK"; //Hardcoded until full implementation
+            Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King"; //Hardcoded until full implementation
 
             //Extract listfiles to cache
             if (!Directory.Exists(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles"))
@@ -562,16 +562,18 @@ namespace WoWExport
             }
             Managers.ArchiveManager.ExtractListfiles(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles\\");
 
-
             Managers.ArchiveManager.LoadArchives();
             Managers.ArchiveManager.GenerateMainListFileFromMPQ();
 
+            if (Managers.ConfigurationManager.Profile == "LK")
+            {
+                Managers.md5Manager.LoadMD5();
+            }
 
             Generators.DisplayStructure.GenerateList();
             treeView1.Nodes.Add(PopulateTreeNode2(Generators.DisplayStructure.MLF, "\\"));
             treeView1.Nodes[0].Expand();
             treeView1.Nodes[0].Text = "root";
-
 
             Managers.ConfigurationManager.ADTExportM2 = true;
             Managers.ConfigurationManager.ADTExportWMO = true;
@@ -597,23 +599,41 @@ namespace WoWExport
             {
                 try
                 {
-                    string filedirectory = treeView1.SelectedNode.FullPath.Replace("\\maps\\", "\\minimaps\\");
-                    filedirectory = filedirectory.Substring(0, filedirectory.LastIndexOf("\\")+1);
-                    filedirectory = filedirectory.Substring(5, filedirectory.Length - 5);
-
-                    string filename = Path.GetFileNameWithoutExtension(treeView1.SelectedNode.FullPath);
-                    filename = filename.Replace(filename.Substring(0, filename.IndexOf("_") + 1), "map")+ ".blp";
-                    //Console.WriteLine(filedirectory + filename);
-
-                    try
+                    if (Managers.ConfigurationManager.Profile != "LK")
                     {
-                        BLPReader reader = new BLPReader();
-                        reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(filedirectory + filename));
-                        pictureBox1.Image = reader.bmp;
+                        string filedirectory = treeView1.SelectedNode.FullPath.Replace("\\maps\\", "\\minimaps\\");
+                        filedirectory = filedirectory.Substring(0, filedirectory.LastIndexOf("\\") + 1);
+                        filedirectory = filedirectory.Substring(5, filedirectory.Length - 5);
+
+                        string filename = Path.GetFileNameWithoutExtension(treeView1.SelectedNode.FullPath);
+                        filename = filename.Replace(filename.Substring(0, filename.IndexOf("_") + 1), "map") + ".blp";
+                        //Console.WriteLine(filedirectory + filename);
+
+                        try
+                        {
+                            BLPReader reader = new BLPReader();
+                            reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(filedirectory + filename));
+                            pictureBox1.Image = reader.bmp;
+                        }
+                        catch
+                        {
+
+                        }
                     }
-                    catch
+                    else
                     {
+                        string filename = treeView1.SelectedNode.FullPath;
+                        
+                        try
+                        {
+                            BLPReader reader = new BLPReader();
+                            reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(Managers.md5Manager.TranslateThisMap(filename)));
+                            pictureBox1.Image = reader.bmp;
+                        }
+                        catch
+                        {
 
+                        }
                     }
                 }
                 catch
