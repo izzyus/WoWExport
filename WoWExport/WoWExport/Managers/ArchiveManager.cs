@@ -31,9 +31,19 @@ namespace Managers
         public static MpqArchive patch2;// = new MpqArchive(@"D:\World of Warcraft - Wrath of the Lich King\Data\patch-2.MPQ", FileAccess.Read);
         public static MpqArchive patch3;// = new MpqArchive(@"D:\World of Warcraft - Wrath of the Lich King\Data\patch-3.MPQ", FileAccess.Read);
 
+        //Vanilla
+        public static MpqArchive baseMPQ;
+        public static MpqArchive dbc;
+        public static MpqArchive interfaceMPQ;
+        public static MpqArchive misc;
+        public static MpqArchive sound;
+        public static MpqArchive terrain;
+        public static MpqArchive texture;
+        public static MpqArchive wmo;
+
         public static void LoadArchives()
         {
-            if(ConfigurationManager.GameDir == null)
+            if (ConfigurationManager.GameDir == null)
             {
                 throw new Exception("Game directory not initialized, unable to load archives");
             }
@@ -57,9 +67,20 @@ namespace Managers
                 patch = new MpqArchive(ConfigurationManager.GameDir + @"\Data\patch.MPQ", FileAccess.Read);
                 patch2 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\patch-2.MPQ", FileAccess.Read);
                 patch3 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\patch-3.MPQ", FileAccess.Read);
+
+                //Vanilla....
+                baseMPQ = new MpqArchive(ConfigurationManager.GameDir + @"\Data\base.mpq", FileAccess.Read);
+                dbc = new MpqArchive(ConfigurationManager.GameDir + @"\Data\dbc.mpq", FileAccess.Read);
+                interfaceMPQ = new MpqArchive(ConfigurationManager.GameDir + @"\Data\interface.mpq", FileAccess.Read);
+                misc = new MpqArchive(ConfigurationManager.GameDir + @"\Data\misc.mpq", FileAccess.Read);
+                sound = new MpqArchive(ConfigurationManager.GameDir + @"\Data\sound.mpq", FileAccess.Read);
+                terrain = new MpqArchive(ConfigurationManager.GameDir + @"\Data\terrain.mpq", FileAccess.Read);
+                texture = new MpqArchive(ConfigurationManager.GameDir + @"\Data\texture.mpq", FileAccess.Read);
+                wmo = new MpqArchive(ConfigurationManager.GameDir + @"\Data\wmo.mpq", FileAccess.Read);
+
             }
 
-        }
+}
         //Kind of obsolete at this point
         public static void GenerateMainListFileFromTXT()
         {
@@ -192,6 +213,32 @@ namespace Managers
                         break;
                     case "patch3":
                         stream = patch3.OpenFile(filename);
+                        break;
+
+                        //Vanilla
+                    case "base":
+                        stream = baseMPQ.OpenFile(filename);
+                        break;
+                    case "dbc":
+                        stream = dbc.OpenFile(filename);
+                        break;
+                    case "interface":
+                        stream = interfaceMPQ.OpenFile(filename);
+                        break;
+                    case "misc":
+                        stream = misc.OpenFile(filename);
+                        break;
+                    case "sound":
+                        stream = sound.OpenFile(filename);
+                        break;
+                    case "terrain":
+                        stream = terrain.OpenFile(filename);
+                        break;
+                    case "texture":
+                        stream = texture.OpenFile(filename);
+                        break;
+                    case "wmo":
+                        stream = wmo.OpenFile(filename);
                         break;
                 }
             }

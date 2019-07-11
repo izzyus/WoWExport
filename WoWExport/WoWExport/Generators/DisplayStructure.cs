@@ -30,12 +30,24 @@ namespace WoWExport.Generators
             ".bls",
             ".cfg",
             ".wtf",
+            ".wlq",
+            ".wlw",
+            ".lit",
+            ".lock",
+            ".wlm",
+            ".not",
             ".trs",
             ".db",
+            ".url",
+            ".html",
+            ".xml",
+            ".ini",
 
             ".mp3",
             ".ogg",
+            ".wav",
             ".blp"
+
         };
 
         public static void GenerateList()

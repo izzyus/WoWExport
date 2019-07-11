@@ -61,12 +61,18 @@ namespace WoWExport
 
             textBox1.Text = "D:\\export";
 
-            groupBox1.Text = "Alphamap [#]";
+            //groupBox1.Text = "Alphamap [#]";
+            groupBox1.Text = "Preview";
 
             radioButton1.Checked = true;
             radioButton1.Text = "Uniform Grayscale";
             radioButton2.Text = "Uniform ARGB";
             radioButton3.Text = "Non-Uniform";
+
+            radioButton1.Hide();
+            radioButton2.Hide();
+            radioButton3.Hide();
+            button3.Hide();
 
             //To be deleted later
             button3.Text = "Crash Me!";
@@ -552,8 +558,13 @@ namespace WoWExport
 
             //Managers.ConfigurationManager.Profile = "Cata"; //Hardcoded until full implementation
             //Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - Cataclysm"; //Hardcoded until full implementation
-            Managers.ConfigurationManager.Profile = "LK"; //Hardcoded until full implementation
-            Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King"; //Hardcoded until full implementation
+            //Managers.ConfigurationManager.Profile = "LK"; //Hardcoded until full implementation
+            //Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King"; //Hardcoded until full implementation
+            Managers.ConfigurationManager.Profile = "TBC"; //Hardcoded until full implementation
+            Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - The Burning Crusade"; //Hardcoded until full implementation
+            //Managers.ConfigurationManager.Profile = "Vanilla"; //Hardcoded until full implementation
+            //Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft"; //Hardcoded until full implementation
+
 
             //Extract listfiles to cache
             if (!Directory.Exists(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles"))
@@ -565,7 +576,7 @@ namespace WoWExport
             Managers.ArchiveManager.LoadArchives();
             Managers.ArchiveManager.GenerateMainListFileFromMPQ();
 
-            if (Managers.ConfigurationManager.Profile == "LK")
+            if (Managers.ConfigurationManager.Profile == "LK" || Managers.ConfigurationManager.Profile == "TBC" || Managers.ConfigurationManager.Profile == "Vanilla")
             {
                 Managers.md5Manager.LoadMD5();
             }
@@ -599,7 +610,7 @@ namespace WoWExport
             {
                 try
                 {
-                    if (Managers.ConfigurationManager.Profile != "LK")
+                    if (Managers.ConfigurationManager.Profile == "Cata" || Managers.ConfigurationManager.Profile == "MOP")
                     {
                         string filedirectory = treeView1.SelectedNode.FullPath.Replace("\\maps\\", "\\minimaps\\");
                         filedirectory = filedirectory.Substring(0, filedirectory.LastIndexOf("\\") + 1);
