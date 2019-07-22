@@ -98,6 +98,8 @@ namespace WoWExport
             {
                 Managers.ConfigurationManager.Profile = comboBox1.Text;
                 Managers.ConfigurationManager.GameDir = textBox1.Text;
+                new WoWExport.Form1().Show();
+                this.Hide();
             }
             else
             {
