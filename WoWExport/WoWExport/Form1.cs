@@ -560,8 +560,8 @@ namespace WoWExport
             //Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - Cataclysm"; //Hardcoded until full implementation
             //Managers.ConfigurationManager.Profile = "LK"; //Hardcoded until full implementation
             //Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - Wrath of the Lich King"; //Hardcoded until full implementation
-            Managers.ConfigurationManager.Profile = "TBC"; //Hardcoded until full implementation
-            Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - The Burning Crusade"; //Hardcoded until full implementation
+            //Managers.ConfigurationManager.Profile = "TBC"; //Hardcoded until full implementation
+            //Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft - The Burning Crusade"; //Hardcoded until full implementation
             //Managers.ConfigurationManager.Profile = "Vanilla"; //Hardcoded until full implementation
             //Managers.ConfigurationManager.GameDir = @"D:\World of Warcraft"; //Hardcoded until full implementation
 
