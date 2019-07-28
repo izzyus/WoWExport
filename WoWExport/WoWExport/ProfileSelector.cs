@@ -34,6 +34,9 @@ namespace WoWExport
 
         private void ProfileSelector_Load(object sender, EventArgs e)
         {
+
+            label1.Text = "";
+
             button1.Text = "Load";
             button2.Text = "Browse";
 
@@ -86,7 +89,16 @@ namespace WoWExport
         private void SwitchProfile()
         {
 
-
+            if (comboBox1.Text == "WOD" || comboBox1.Text == "Legion" || comboBox1.Text == "BFA")
+            {
+                button1.Enabled = false;
+                label1.Text = "Not implemented yet";
+            }
+            else
+            {
+                button1.Enabled = true;
+                label1.Text = "";
+            }
 
         }
 

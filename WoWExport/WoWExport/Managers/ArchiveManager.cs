@@ -12,6 +12,10 @@ namespace Managers
         public static List<String> MainListFile = new List<String>();
         //public static String ConfigurationManager.GameDir;
 
+        //Mysts
+        public static MpqArchive expansion4;
+        public static MpqArchive model;
+
         //Cataclysm
         public static MpqArchive art;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\art.mpq", FileAccess.Read);
         public static MpqArchive expansion1;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\expansion1.MPQ", FileAccess.Read);
@@ -49,6 +53,10 @@ namespace Managers
             }
             else
             {
+                //Mysts
+                expansion4 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\expansion4.MPQ", FileAccess.Read);
+                model = new MpqArchive(ConfigurationManager.GameDir + @"\Data\model.MPQ", FileAccess.Read);
+
                 //Cataclysm
                 art = new MpqArchive(ConfigurationManager.GameDir + @"\Data\art.mpq", FileAccess.Read);
                 expansion1 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\expansion1.MPQ", FileAccess.Read);
@@ -166,6 +174,14 @@ namespace Managers
                 switch (archive.Substring(0, archive.Length - 4).Replace("-", ""))
                 //switch (archive.Substring(0, archive.Length - 4))
                 {
+                    //Mysts
+                    case "expansion4":
+                        stream = expansion4.OpenFile(filename);
+                        break;
+                    case "model":
+                        stream = model.OpenFile(filename);
+                        break;
+
                     //Cataclysm
                     case "art":
                         stream = art.OpenFile(filename);
