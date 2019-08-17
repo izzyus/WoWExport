@@ -68,6 +68,12 @@
     <Compile Include="Form_ADTExport.Designer.cs">
       <DependentUpon>Form_ADTExport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_M2Export.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_M2Export.Designer.cs">
+      <DependentUpon>Form_M2Export.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_WMOExport.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -113,6 +119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ADTExport.resx">
       <DependentUpon>Form_ADTExport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_M2Export.resx">
+      <DependentUpon>Form_M2Export.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_WMOExport.resx">
       <DependentUpon>Form_WMOExport.cs</DependentUpon>

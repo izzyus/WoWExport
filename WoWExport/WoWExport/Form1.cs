@@ -401,7 +401,7 @@ namespace WoWExport
                         new WoWExport.Form_ADTExport(selectedItem).Show();
                         break;
                     case ".m2":
-                        MessageBox.Show("Not implemented yet");
+                        new WoWExport.Form_M2Export(selectedItem).Show();
                         break;
                     case ".wmo":
                         new WoWExport.Form_WMOExport(selectedItem).Show();
