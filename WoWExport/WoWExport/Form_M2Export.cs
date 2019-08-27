@@ -32,11 +32,20 @@ namespace WoWExport
                 M2Reader reader = new M2Reader();
                 reader.LoadM2(filename);
 
-                //other stuff here
+                //Populate model details:
+
+                label1.Text = "Version: " + reader.model.version;
+                label2.Text = "Name: " + reader.model.name;
+                label3.Text = "Sequences: " + reader.model.sequences.Count();
+                label4.Text = "Animations: " + reader.model.animations.Count();
+                label5.Text = "Bones: " + reader.model.bones.Count();
+                label6.Text = "Vertices: " + reader.model.vertices.Count();
+                label7.Text = "Skins: " + reader.model.skins.Count();
+                label8.Text = "Textures: " + reader.model.textures.Count();         
             }
             catch
             {
-                throw new Exception("Something really really bad happened");
+                throw new Exception("Could not read the model to display details");
             }
         }
 
