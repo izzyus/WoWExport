@@ -34,7 +34,6 @@ namespace WoWExport
 
         private void ProfileSelector_Load(object sender, EventArgs e)
         {
-
             label1.Text = "";
 
             button1.Text = "Load";
@@ -44,8 +43,28 @@ namespace WoWExport
 
             comboBox1.Items.AddRange(DisplayProfiles);
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
-            comboBox1.SelectedIndex = 0;
 
+            if (File.Exists(Environment.CurrentDirectory + "\\settings\\" + "last_session" + ".txt"))
+            {
+                try
+                {
+                    comboBox1.SelectedIndex = int.Parse(File.ReadAllText(Environment.CurrentDirectory + "\\settings\\" + "last_session" + ".txt"));
+                }
+                catch
+                {
+                    comboBox1.SelectedIndex = 0;
+                }
+            }
+            else
+            { 
+            comboBox1.SelectedIndex = 0;
+        }
+
+            //Create Settings Folder if missing
+            if (!Directory.Exists(Environment.CurrentDirectory + "\\settings"))
+            {
+                Directory.CreateDirectory(Environment.CurrentDirectory + "\\settings");
+            }
         }
 
         private void BrowseFolder()
@@ -73,7 +92,6 @@ namespace WoWExport
 
         private void LoadProfiles()
         {
-
             using (StreamReader sr = File.OpenText(Environment.CurrentDirectory + "\\" + "profiles.txt"))
             {
                 string s = String.Empty;
@@ -83,12 +101,10 @@ namespace WoWExport
                     Profiles.Add(s);
                 }
             }
-
         }
 
         private void SwitchProfile()
         {
-
             if (comboBox1.Text == "WOD" || comboBox1.Text == "Legion" || comboBox1.Text == "BFA")
             {
                 button1.Enabled = false;
@@ -99,15 +115,55 @@ namespace WoWExport
                 button1.Enabled = true;
                 label1.Text = "";
             }
-
+            //Console.WriteLine("Profile set to: " + comboBox1.Text);
+            
+            //Try to read the selectd profile path
+            if (File.Exists(Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt"))
+            {
+                try
+                {
+                    textBox1.Text = File.ReadAllText(Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt");
+                }
+                catch
+                {
+                    throw new Exception("Something went wrong with: " + Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt");
+                }
+            }
+            else
+            {
+                textBox1.Text = "";
+            }
         }
-
-
 
         private void button1_Click_1(object sender, EventArgs e)
         {
+            //Check to see if there is a given path
             if (textBox1.Text != "" && comboBox1.Text != "")
             {
+                //Save path for next boot:
+                try
+                {
+                    File.WriteAllText(Environment.CurrentDirectory + "\\settings\\" + "last_session" + ".txt", comboBox1.SelectedIndex.ToString());
+                }
+                catch
+                {
+                    throw new Exception("Could not save this session index");
+                }
+
+                
+                if (!File.Exists(Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt"))
+                {
+                    try
+                    {
+                        File.WriteAllText(Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt", textBox1.Text);
+                    }
+                    catch
+                    {
+                        throw new Exception("Could not create file: " + Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt");
+                    }
+                }
+
+                //Load up the main GUI and set the profile acordingly
                 Managers.ConfigurationManager.Profile = comboBox1.Text;
                 Managers.ConfigurationManager.GameDir = textBox1.Text;
                 new WoWExport.Form1().Show();
