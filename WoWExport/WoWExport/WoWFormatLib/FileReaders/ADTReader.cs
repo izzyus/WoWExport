@@ -461,6 +461,8 @@ namespace WoWFormatLib.FileReaders
                             break;
                         case "MAMP":
                             break;
+                        case "MTXF":
+                            break;
                         default:
                             throw new Exception(string.Format("Found unknown header at offset {1} \"{0}\" while we should've already read them all!", chunkName, position));
                     }
