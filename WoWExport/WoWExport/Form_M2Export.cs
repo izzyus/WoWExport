@@ -43,9 +43,9 @@ namespace WoWExport
                 label7.Text = "Skins: " + reader.model.skins.Count();
                 label8.Text = "Textures: " + reader.model.textures.Count();         
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Could not read the model to display details");
+                throw new Exception("Could not read the model to display details" + " - exception: " + ex.Message);
             }
         }
 

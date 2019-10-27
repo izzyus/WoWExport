@@ -64,9 +64,9 @@ namespace WoWExport
                 label3.Text = "WMOs (" + reader.wmoFiles.Count() + ")";
 
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Something really really bad happened");
+                throw new Exception(ex.Message);
             }
         }
 

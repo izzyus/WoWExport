@@ -36,9 +36,9 @@ namespace WoWExport
 
                 //other stuff here
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Something really really bad happened");
+                throw new Exception(ex.Message);
             }
 
         }
