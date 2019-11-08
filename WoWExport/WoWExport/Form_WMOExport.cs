@@ -34,6 +34,21 @@ namespace WoWExport
                 WMOReader reader = new WMOReader();
                 reader.LoadWMO(filename);
 
+                if (reader.wmofile.doodadNames != null)
+                {
+                    try
+                    {
+                        for(int i = 0; i < reader.wmofile.doodadNames.Length; i ++)
+                        {
+                            listBox1.Items.Add(reader.wmofile.doodadNames[i].filename.ToLower());
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
                 //other stuff here
             }
             catch (Exception ex)
