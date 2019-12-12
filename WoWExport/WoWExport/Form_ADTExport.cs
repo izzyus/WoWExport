@@ -45,6 +45,8 @@ namespace WoWExport
             checkBox5.Text = "Export ground textures";
             checkBox6.Checked = Managers.ConfigurationManager.ADTexportAlphaMaps;
             checkBox6.Text = "Export alphamaps";
+            checkBox7.Checked = Managers.ConfigurationManager.ADTIgnoreHoles;
+            checkBox7.Text = "Ignore holes";
 
             button1.Text = "Export";
             this.Text = filename;
@@ -78,6 +80,7 @@ namespace WoWExport
             Managers.ConfigurationManager.ADTExportFoliage = checkBox4.Checked;
             Managers.ConfigurationManager.ADTexportTextures = checkBox5.Checked;
             Managers.ConfigurationManager.ADTexportAlphaMaps= checkBox6.Checked;
+            Managers.ConfigurationManager.ADTIgnoreHoles = checkBox7.Checked;
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)

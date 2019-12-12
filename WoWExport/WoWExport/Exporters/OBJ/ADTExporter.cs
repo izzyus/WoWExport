@@ -195,6 +195,13 @@ namespace Exporters.OBJ
                             }
                         }
 
+                        //Sloppy ignore holes:
+                        if(Managers.ConfigurationManager.ADTIgnoreHoles)
+                        {
+                            isHole = false;
+                        }
+
+
                         else
                         {
                             // Check if current section is a hole

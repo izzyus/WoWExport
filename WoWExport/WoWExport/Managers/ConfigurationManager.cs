@@ -18,6 +18,7 @@ namespace Managers
         public static Boolean ADTExportFoliage = false; //Obsolete atm
         public static Boolean ADTexportTextures = false;
         public static Boolean ADTexportAlphaMaps = false;
+        public static Boolean ADTIgnoreHoles = false;
 
         //WMO Export
         public static Boolean WMOExportM2 = false;
