@@ -137,7 +137,7 @@ namespace Generators.ADT_Alpha
 
                 }
             }
-            else //METHOD 3 (ALL THE CHUNKS (256) GET AN ALPHA FOR EVERY USED TEXTURE (ALPHA SIZE = 64x64 ))
+            else //METHOD 3 OR 4 (ALL THE CHUNKS (256) GET AN ALPHA FOR EVERY USED TEXTURE (ALPHA TEXTURE SIZE = 64x64 ))
             {
                 //----------------------------------------------------------------------------------------------------------
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -156,13 +156,32 @@ namespace Generators.ADT_Alpha
                             var values = adtfile.texChunks[c].alphaLayer[li].layer;
                             var bmp = new System.Drawing.Bitmap(64, 64);
                             {
-                                for (int x = 0; x < 64; x++)
+                                if(GenerationMode == 3)
                                 {
-                                    for (int y = 0; y < 64; y++)
+                                    // 64x64 ALPHAS:
+                                    for (int x = 0; x < 64; x++)
                                     {
-                                        var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
-                                        //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
-                                        bmp.SetPixel(x, y, color);
+                                        for (int y = 0; y < 64; y++)
+                                        {
+                                            var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
+                                            //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
+                                            bmp.SetPixel(x, y, color);
+                                        }
+                                    }
+                                }
+                                if (GenerationMode == 4)
+                                {
+                                    // 63x63 ALPHAS: (Last column/row = previous one)
+                                    for (int x = 0; x < 63; x++)
+                                    {
+                                        for (int y = 0; y < 63; y++)
+                                        {
+                                            var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
+                                            bmp.SetPixel(x, y, color);
+                                            if (y == 62) { bmp.SetPixel(x, y + 1, color); }
+                                            if (x == 62) { bmp.SetPixel(x + 1, y, color); }
+                                            if (x == 62 && y == 62) { bmp.SetPixel(x + 1, y + 1, color); }
+                                        }
                                     }
                                 }
                             }
