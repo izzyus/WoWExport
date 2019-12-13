@@ -54,8 +54,14 @@ namespace WoWExport
             try
             {
                 ADTReader reader = new ADTReader();
-                reader.LoadADT(filename);
-
+                if(Managers.ConfigurationManager.Profile == "LK")
+                {
+                    reader.Load335ADT(filename);
+                }
+                else
+                {
+                    reader.LoadADT(filename);
+                }
                 //listBox1.Items.AddRange(reader.m2Files.ToArray());
                 //listBox2.Items.AddRange(reader.wmoFiles.ToArray());
                 listBox1.Items.AddRange(reader.m2Files.Select(s => s.ToLowerInvariant()).ToArray());

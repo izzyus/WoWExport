@@ -56,7 +56,15 @@ namespace Exporters.OBJ
             var ADTtex = file.Replace(".adt", "_tex0.adt");
 
             //reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
-            reader.LoadADT(ADTfile);
+            //reader.LoadADT(ADTfile);
+            if (Managers.ConfigurationManager.Profile == "LK")
+            {
+                reader.Load335ADT(ADTfile);
+            }
+            else
+            {
+                reader.LoadADT(ADTfile);
+            }
 
             if (reader.adtfile.chunks == null)
             {

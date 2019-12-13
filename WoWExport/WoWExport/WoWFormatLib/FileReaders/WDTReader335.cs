@@ -39,9 +39,11 @@ namespace WoWFormatLib.FileReaders
             //--
 
             //--
-            if (File.Exists(filename))
+            //if (File.Exists(filename))
+            if (Managers.ArchiveManager.FileExists(filename))
             {
-                using (Stream tex = File.OpenRead(filename))
+                //using (Stream tex = File.OpenRead(filename))
+                using (Stream tex = Managers.ArchiveManager.ReadThisFile(filename))
                 {
                     ReadWDT(filename, tex);
                 }

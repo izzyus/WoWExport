@@ -16,7 +16,17 @@ namespace WoWFormatLib.FileReaders
         public List<string> wmoFiles;
         private Structs.WDT.WDT wdt;
 
+        public int currentChunk; //very ghetto, much wow
+
         /* ROOT */
+
+        //----------------------------------------------------------------------------------------------------------
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///ADT READER
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //----------------------------------------------------------------------------------------------------------
+
+        #region Split-File_ADT_READER
         public void LoadADT(string filename, bool loadSecondaryADTs = true)
         //public void LoadADT(string filename, string wdtfilename, string objfilename, string texfilename, bool loadSecondaryADTs = true)
         {
@@ -125,6 +135,280 @@ namespace WoWFormatLib.FileReaders
                 }
             }
         }
+
+        #endregion
+
+        //----------------------------------------------------------------------------------------------------------
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///ADT READER END
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //----------------------------------------------------------------------------------------------------------
+
+
+
+        //----------------------------------------------------------------------------------------------------------
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///335 ADT READER
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //----------------------------------------------------------------------------------------------------------
+
+        #region Single-File_ADT_READER
+        //public void Load335ADT(string filename, string wdtfilename)
+        public void Load335ADT(string filename)
+        {
+            m2Files = new List<string>();
+            wmoFiles = new List<string>();
+            blpFiles = new List<string>();
+
+            var WDTfile = filename.Substring(0, filename.Length - 10) + ".wdt";
+
+            /*
+            filename = Path.ChangeExtension(filename, ".adt");
+
+            if (!CASC.cascHandler.FileExists(filename) || !CASC.cascHandler.FileExists(filename.Replace(".adt", "_obj0.adt")) || !CASC.cascHandler.FileExists(filename.Replace(".adt", "_tex0.adt"))) {
+                throw new FileNotFoundException("One or more ADT files for ADT " + filename + " could not be found.");
+            }
+
+            var mapname = filename.Replace("world\\maps\\", "").Substring(0, filename.Replace("world\\maps\\", "").IndexOf("\\"));
+
+            if (CASC.cascHandler.FileExists("world\\maps\\" + mapname + "\\" + mapname + ".wdt"))
+            */
+
+            //if (File.Exists(wdtfilename))
+            if (Managers.ArchiveManager.FileExists(WDTfile))
+            {
+                var wdtr = new WDTReader335();
+
+                //wdtr.LoadWDT("world\\maps\\" + mapname + "\\" + mapname + ".wdt");
+                //wdtr.LoadWDT(wdtfilename);
+
+                wdtr.LoadWDT(WDTfile);
+                wdt = wdtr.wdtfile;
+
+            }
+            else
+            {
+                throw new Exception("WDT does not exist, need this for MCAL flags!");
+            }
+
+            //using (var adt = CASC.cascHandler.OpenFile(filename))
+
+            //var adt = File.OpenRead(filename);
+            var adt = Managers.ArchiveManager.ReadThisFile(filename);
+
+            using (var bin = new BinaryReader(adt))
+            {
+                long position = 0;
+                var MCNKi = 0;
+                var MCINi = 0;
+                currentChunk = 0; //very ghetto, much wow
+
+                adtfile.chunks = new MCNK[16 * 16];
+
+                adtfile.mcinChunks = new MCIN[16 * 16]; // <------
+                adtfile.texChunks = new TexMCNK[16 * 16]; // <------ You are not supposed to be in here (actually yes, but also no)
+
+                while (position < adt.Length)
+                {
+                    adt.Position = position;
+
+                    var chunkName = new string(bin.ReadChars(4).Reverse().ToArray());
+                    var chunkSize = bin.ReadUInt32();
+
+                    position = adt.Position + chunkSize;
+
+                    switch (chunkName)
+                    {
+                        case "MVER":
+                            var version = bin.ReadUInt32();
+                            if (version != 18)
+                            {
+                                throw new Exception("Unsupported ADT version!");
+                            }
+                            else
+                            {
+                                adtfile.version = version;
+                            }
+                            break;
+                        /* // <-------------------------------------------------------------------
+                    case "MFBO":
+                    //model.blob stuff
+                    case "MBMH":
+                    case "MBBB":
+                    case "MBMI":
+                    case "MBNV":
+                        break;
+                        */ // <-------------------------------------------------------------------
+                        case "MHDR":
+                            adtfile.header = bin.Read<MHDR>();
+                            break;
+
+                        case "MCIN": // <-----
+                            adtfile.mcinChunks[MCINi] = readMCINChunk(chunkSize, bin);
+                            MCINi++;
+                            break;
+
+                        case "MTEX":
+                            adtfile.textures = ReadMTEXChunk(chunkSize, bin);
+                            break;
+                        case "MMDX":
+                            adtfile.objects.m2Names = ReadMMDXChunk(chunkSize, bin);
+                            break;
+                        case "MMID":
+                            adtfile.objects.m2NameOffsets = ReadMMIDChunk(chunkSize, bin);
+                            break;
+                        case "MWMO":
+                            adtfile.objects.wmoNames = ReadMWMOChunk(chunkSize, bin);
+                            break;
+                        case "MWID":
+                            adtfile.objects.wmoNameOffsets = ReadMWIDChunk(chunkSize, bin);
+                            break;
+                        case "MDDF":
+                            adtfile.objects.models = ReadMDDFChunk(chunkSize, bin);
+                            break;
+                        case "MODF":
+                            adtfile.objects.worldModels = ReadMODFChunk(chunkSize, bin);
+                            break;
+                        case "MH2O":
+                            adtfile.mh2o = ReadMH20SubChunk(chunkSize, bin);
+                            break;
+                        case "MCNK":
+                            //adtfile.chunks[MCNKi] = ReadMCNKChunk(adtfile.mcinChunks[MCNKi].size, bin); //Bad idea (MCIN size = 8 bytes longer than MCNK)
+                            adtfile.chunks[MCNKi] = Read335MCNKChunk(chunkSize, bin);
+                            MCNKi++;
+                            currentChunk++; //very ghetto, much wow
+                            break;
+                        default:
+                            throw new Exception(string.Format("{2} Found unknown header at offset {1} \"{0}\" while we should've already read them all!", chunkName, position, filename));
+                    }
+                }
+            }
+
+            //----------------------------------------------------------------------------------------------------
+            // CLEAVED FOR THE MOMENT
+            //----------------------------------------------------------------------------------------------------
+            /*
+            if (loadSecondaryADTs)
+            {
+                //using (var adtobj0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_obj0.adt")))
+                using (var adtobj0 = File.OpenRead(objfilename))
+                {
+                    ReadObjFile(adtobj0);
+                }
+
+                //using (var adttex0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_tex0.adt")))
+                using (var adttex0 = File.OpenRead(texfilename))
+                {
+                    ReadTexFile(adttex0);
+                }
+            }
+            */
+        }
+        #endregion
+
+        //----------------------------------------------------------------------------------------------------------
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///335 ADT READER END
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //----------------------------------------------------------------------------------------------------------
+
+        // MCIN chunk reader
+        private MCIN readMCINChunk(uint size, BinaryReader bin)
+        {
+            var mcinChunk = new MCIN()
+            {
+                offset = bin.ReadUInt32(),
+                size = bin.ReadUInt32(),
+                flags = bin.ReadUInt32(),
+                AsyncId = bin.ReadUInt32(),
+            };
+            return mcinChunk;
+        }
+        //--
+
+
+        private MCNK Read335MCNKChunk(uint size, BinaryReader bin)
+        {
+            var mapchunk = new MCNK()
+            {
+                header = bin.Read<MCNKheader>()
+            };
+
+            using (var stream = new MemoryStream(bin.ReadBytes((int)size - 128)))
+            using (var subbin = new BinaryReader(stream))
+            {
+                long subpos = 0;
+                while (subpos < stream.Length)
+                {
+                    subbin.BaseStream.Position = subpos;
+
+                    var subChunkName = new string(subbin.ReadChars(4).Reverse().ToArray());
+                    var subChunkSize = subbin.ReadUInt32();
+
+                    subpos = stream.Position + subChunkSize;
+
+                    switch (subChunkName)
+                    {
+                        case "MCVT":
+                            mapchunk.vertices = ReadMCVTSubChunk(subbin);
+                            break;
+                        case "MCNR":
+                            mapchunk.normals = ReadMCNRSubChunk(subbin);
+                            subpos = subpos + 13; //The weird data that the wiki speaks about [Thanks Marl!]
+                            break;
+
+                        /* // <-----
+                        case "MCCV":
+                            mapchunk.vertexShading = ReadMCCVSubChunk(subbin);
+                            break;
+                        case "MCBB":
+                            mapchunk.blendBatches = ReadMCBBSubChunk(subChunkSize, subbin);
+                            break;
+                        
+                        case "MCLV":
+                            continue;
+                        */  // <-----
+
+                        //----------------------------------------------------------------------------
+                        // To be properly implemented
+                        //----------------------------------------------------------------------------
+                        case "MCLY":
+                            //mapchunk.layers = ReadMCLYSubChunk(subChunkSize, subbin);
+                            adtfile.texChunks[currentChunk].layers = ReadMCLYSubChunk(subChunkSize, subbin); //very ghetto, much wow
+                            break;
+                        //----------------------------------------------------------------------------
+
+                        case "MCRF":
+                            break;
+                        case "MCSH":
+                            break;
+
+                        //----------------------------------------------------------------------------
+                        // To be properly implemented
+                        //----------------------------------------------------------------------------
+                        case "MCAL":
+                            //mapchunk.alphaLayer = ReadMCALSubChunk(subChunkSize, subbin, mapchunk);
+                            adtfile.texChunks[currentChunk].alphaLayer = ReadMCALSubChunk(subChunkSize, subbin, adtfile.texChunks[currentChunk]); //very ghetto, much wow
+                            break;
+                        //----------------------------------------------------------------------------
+
+                        case "MCLQ": //FIND PROPER PLACE IN STACK (not that it matters)
+
+                        case "MCSE":
+                            mapchunk.soundEmitters = ReadMCSESubChunk(subChunkSize, subbin);
+                            break;
+
+                        default:
+                            throw new Exception(string.Format("Found unknown header at offset {1} \"{0}\" while we should've already read them all! (Total size: {2})", subChunkName, subpos.ToString(), size));
+                    }
+                }
+            }
+
+            return mapchunk;
+        }
+
+
+
         private MCNK ReadMCNKChunk(uint size, BinaryReader bin)
         {
             var mapchunk = new MCNK()

@@ -72,7 +72,7 @@ namespace WoWExport
             radioButton1.Hide();
             radioButton2.Hide();
             radioButton3.Hide();
-            button3.Hide();
+            //button3.Hide();
 
             //To be deleted later
             button3.Text = "Crash Me!";
@@ -434,6 +434,14 @@ namespace WoWExport
             //---------------------------------------------------------------------------
             //WMOReader reader = new WMOReader();
             //reader.LoadWMO(@"");
+            //---------------------------------------------------------------------------
+
+
+            //---------------------------------------------------------------------------
+            //TEST INDIVIDUAL ADT (335):
+            //---------------------------------------------------------------------------
+            //ADTReader reader = new ADTReader();
+            //reader.Load335ADT(@"world\maps\azeroth\azeroth_32_48.adt");
             //---------------------------------------------------------------------------
 
             #region OldTests
