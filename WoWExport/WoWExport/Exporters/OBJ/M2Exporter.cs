@@ -52,7 +52,27 @@ namespace Exporters.OBJ
 
             //if (!CASC.FileExists(fileDataID)) { throw new Exception("404 M2 not found!"); }
             //if (!File.Exists(filename)) { throw new Exception("404 M2 not found!"); }
-            if (!Managers.ArchiveManager.FileExists(filename)) { throw new Exception("404 M2 not found!"); }
+            //if (!Managers.ArchiveManager.FileExists(filename)) { throw new Exception("404 M2 not found!"); }
+
+            //If the missing file is an ".mdx", try to look for a ".m2" alternative
+            if (!Managers.ArchiveManager.FileExists(filename))
+            {
+                if (Path.GetExtension(filename) == ".mdx")
+                {
+                    if (!Managers.ArchiveManager.FileExists(filename.Replace(".mdx", ".m2")))
+                    {
+                        throw new Exception("404 M2 not found!");
+                    }
+                    else
+                    {
+                        filename = filename.Replace(".mdx", ".m2");
+                    }
+                }
+                else
+                {
+                    throw new Exception("404 M2 not found!");
+                }
+            }
 
             //reader.LoadM2(fileDataID);
             reader.LoadM2(filename);
