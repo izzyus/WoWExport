@@ -42,6 +42,10 @@ namespace WoWExport.Generators
             ".html",
             ".xml",
             ".ini",
+            ".lua",
+            ".toc",
+            ".sig",
+            ".ttf",
 
             ".mp3",
             ".ogg",

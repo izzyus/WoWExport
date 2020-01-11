@@ -627,6 +627,7 @@ namespace WoWExport
             {
                 Directory.CreateDirectory(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles");
             }
+            Managers.ArchiveManager.FindLocale();
             Managers.ArchiveManager.ExtractListfiles(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles\\");
 
             Managers.ArchiveManager.LoadArchives();
