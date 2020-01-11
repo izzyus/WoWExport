@@ -45,8 +45,8 @@ namespace WoWExport.Generators
 
             ".mp3",
             ".ogg",
-            ".wav",
-            ".blp"
+            ".wav"
+            //".blp"
 
         };
 

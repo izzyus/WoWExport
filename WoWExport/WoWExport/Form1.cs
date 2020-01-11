@@ -406,9 +406,30 @@ namespace WoWExport
                     case ".wmo":
                         new WoWExport.Form_WMOExport(selectedItem).Show();
                         break;
+                    case ".blp":
+                        ExportBLP(selectedItem);
+                        break;
                     default:
                         MessageBox.Show("Direct file export not supported yet");
                         break;
+                }
+            }
+        }
+
+        private void ExportBLP(string file)
+        {
+            if (!File.Exists(Path.Combine(textBox1.Text, Path.GetFileNameWithoutExtension(file) + ".png")))
+            {
+                try
+                {
+                    BLPReader reader = new BLPReader();
+                    reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(file));
+                    reader.bmp.Save(Path.Combine(textBox1.Text, Path.GetFileNameWithoutExtension(file) + ".png"));
+                }
+                catch
+                {
+                    Console.WriteLine("Error occured on saving the file: " + file);
+                    Console.WriteLine(Path.Combine(textBox1.Text, Path.GetFileNameWithoutExtension(file) + ".png"));
                 }
             }
         }
@@ -641,7 +662,21 @@ namespace WoWExport
                 button2.Enabled = false;   
             }
 
-            if (treeView1.SelectedNode.FullPath.EndsWith(".adt"))
+            if (treeView1.SelectedNode.FullPath.EndsWith(".blp"))
+            {
+                try
+                {
+                    BLPReader reader = new BLPReader();
+                    reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(treeView1.SelectedNode.FullPath.Replace(@"root\", "")));
+                    pictureBox1.Image = reader.bmp;
+                }
+                catch
+                {
+                    Console.WriteLine("Error occured while trying to read " + treeView1.SelectedNode.FullPath.Replace(@"root\",""));
+                }
+            }
+
+                if (treeView1.SelectedNode.FullPath.EndsWith(".adt"))
             {
                 try
                 {
