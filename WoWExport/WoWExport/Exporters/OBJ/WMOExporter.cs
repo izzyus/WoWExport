@@ -686,8 +686,10 @@ namespace Exporters.OBJ
                     continue;
                 }
                 Console.WriteLine("Writing " + group.name);
-                objsw.WriteLine("g " + group.name);
+                //objsw.WriteLine("g " + group.name);
+                objsw.WriteLine("o " + group.name);
 
+                //Added thunderysteak's adjustment (original commit: ed067c7c6e8321c33ef0f3679d33c9c472dcefc3)
                 foreach (var vertex in group.vertices)
                 {
                     /*
@@ -696,7 +698,20 @@ namespace Exporters.OBJ
                     objsw.WriteLine("vn " + vertex.Normal.X.ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
                     */
                     objsw.WriteLine("v " + vertex.Position.X + " " + vertex.Position.Y + " " + vertex.Position.Z);
+
+                    //--- the following moved to separated forloops below
+
+                    //objsw.WriteLine("vt " + vertex.TexCoord.X + " " + (vertex.TexCoord.Y - 1) * -1); //the last part is for fixing the UV going outside of 0-1 space
+                    //objsw.WriteLine("vn " + (-vertex.Normal.X).ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
+                }
+
+                foreach (var vertex in group.vertices)
+                {
                     objsw.WriteLine("vt " + vertex.TexCoord.X + " " + (vertex.TexCoord.Y - 1) * -1); //the last part is for fixing the UV going outside of 0-1 space
+                    
+                }
+                foreach (var vertex in group.vertices)
+                {
                     objsw.WriteLine("vn " + (-vertex.Normal.X).ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
                 }
 
@@ -707,6 +722,10 @@ namespace Exporters.OBJ
                     var i = renderbatch.firstFace;
                     if (renderbatch.numFaces > 0)
                     {
+                        //thunderysteak's adjustment
+                        //objsw.WriteLine("o " + group.name); //?
+                        objsw.WriteLine("g " + group.name);//3DS Max's OBJ importer fails with invalid normal index without groups being defined
+                        //--------------------------
                         objsw.WriteLine("usemtl " + materials[renderbatch.materialID].filename);
                         objsw.WriteLine("s 1");
                         while (i < (renderbatch.firstFace + renderbatch.numFaces))

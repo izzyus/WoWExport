@@ -157,7 +157,7 @@ namespace Exporters.OBJ
                 //objsw.WriteLine("mtllib " + fileDataID + ".mtl");
                 objsw.WriteLine("mtllib " + filename + ".mtl");
             }
-
+            //Added thunderysteak's adjustment (original commit: ed067c7c6e8321c33ef0f3679d33c9c472dcefc3)
             foreach (var vertex in vertices)
             {
                 /*
@@ -166,11 +166,23 @@ namespace Exporters.OBJ
                 objsw.WriteLine("vn " + vertex.Normal.X.ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
                 */
                 objsw.WriteLine("v " + -vertex.Position.X + " " + vertex.Position.Y + " " + -vertex.Position.Z);
+                
+                //--- the following moved to separated forloops below
+
+                //objsw.WriteLine("vt " + vertex.TexCoord.X + " " + (vertex.TexCoord.Y -1)*-1); //the last part is for fixing the UV going outside of 0-1 space
+                //objsw.WriteLine("vn " + (-vertex.Normal.X).ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
+            }
+            foreach (var vertex in vertices)
+            {
                 objsw.WriteLine("vt " + vertex.TexCoord.X + " " + (vertex.TexCoord.Y -1)*-1); //the last part is for fixing the UV going outside of 0-1 space
+                
+            }
+            foreach (var vertex in vertices)
+            {
                 objsw.WriteLine("vn " + (-vertex.Normal.X).ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
             }
 
-            var indicelist = new List<uint>();
+                var indicelist = new List<uint>();
             for (var i = 0; i < reader.model.skins[0].triangles.Count(); i++)
             {
                 var t = reader.model.skins[0].triangles[i];
