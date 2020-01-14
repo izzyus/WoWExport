@@ -72,7 +72,7 @@ namespace WoWExport
             radioButton1.Hide();
             radioButton2.Hide();
             radioButton3.Hide();
-            //button3.Hide();
+            button3.Hide();
 
             //To be deleted later
             button3.Text = "Crash Me!";

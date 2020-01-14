@@ -16,6 +16,11 @@ namespace WoWExport
 
         public String filename;
 
+        string[] formats = {
+            "OBJ",
+            "SMD (experimental)"
+        };
+
         public Form_M2Export(string receivedFilename)
         {
             InitializeComponent();
@@ -26,6 +31,10 @@ namespace WoWExport
         {
             button1.Text = "Export";
             this.Text = filename;
+            label9.Text = "Export format:";
+            comboBox1.Items.AddRange(formats);
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox1.SelectedIndex = 0;
 
             try
             {
@@ -60,7 +69,18 @@ namespace WoWExport
 
             if (Managers.ConfigurationManager.OutputDirectory != null)
             {
-                Exporters.OBJ.M2Exporter.ExportM2(filename, Managers.ConfigurationManager.OutputDirectory);
+                switch (comboBox1.SelectedIndex)
+                {
+                    case 0: //obj
+                    Exporters.OBJ.M2Exporter.ExportM2(filename, Managers.ConfigurationManager.OutputDirectory);
+                        break;
+                    case 1: //smd
+                        Exporters.SMD.M2SmdExporter.ExportM2(filename, Managers.ConfigurationManager.OutputDirectory);
+                        break;
+                    default:
+                        break;
+                }
+                
             }
             else
             {

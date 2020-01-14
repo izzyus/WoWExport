@@ -55,6 +55,7 @@
     <Compile Include="Exporters\OBJ\ADTExporter.cs" />
     <Compile Include="Exporters\OBJ\M2Exporter.cs" />
     <Compile Include="Exporters\OBJ\WMOExporter.cs" />
+    <Compile Include="Exporters\SMD\M2SmdExporter.cs" />
     <Compile Include="Exporters\Structs.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
