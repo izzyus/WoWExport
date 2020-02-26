@@ -39,6 +39,7 @@ namespace WoWExport
         private void button1_Click(object sender, EventArgs e)
         {
             {
+                Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
                 string selectedItem = treeView1.SelectedNode.FullPath;
                 selectedItem = selectedItem.Substring(5, selectedItem.Length - 5); //that's because we remove from the name "root\"
 
@@ -199,7 +200,7 @@ namespace WoWExport
             Managers.ConfigurationManager.ADTexportTextures = true;
             Managers.ConfigurationManager.ADTexportAlphaMaps = true;
             Managers.ConfigurationManager.WMOExportM2 = true;
-            Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
+            //Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//"; -- not here please
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
