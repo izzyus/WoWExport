@@ -31,7 +31,7 @@ namespace WoWExport
         {
             button1.Text = "Export";
             this.Text = filename;
-            label9.Text = "Export format:";
+            label10.Text = "Export format:";
             comboBox1.Items.AddRange(formats);
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox1.SelectedIndex = 0;
@@ -50,7 +50,8 @@ namespace WoWExport
                 label5.Text = "Bones: " + reader.model.bones.Count();
                 label6.Text = "Vertices: " + reader.model.vertices.Count();
                 label7.Text = "Skins: " + reader.model.skins.Count();
-                label8.Text = "Textures: " + reader.model.textures.Count();         
+                label8.Text = "Textures: " + reader.model.textures.Count();    
+                label9.Text = "Submeshes:" + reader.model.skins[0].submeshes.Count();
             }
             catch (Exception ex)
             {

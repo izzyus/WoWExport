@@ -81,6 +81,7 @@ namespace Exporters.SMD
             ///REFERENCE SMD(s)
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //----------------------------------------------------------------------------------------------------------
+            int sMeshIndex = 0; // to be used for submeshes names
             foreach (var renderbatch in renderbatches)
             {
                 var j = renderbatch.firstFace;
@@ -94,7 +95,7 @@ namespace Exporters.SMD
                         {
                             Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(filename)));
                         }
-                        smdsw = new StreamWriter(Path.Combine(outdir, filename.Replace(".m2", j + ".smd")));
+                        smdsw = new StreamWriter(Path.Combine(outdir, filename.Replace(".m2", sMeshIndex + ".smd")));
                     }
                     else
                     {
@@ -102,18 +103,18 @@ namespace Exporters.SMD
                         {
                             Directory.CreateDirectory(outdir);
                         }
-                        smdsw = new StreamWriter(Path.Combine(outdir, filename + j + ".smd"));
+                        smdsw = new StreamWriter(Path.Combine(outdir, filename + sMeshIndex + ".smd"));
                     }
                 }
                 else
                 {
                     if (!string.IsNullOrEmpty(filename))
                     {
-                        smdsw = new StreamWriter(Path.Combine(outdir, destinationOverride, Path.GetFileName(filename.ToLower()).Replace(".m2", j + ".smd")));
+                        smdsw = new StreamWriter(Path.Combine(outdir, destinationOverride, Path.GetFileName(filename.ToLower()).Replace(".m2", sMeshIndex + ".smd")));
                     }
                     else
                     {
-                        smdsw = new StreamWriter(Path.Combine(outdir, destinationOverride, filename + j + ".smd"));
+                        smdsw = new StreamWriter(Path.Combine(outdir, destinationOverride, filename + sMeshIndex + ".smd"));
                     }
                 }
                 smdsw.WriteLine("// Written by izzy's SMD Export module. Original file: " + filename);
@@ -239,6 +240,7 @@ namespace Exporters.SMD
                 smdsw.WriteLine("end");
                 //Triangles block end
                 smdsw.Close();
+                sMeshIndex++;
             }
         }
         // https://developer.valvesoftware.com/wiki/Studiomdl_Data
