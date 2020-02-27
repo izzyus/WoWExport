@@ -13,8 +13,16 @@ namespace WoWExport
 {
     public partial class Form_ADTExport : Form
     {
-        
+
         public String filename;
+
+        public static string[] AlphaType =
+        {
+            "RGB",
+            "RGB (63)",
+            "Alpha",
+            "Alpha (63)"
+        };
 
         public Form_ADTExport(string receivedFilename)
         {
@@ -24,6 +32,10 @@ namespace WoWExport
 
         private void Form_ADTExport_Load(object sender, EventArgs e)
         {
+            comboBox1.Items.AddRange(AlphaType);
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
+
+
             checkBox1.Checked = Managers.ConfigurationManager.ADTExportM2;
             checkBox1.Text = "Export doodads";
             checkBox2.Checked = Managers.ConfigurationManager.ADTExportWMO;
@@ -45,6 +57,9 @@ namespace WoWExport
             checkBox5.Text = "Export ground textures";
             checkBox6.Checked = Managers.ConfigurationManager.ADTexportAlphaMaps;
             checkBox6.Text = "Export alphamaps";
+
+            comboBox1.SelectedIndex = Managers.ConfigurationManager.ADTAlphaMode;
+
             checkBox7.Checked = Managers.ConfigurationManager.ADTIgnoreHoles;
             checkBox7.Text = "Ignore holes";
 
@@ -54,7 +69,7 @@ namespace WoWExport
             try
             {
                 ADTReader reader = new ADTReader();
-                if(Managers.ConfigurationManager.Profile == "LK")
+                if (Managers.ConfigurationManager.Profile == "LK")
                 {
                     reader.Load335ADT(filename);
                 }
@@ -85,8 +100,10 @@ namespace WoWExport
             Managers.ConfigurationManager.WMOExportM2 = checkBox3.Checked;
             Managers.ConfigurationManager.ADTExportFoliage = checkBox4.Checked;
             Managers.ConfigurationManager.ADTexportTextures = checkBox5.Checked;
-            Managers.ConfigurationManager.ADTexportAlphaMaps= checkBox6.Checked;
+            Managers.ConfigurationManager.ADTexportAlphaMaps = checkBox6.Checked;
             Managers.ConfigurationManager.ADTIgnoreHoles = checkBox7.Checked;
+
+            Managers.ConfigurationManager.ADTAlphaMode = comboBox1.SelectedIndex;
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)

@@ -19,6 +19,7 @@ namespace Managers
         public static Boolean ADTexportTextures = false;
         public static Boolean ADTexportAlphaMaps = false;
         public static Boolean ADTIgnoreHoles = false;
+        public static int ADTAlphaMode = 0;
 
         //WMO Export
         public static Boolean WMOExportM2 = false;

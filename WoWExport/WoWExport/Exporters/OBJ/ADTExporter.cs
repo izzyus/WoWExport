@@ -527,68 +527,76 @@ namespace Exporters.OBJ
             if (exportAlphaMaps)
             {
                 Generators.ADT_Alpha.ADT_Alpha AlphaMapsGenerator = new Generators.ADT_Alpha.ADT_Alpha();
-                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile, 3);
+                AlphaMapsGenerator.GenerateAlphaMaps(reader.adtfile, Managers.ConfigurationManager.ADTAlphaMode);
 
                 List<System.Drawing.Bitmap> AlphaLayers = new List<System.Drawing.Bitmap>();
-                List<String> AlphaLayersNames = new List<String>();
-
                 AlphaLayers = AlphaMapsGenerator.AlphaLayers;
-                AlphaLayersNames = AlphaMapsGenerator.AlphaLayersNames;
-
+                
                 if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps")))
                 {
                     Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps"));
                 }
 
-
                 if (AlphaLayers != null)
                 {
-                    for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
+                    if (Managers.ConfigurationManager.ADTAlphaMode == 0 || Managers.ConfigurationManager.ADTAlphaMode == 1)
                     {
-                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png")))
+                        for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
                         {
-                            try
+                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + m + ".png")))
                             {
-                                AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png"));
+                                try
+                                {
+                                    AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + m + ".png"));
+                                }
+                                catch
+                                {
+                                    //MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
                             }
-                            catch
+                        }
+                    }
+                    if (Managers.ConfigurationManager.ADTAlphaMode == 2 || Managers.ConfigurationManager.ADTAlphaMode == 3)
+                    {
+                        List<String> AlphaLayersNames = new List<String>(AlphaMapsGenerator.AlphaLayersNames);
+                        //AlphaLayersNames = AlphaMapsGenerator.AlphaLayersNames;
+                        for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
+                        {
+                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png")))
                             {
-                                //MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                                try
+                                {
+                                    AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png"));
+                                }
+                                catch
+                                {
+                                    //MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                }
                             }
                         }
                     }
                 }
 
-                //Export Layer info CSV
-
+                //Delete the existing layers CSV
                 if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv")))
                 {
                     File.Delete(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv"));
                 }
 
-                string LineOfText = "";
-                int cchunk = 0;
-                for (int i = 0; i < AlphaLayersNames.ToArray().Length; i++)
+                //Generate layer information CSV
+                for (uint c = 0; c < reader.adtfile.chunks.Count(); c++)
                 {
-                    var line = AlphaLayersNames[i];
-                    var values = line.Split(';');
-                    var chunk = int.Parse(values[0]);
-                    if (chunk == cchunk)
+                    string csvLine = c.ToString();
+                    for (int li = 0; li < reader.adtfile.texChunks[c].layers.Count(); li++)
                     {
-                        LineOfText = LineOfText + values[0] + ";" + values[1] + ";" + values[2] + ";";
+                        var AlphaLayerName = reader.adtfile.textures.filenames[reader.adtfile.texChunks[c].layers[li].textureId].ToLower();
+                        AlphaLayerName = AlphaLayerName.Substring(AlphaLayerName.LastIndexOf("\\", AlphaLayerName.Length - 2) + 1);
+                        AlphaLayerName = AlphaLayerName.Substring(0, AlphaLayerName.Length - 4);
+                        csvLine = csvLine + ";" + AlphaLayerName;
                     }
-                    else //Next Chunk
-                    {
-                        File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1) + Environment.NewLine);
-                        LineOfText = values[0] + ";" + values[1] + ";" + values[2] + ";";
-                        cchunk++;
-                    }
+                    File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", csvLine + Environment.NewLine);
                 }
-                //Last entry, i have no idea how to do it properly so i am doing it like this
-                File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", LineOfText.Substring(0, LineOfText.Length - 1));
             }
-
             //----------------------------------------------------------------------------------------------------------
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             ///TEXTURE & ALPHA RELATED END

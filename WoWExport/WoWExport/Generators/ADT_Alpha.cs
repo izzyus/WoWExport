@@ -7,148 +7,144 @@ namespace Generators.ADT_Alpha
 {
     class ADT_Alpha
     {
-
         //-----------------------------------------------------------------------------------------------------------------
         //PUBLIC STUFF:
         //-----------------------------------------------------------------------------------------------------------------
-
         public List<Bitmap> AlphaLayers = new List<Bitmap>();
         public List<String> AlphaLayersNames = new List<String>();
-
         //-----------------------------------------------------------------------------------------------------------------
 
         public void GenerateAlphaMaps(ADT adtfile, int GenerationMode)
         {
-            if (GenerationMode == 1 || GenerationMode == 2) //MODE 1 & 2 (ALL TEXTURES GET ONLY ONE ALPHA FOR ALL THE 256 CHUNKS (ALPHA SIZE = 1024x1024))
+            if (GenerationMode == 0 || GenerationMode == 1) //MODE 0 & 1 (256 RGB ALPHAS, ONE PER CHUNK)
             {
                 //----------------------------------------------------------------------------------------------------------
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 ///ALPHA MAPS TEST
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 //----------------------------------------------------------------------------------------------------------
-
-
-
-                for (int alphamap = 0; alphamap < adtfile.textures.filenames.Count(); alphamap++)
+                var valuesR = new MCAL().layer;
+                var valuesG = new MCAL().layer;
+                var valuesB = new MCAL().layer;
+                for (uint c = 0; c < adtfile.chunks.Count(); c++)
                 {
-                    //----------------------------------------------------------------------------------------------------------
-                    //Get the name of the texture used in this alphamap and store it
-                    //----------------------------------------------------------------------------------------------------------
-                    var AlphaLayerName = adtfile.textures.filenames[alphamap];
-                    AlphaLayerName = AlphaLayerName.Substring(AlphaLayerName.LastIndexOf("\\", AlphaLayerName.Length - 2) + 1);
-                    AlphaLayerName = AlphaLayerName.Substring(0, AlphaLayerName.Length - 4);
-                    AlphaLayersNames.Add(AlphaLayerName);
-
-                    //----------------------------------------------------------------------------------------------------------
-                    //Get the full path and texture name for a comparation down the line
-                    //----------------------------------------------------------------------------------------------------------
-                    var layername = adtfile.textures.filenames[alphamap];
-                    //----------------------------------------------------------------------------------------------------------
-
-                    int xOff = 0;
-                    int yOff = 0;
-
-                    var bmp = new System.Drawing.Bitmap(1024, 1024);
-
-                    for (uint c = 0; c < adtfile.chunks.Count(); c++)
+                    if (adtfile.texChunks[c].alphaLayer != null)
                     {
-                        var chunk = adtfile.chunks[c];
-                        for (int li = 0; li < adtfile.texChunks[c].layers.Count(); li++)
+                        var bmp = new Bitmap(64, 64);
+                        //Assign the channels...
+                        switch (adtfile.texChunks[c].layers.Count())
                         {
-                            if (adtfile.texChunks[c].alphaLayer != null)
+                            case 2:
+                                valuesR = adtfile.texChunks[c].alphaLayer[1].layer;
+                                break;
+                            case 3:
+                                valuesR = adtfile.texChunks[c].alphaLayer[1].layer;
+                                valuesG = adtfile.texChunks[c].alphaLayer[2].layer;
+                                break;
+
+                            case 4:
+                                valuesR = adtfile.texChunks[c].alphaLayer[1].layer;
+                                valuesG = adtfile.texChunks[c].alphaLayer[2].layer;
+                                valuesB = adtfile.texChunks[c].alphaLayer[3].layer;
+                                break;
+                            default:
+                                //Don't do anything
+                                break;
+                        }
+                        if (GenerationMode == 0)
+                        {
+                            // 64x64 ALPHAS:
+                            for (int x = 0; x < 64; x++)
                             {
-                                var values = adtfile.texChunks[c].alphaLayer[li].layer;
-                                if (adtfile.textures.filenames[adtfile.texChunks[c].layers[li].textureId].ToLower() == layername.ToLower())
+                                for (int y = 0; y < 64; y++)
                                 {
-                                    for (int x = 0; x < 64; x++)
+                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
+                                    Color color;
+                                    switch (adtfile.texChunks[c].layers.Count())
                                     {
-                                        for (int y = 0; y < 64; y++)
-                                        {
-                                            var CurrentColor = new System.Drawing.Color();
-
-                                            if (GenerationMode == 2) //ARGB MODE
-                                            {
-
-                                                switch (li)
-                                                {
-                                                    case 0:
-                                                        CurrentColor = System.Drawing.Color.FromArgb(255, values[x * 64 + y], 0, 0);
-                                                        break;
-                                                    case 1:
-                                                        CurrentColor = System.Drawing.Color.FromArgb(255, 0, values[x * 64 + y], 0);
-                                                        break;
-                                                    case 2:
-                                                        CurrentColor = System.Drawing.Color.FromArgb(255, 0, 0, values[x * 64 + y]);
-                                                        break;
-                                                    case 3:
-                                                        CurrentColor = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0);
-                                                        break;
-                                                }
-                                                
-                                            }
-                                            else //FLAT MODE
-                                            {
-                                                CurrentColor = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
-                                                //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
-                                            }
-
-                                            bmp.SetPixel(x + xOff, y + yOff, CurrentColor);
-                                        }
+                                        case 2:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], 0, 0);
+                                            break;
+                                        case 3:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], valuesG[x * 64 + y], 0);
+                                            break;
+                                        case 4:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], valuesG[x * 64 + y], valuesB[x * 64 + y]);
+                                            break;
+                                        default:
+                                            color = Color.FromArgb(255, 0, 0, 0);
+                                            break;
                                     }
+                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
+                                    bmp.SetPixel(x, y, color);
+                                }
+                            }
+                        }
+                        if (GenerationMode == 1)
+                        {
+                            // 63x63 ALPHAS: (Last column/row = previous one)
+                            for (int x = 0; x < 63; x++)
+                            {
+                                for (int y = 0; y < 63; y++)
+                                {
+                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
+                                    Color color;
+                                    switch (adtfile.texChunks[c].layers.Count())
+                                    {
+                                        case 2:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], 0, 0);
+                                            break;
+                                        case 3:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], valuesG[x * 64 + y], 0);
+                                            break;
+                                        case 4:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], valuesG[x * 64 + y], valuesB[x * 64 + y]);
+                                            break;
+                                        default:
+                                            color = Color.FromArgb(255, 0, 0, 0);
+                                            break;
+                                    }
+                                    bmp.SetPixel(x, y, color);
+                                    if (y == 62) { bmp.SetPixel(x, y + 1, color); }
+                                    if (x == 62) { bmp.SetPixel(x + 1, y, color); }
+                                    if (x == 62 && y == 62) { bmp.SetPixel(x + 1, y + 1, color); }
                                 }
                             }
                         }
                         //----------------------------------------------------------------------------------------------------------
-                        //Change the offset
+                        //Fix bmp orientation:
                         //----------------------------------------------------------------------------------------------------------
-                        if (yOff + 64 > 960)
-                        {
-                            yOff = 0;
-                            if (xOff + 64 <= 960)
-                            {
-                                xOff = xOff + 64;
-                            }
-                        }
-                        else
-                        {
-                            yOff = yOff + 64;
-                        }
+                        bmp.RotateFlip(RotateFlipType.Rotate270FlipY);
                         //----------------------------------------------------------------------------------------------------------
+
+                        //----------------------------------------------------------------------------------------------------------
+                        //Store the generated map in the array
+                        //----------------------------------------------------------------------------------------------------------
+                        AlphaLayers.Add(bmp);
+                        //----------------------------------------------------------------------------------------------------------   
                     }
-                    //----------------------------------------------------------------------------------------------------------
-                    //Fix bmp orientation:
-                    //----------------------------------------------------------------------------------------------------------
-                    bmp.RotateFlip(RotateFlipType.Rotate270FlipY);
-                    //----------------------------------------------------------------------------------------------------------
-
-                    //----------------------------------------------------------------------------------------------------------
-                    //Store the generated map in the array
-                    //----------------------------------------------------------------------------------------------------------
-                    AlphaLayers.Add(bmp);
-                    //----------------------------------------------------------------------------------------------------------
-
-
-
-                    //----------------------------------------------------------------------------------------------------------
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    ///ALPHA MAPS TEST END
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    //----------------------------------------------------------------------------------------------------------
-
+                    else //Create and add an empty BMP if Null
+                    {
+                        var bmp = new Bitmap(64, 64);
+                        AlphaLayers.Add(bmp);
+                    }
                 }
+                //----------------------------------------------------------------------------------------------------------
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                ///ALPHA MAPS TEST END
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //----------------------------------------------------------------------------------------------------------
             }
-            else //METHOD 3 OR 4 (ALL THE CHUNKS (256) GET AN ALPHA FOR EVERY USED TEXTURE (ALPHA TEXTURE SIZE = 64x64 ))
+            if (GenerationMode == 2 || GenerationMode == 3) //MODE 2 & 3 (A BLACK&WHITE ALPHA FOR EACH LAYER (ROUGHLY ~768 ALPHAS))
             {
                 //----------------------------------------------------------------------------------------------------------
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 ///ALPHA MAPS TEST
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 //----------------------------------------------------------------------------------------------------------
-
                 for (uint c = 0; c < adtfile.chunks.Count(); c++)
                 {
                     var chunk = adtfile.chunks[c];
-
                     for (int li = 0; li < adtfile.texChunks[c].layers.Count(); li++)
                     {
                         if (adtfile.texChunks[c].alphaLayer != null)
@@ -156,7 +152,7 @@ namespace Generators.ADT_Alpha
                             var values = adtfile.texChunks[c].alphaLayer[li].layer;
                             var bmp = new System.Drawing.Bitmap(64, 64);
                             {
-                                if(GenerationMode == 3)
+                                if (GenerationMode == 2)
                                 {
                                     // 64x64 ALPHAS:
                                     for (int x = 0; x < 64; x++)
@@ -169,7 +165,7 @@ namespace Generators.ADT_Alpha
                                         }
                                     }
                                 }
-                                if (GenerationMode == 4)
+                                if (GenerationMode == 3)
                                 {
                                     // 63x63 ALPHAS: (Last column/row = previous one)
                                     for (int x = 0; x < 63; x++)
@@ -207,20 +203,14 @@ namespace Generators.ADT_Alpha
                             //----------------------------------------------------------------------------------------------------------
                             AlphaLayers.Add(bmp);
                             //----------------------------------------------------------------------------------------------------------   
-
                         }
                     }
                 }
-
-
-
-
                 //----------------------------------------------------------------------------------------------------------
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 ///ALPHA MAPS TEST END
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 //----------------------------------------------------------------------------------------------------------
-
             }
         }
     }
