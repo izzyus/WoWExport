@@ -543,11 +543,11 @@ namespace Exporters.OBJ
                     {
                         for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
                         {
-                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + m + ".png")))
+                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "_" + m + ".png")))
                             {
                                 try
                                 {
-                                    AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + m + ".png"));
+                                    AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "_" + m + ".png"));
                                 }
                                 catch
                                 {
@@ -562,11 +562,11 @@ namespace Exporters.OBJ
                         //AlphaLayersNames = AlphaMapsGenerator.AlphaLayersNames;
                         for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
                         {
-                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png")))
+                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "_" + AlphaLayersNames[m].Replace(";", "_") + ".png")))
                             {
                                 try
                                 {
-                                    AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "-" + AlphaLayersNames[m].Replace(";", "_") + ".png"));
+                                    AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "_" + AlphaLayersNames[m].Replace(";", "_") + ".png"));
                                 }
                                 catch
                                 {
@@ -577,24 +577,34 @@ namespace Exporters.OBJ
                     }
                 }
 
-                //Delete the existing layers CSV
+                //No need for this, the structure of the CSV remains the same for every mode
+                //Delete the existing layers CSV 
+                /*
                 if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv")))
                 {
                     File.Delete(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv"));
                 }
+                */
 
-                //Generate layer information CSV
-                for (uint c = 0; c < reader.adtfile.chunks.Count(); c++)
+                //Check if the CSV already exists, if not, create it
+                if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv")))
                 {
-                    string csvLine = c.ToString();
-                    for (int li = 0; li < reader.adtfile.texChunks[c].layers.Count(); li++)
+                    //Generate layer information CSV
+                    StreamWriter layerCsvSR = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv"));
+                    for (uint c = 0; c < reader.adtfile.chunks.Count(); c++)
                     {
-                        var AlphaLayerName = reader.adtfile.textures.filenames[reader.adtfile.texChunks[c].layers[li].textureId].ToLower();
-                        AlphaLayerName = AlphaLayerName.Substring(AlphaLayerName.LastIndexOf("\\", AlphaLayerName.Length - 2) + 1);
-                        AlphaLayerName = AlphaLayerName.Substring(0, AlphaLayerName.Length - 4);
-                        csvLine = csvLine + ";" + AlphaLayerName;
+                        string csvLine = c.ToString();
+                        for (int li = 0; li < reader.adtfile.texChunks[c].layers.Count(); li++)
+                        {
+                            var AlphaLayerName = reader.adtfile.textures.filenames[reader.adtfile.texChunks[c].layers[li].textureId].ToLower();
+                            AlphaLayerName = AlphaLayerName.Substring(AlphaLayerName.LastIndexOf("\\", AlphaLayerName.Length - 2) + 1);
+                            AlphaLayerName = AlphaLayerName.Substring(0, AlphaLayerName.Length - 4);
+                            csvLine = csvLine + ";" + AlphaLayerName;
+                        }
+                        layerCsvSR.WriteLine(csvLine);
+                        //File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", csvLine + Environment.NewLine);
                     }
-                    File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", csvLine + Environment.NewLine);
+                    layerCsvSR.Close();
                 }
             }
             //----------------------------------------------------------------------------------------------------------
