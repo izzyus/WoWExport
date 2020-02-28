@@ -128,30 +128,40 @@ namespace Managers
                 foreach (FileInfo fileinfo in Archives)
                 {
                     //Console.WriteLine(fileinfo);
-                    using (MpqArchive archive = new MpqArchive(fileinfo.FullName, FileAccess.Read))
+                    try
+                    {
+                        using (MpqArchive archive = new MpqArchive(fileinfo.FullName, FileAccess.Read))
+                        {
+                            using (MpqFileStream file = archive.OpenFile("(listfile)"))
+                            using (StreamReader sr = new StreamReader(file))
+                            {
+                                listFile = sr.ReadToEnd();
+                                //Console.WriteLine(listFile);
+                                //Console.WriteLine(listFile.ToLower() + ";" + fileinfo.Name);
+                                MainListFile.Add(listFile.ToLower() + ";" + fileinfo.Name);
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        throw new Exception("Could not read: \"" + fileinfo.FullName + "\".");
+                    }
+                }
+
+                //Add locale to the listfile:
+                //Console.WriteLine(ConfigurationManager.GameDir + "\\data\\" + locale + "\\" + "locale-" + locale + ".mpq");
+                if (Managers.ConfigurationManager.Profile != "Vanilla")
+                {
+                    using (MpqArchive archive = new MpqArchive(ConfigurationManager.GameDir + "\\data\\" + locale + "\\" + "locale-" + locale + ".mpq", FileAccess.Read))
                     {
                         using (MpqFileStream file = archive.OpenFile("(listfile)"))
                         using (StreamReader sr = new StreamReader(file))
                         {
                             listFile = sr.ReadToEnd();
                             //Console.WriteLine(listFile);
-                            //Console.WriteLine(listFile.ToLower() + ";" + fileinfo.Name);
-                            MainListFile.Add(listFile.ToLower() + ";" + fileinfo.Name);
+                            //Console.WriteLine(listFile.ToLower() + ";" + "locale1");
+                            MainListFile.Add(listFile.ToLower() + ";" + "locale1.txt"); //.txt because i need an extension, that's how i coded the damn thing, and that's how it will stay for the moment
                         }
-                    }
-                }
-
-                //Add locale to the listfile:
-                //Console.WriteLine(ConfigurationManager.GameDir + "\\data\\" + locale + "\\" + "locale-" + locale + ".mpq");
-                using (MpqArchive archive = new MpqArchive(ConfigurationManager.GameDir + "\\data\\" + locale + "\\" + "locale-" + locale + ".mpq", FileAccess.Read))
-                {
-                    using (MpqFileStream file = archive.OpenFile("(listfile)"))
-                    using (StreamReader sr = new StreamReader(file))
-                    {
-                        listFile = sr.ReadToEnd();
-                        //Console.WriteLine(listFile);
-                        //Console.WriteLine(listFile.ToLower() + ";" + "locale1");
-                        MainListFile.Add(listFile.ToLower() + ";" + "locale1.txt"); //.txt because i need an extension, that's how i coded the damn thing, and that's how it will stay for the moment
                     }
                 }
 
@@ -310,13 +320,16 @@ namespace Managers
                 }
             }
 
-            if (!File.Exists(to + "\\" +  "locale1.txt")) 
+            if (ConfigurationManager.Profile != "Vanilla")
             {
-                //Console.WriteLine(to + "\\" + "locale1.txt");
-                //Console.WriteLine(ConfigurationManager.GameDir + "\\data\\" + locale + "\\" + "locale-" + locale + ".mpq");
-                using (MpqArchive archive = new MpqArchive(ConfigurationManager.GameDir + "\\data\\" + locale + "\\" + "locale-" + locale + ".mpq", FileAccess.Read))
+                if (!File.Exists(to + "\\" + "locale1.txt"))
                 {
-                    archive.ExtractFile("(listfile)", to + "\\" + "locale1.txt");
+                    //Console.WriteLine(to + "\\" + "locale1.txt");
+                    //Console.WriteLine(ConfigurationManager.GameDir + "\\data\\" + locale + "\\" + "locale-" + locale + ".mpq");
+                    using (MpqArchive archive = new MpqArchive(ConfigurationManager.GameDir + "\\data\\" + locale + "\\" + "locale-" + locale + ".mpq", FileAccess.Read))
+                    {
+                        archive.ExtractFile("(listfile)", to + "\\" + "locale1.txt");
+                    }
                 }
             }
 
