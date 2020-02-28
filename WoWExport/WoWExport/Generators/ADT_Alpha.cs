@@ -159,7 +159,7 @@ namespace Generators.ADT_Alpha
                                     {
                                         for (int y = 0; y < 64; y++)
                                         {
-                                            var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
+                                            var color = System.Drawing.Color.FromArgb(255, values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
                                             //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
                                             bmp.SetPixel(x, y, color);
                                         }
@@ -172,7 +172,7 @@ namespace Generators.ADT_Alpha
                                     {
                                         for (int y = 0; y < 63; y++)
                                         {
-                                            var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
+                                            var color = System.Drawing.Color.FromArgb(255, values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
                                             bmp.SetPixel(x, y, color);
                                             if (y == 62) { bmp.SetPixel(x, y + 1, color); }
                                             if (x == 62) { bmp.SetPixel(x + 1, y, color); }
