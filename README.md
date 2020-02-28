@@ -4,9 +4,23 @@ An attempt at creating an universal WoW Exporter
 
 ## Disclaimer
 
-This project is **HEAVELY** based on Marlamin's tools (links below)
+This project is based on [Marlamin's](https://github.com/Marlamin) tools
 
-## Built using the following
+## Compatiblity table
+
+| | ADT | M2 | WMO |
+| --- | --- | --- | --- |
+| Vanilla | No | No | Yes |
+| TBC | No | No | Yes |
+| WOTLK | Yes | Yes | Yes |
+| CATA | Yes | Yes | Yes |
+| MOP | Yes | Yes | Yes |
+| WOD | No | No | No |
+| Legion | No | No | No |
+| BFA | No | No | No |
+| Classic | No | No | No |
+
+## Built using the following:
 
 * [WoWFormatLib](https://github.com/Marlamin/WoWFormatLib)
 * [WoWExportTools](https://github.com/Marlamin/WoWExportTools)
@@ -14,14 +28,11 @@ This project is **HEAVELY** based on Marlamin's tools (links below)
 * [SereniaBLPLib](https://github.com/WoW-Tools/SereniaBLPLib)
 * [StormLibSharp](https://github.com/robpaveza/stormlibsharp)
 
-## Authors
-
-* **Martin Benjamins** - *Initial work* - [Marlamin](https://github.com/Marlamin)
-
 ## Thanks
 
 * Marlamin
 * Schlumpf
+* Kruithne
 * Xalcon
 * TOM_RUS
 * Ladislav Zezula
