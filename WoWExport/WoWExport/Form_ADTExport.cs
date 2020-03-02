@@ -63,6 +63,9 @@ namespace WoWExport
             checkBox7.Checked = Managers.ConfigurationManager.ADTIgnoreHoles;
             checkBox7.Text = "Ignore holes";
 
+            checkBox8.Text = "Use transparency";
+            checkBox8.Checked = Managers.ConfigurationManager.ADTAlphaUseA;
+
             button1.Text = "Export";
             this.Text = filename;
 
@@ -102,8 +105,9 @@ namespace WoWExport
             Managers.ConfigurationManager.ADTexportTextures = checkBox5.Checked;
             Managers.ConfigurationManager.ADTexportAlphaMaps = checkBox6.Checked;
             Managers.ConfigurationManager.ADTIgnoreHoles = checkBox7.Checked;
-
+            
             Managers.ConfigurationManager.ADTAlphaMode = comboBox1.SelectedIndex;
+            Managers.ConfigurationManager.ADTAlphaUseA = checkBox8.Checked;
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -131,6 +135,35 @@ namespace WoWExport
                 throw new Exception("No output direcotry set");
             }
             MessageBox.Show("Done");
+        }
+
+        private void checkBox6_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox6.Checked)
+            {
+                comboBox1.Enabled = true;
+                if (comboBox1.SelectedIndex > 1)
+                {
+                    checkBox8.Enabled = true;
+                }
+            }
+            else
+            {
+                comboBox1.Enabled = false;
+                checkBox8.Enabled = false;
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(comboBox1.SelectedIndex > 1)
+            {
+                checkBox8.Enabled = true;
+            }
+            else
+            {
+                checkBox8.Enabled = false;
+            }
         }
     }
 }
