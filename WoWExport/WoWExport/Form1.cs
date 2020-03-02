@@ -40,11 +40,6 @@ namespace WoWExport
         {
             var list = new List<string>();
             ListCheckedFiles(treeView1.Nodes, list);
-            for (int i = 0; i < list.Count; i++)
-            {
-                Console.WriteLine(list[i]);
-            }
-
             Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
 
             if (list.Count == 0)
@@ -68,7 +63,7 @@ namespace WoWExport
                                 new WoWExport.Form_WMOExport(selectedItem).Show();
                                 break;
                             case ".blp":
-                                ExportBLP(selectedItem);
+                                Exporters.BLPExporter.ExportBLP(selectedItem, Managers.ConfigurationManager.OutputDirectory);
                                 break;
                             default:
                                 MessageBox.Show("Direct file export not supported yet");
@@ -114,30 +109,6 @@ namespace WoWExport
             //ADTReader reader = new ADTReader();
             //reader.Load335ADT(@"world\maps\azeroth\azeroth_32_48.adt");
             //---------------------------------------------------------------------------
-            var list = new List<string>();
-            ListCheckedFiles(treeView1.Nodes, list);
-            for(int i = 0; i < list.Count; i++)
-            {
-                Console.WriteLine(list[i]);
-            }
-        }
-
-        private void ExportBLP(string file)
-        {
-            if (!File.Exists(Path.Combine(textBox1.Text, Path.GetFileNameWithoutExtension(file) + ".png")))
-            {
-                try
-                {
-                    BLPReader reader = new BLPReader();
-                    reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(file));
-                    reader.bmp.Save(Path.Combine(textBox1.Text, Path.GetFileNameWithoutExtension(file) + ".png"));
-                }
-                catch
-                {
-                    Console.WriteLine("Error occured on saving the file: " + file);
-                    Console.WriteLine(Path.Combine(textBox1.Text, Path.GetFileNameWithoutExtension(file) + ".png"));
-                }
-            }
         }
 
         private void button3_Click(object sender, EventArgs e)

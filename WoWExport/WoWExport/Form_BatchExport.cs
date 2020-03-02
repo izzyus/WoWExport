@@ -132,7 +132,7 @@ namespace WoWExport
             {
                 for (int i = 0; i < fileList.Count; i++)
                 {
-                    Console.WriteLine("Exporting: " + fileList[i]);
+                    //Console.WriteLine("Exporting: " + fileList[i]);
                     string currentFile = fileList[i];
                     switch (Path.GetExtension(currentFile))
                     {
@@ -146,18 +146,18 @@ namespace WoWExport
                             Exporters.OBJ.WMOExporter.ExportWMO(currentFile, Managers.ConfigurationManager.OutputDirectory);
                             break;
                         case ".blp":
-                            //ExportBLP(selectedItem); //TO DO A PROPER EXPORTER
+                            Exporters.BLPExporter.ExportBLP(currentFile, Managers.ConfigurationManager.OutputDirectory);
                             break;
                         default:
                             //some other files that the exporter does not care about
                             break;
                     }
-                    Console.WriteLine("Finished: " + fileList[i]);
+                    //Console.WriteLine("Finished: " + fileList[i]);
                 }
             }
-            catch(Exception e)
+            catch
             {
-                Console.WriteLine(e);
+
             }
         }
     }

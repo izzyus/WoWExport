@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exporters\BLPExporter.cs" />
     <Compile Include="Exporters\OBJ\ADTExporter.cs" />
     <Compile Include="Exporters\OBJ\M2Exporter.cs" />
     <Compile Include="Exporters\OBJ\WMOExporter.cs" />
