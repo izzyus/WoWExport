@@ -38,33 +38,48 @@ namespace WoWExport
         //---------------------------------------------------------------------------
         private void button1_Click(object sender, EventArgs e)
         {
-            if (treeView1.SelectedNode != null)
+            var list = new List<string>();
+            ListCheckedFiles(treeView1.Nodes, list);
+            for (int i = 0; i < list.Count; i++)
             {
-                if (treeView1.SelectedNode.Level != 0)
-                {
-                    Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
-                    string selectedItem = treeView1.SelectedNode.FullPath;
-                    selectedItem = selectedItem.Substring(5, selectedItem.Length - 5); //that's because we remove from the name "root\"
+                Console.WriteLine(list[i]);
+            }
 
-                    switch (Path.GetExtension(selectedItem))
+            Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
+
+            if (list.Count == 0)
+            {
+                if (treeView1.SelectedNode != null)
+                {
+                    if (treeView1.SelectedNode.Level != 0)
                     {
-                        case ".adt":
-                            new WoWExport.Form_ADTExport(selectedItem).Show();
-                            break;
-                        case ".m2":
-                            new WoWExport.Form_M2Export(selectedItem).Show();
-                            break;
-                        case ".wmo":
-                            new WoWExport.Form_WMOExport(selectedItem).Show();
-                            break;
-                        case ".blp":
-                            ExportBLP(selectedItem);
-                            break;
-                        default:
-                            MessageBox.Show("Direct file export not supported yet");
-                            break;
+                        string selectedItem = treeView1.SelectedNode.FullPath;
+                        selectedItem = selectedItem.Substring(5, selectedItem.Length - 5); //that's because we remove from the name "root\"
+
+                        switch (Path.GetExtension(selectedItem))
+                        {
+                            case ".adt":
+                                new WoWExport.Form_ADTExport(selectedItem).Show();
+                                break;
+                            case ".m2":
+                                new WoWExport.Form_M2Export(selectedItem).Show();
+                                break;
+                            case ".wmo":
+                                new WoWExport.Form_WMOExport(selectedItem).Show();
+                                break;
+                            case ".blp":
+                                ExportBLP(selectedItem);
+                                break;
+                            default:
+                                MessageBox.Show("Direct file export not supported yet");
+                                break;
+                        }
                     }
                 }
+            }
+            else
+            {
+                new WoWExport.Form_BatchExport(list).Show();
             }
         }
         //---------------------------------------------------------------------------
@@ -314,7 +329,10 @@ namespace WoWExport
             {
                 if (node.Checked)
                 {
-                    list.Add(node.FullPath.Substring(5, node.FullPath.Length - 5));
+                    if (Path.GetExtension(node.FullPath) != "")
+                    {
+                        list.Add(node.FullPath.Substring(5, node.FullPath.Length - 5));
+                    }
                 }
                 ListCheckedFiles(node.Nodes, list);
             }

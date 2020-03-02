@@ -69,6 +69,12 @@
     <Compile Include="Form_ADTExport.Designer.cs">
       <DependentUpon>Form_ADTExport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form_BatchExport.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_BatchExport.Designer.cs">
+      <DependentUpon>Form_BatchExport.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form_M2Export.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ADTExport.resx">
       <DependentUpon>Form_ADTExport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_BatchExport.resx">
+      <DependentUpon>Form_BatchExport.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_M2Export.resx">
       <DependentUpon>Form_M2Export.cs</DependentUpon>
