@@ -38,32 +38,35 @@ namespace WoWExport
         //---------------------------------------------------------------------------
         private void button1_Click(object sender, EventArgs e)
         {
+            if (treeView1.SelectedNode != null)
             {
-                Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
-                string selectedItem = treeView1.SelectedNode.FullPath;
-                selectedItem = selectedItem.Substring(5, selectedItem.Length - 5); //that's because we remove from the name "root\"
-
-                switch (Path.GetExtension(selectedItem))
+                if (treeView1.SelectedNode.Level != 0)
                 {
-                    case ".adt":
-                        new WoWExport.Form_ADTExport(selectedItem).Show();
-                        break;
-                    case ".m2":
-                        new WoWExport.Form_M2Export(selectedItem).Show();
-                        break;
-                    case ".wmo":
-                        new WoWExport.Form_WMOExport(selectedItem).Show();
-                        break;
-                    case ".blp":
-                        ExportBLP(selectedItem);
-                        break;
-                    default:
-                        MessageBox.Show("Direct file export not supported yet");
-                        break;
+                    Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
+                    string selectedItem = treeView1.SelectedNode.FullPath;
+                    selectedItem = selectedItem.Substring(5, selectedItem.Length - 5); //that's because we remove from the name "root\"
+
+                    switch (Path.GetExtension(selectedItem))
+                    {
+                        case ".adt":
+                            new WoWExport.Form_ADTExport(selectedItem).Show();
+                            break;
+                        case ".m2":
+                            new WoWExport.Form_M2Export(selectedItem).Show();
+                            break;
+                        case ".wmo":
+                            new WoWExport.Form_WMOExport(selectedItem).Show();
+                            break;
+                        case ".blp":
+                            ExportBLP(selectedItem);
+                            break;
+                        default:
+                            MessageBox.Show("Direct file export not supported yet");
+                            break;
+                    }
                 }
             }
         }
-
         //---------------------------------------------------------------------------
         //Debug Button:
         //---------------------------------------------------------------------------
@@ -212,15 +215,6 @@ namespace WoWExport
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if (Path.GetExtension(treeView1.SelectedNode.FullPath) != "")
-            {
-                button1.Enabled = true;
-            }
-            else
-            {
-                button1.Enabled = false;
-            }
-
             if (treeView1.SelectedNode.FullPath.EndsWith(".blp"))
             {
                 try
