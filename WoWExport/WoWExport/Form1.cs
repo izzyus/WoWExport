@@ -96,6 +96,12 @@ namespace WoWExport
             //ADTReader reader = new ADTReader();
             //reader.Load335ADT(@"world\maps\azeroth\azeroth_32_48.adt");
             //---------------------------------------------------------------------------
+            var list = new List<string>();
+            ListCheckedFiles(treeView1.Nodes, list);
+            for(int i = 0; i < list.Count; i++)
+            {
+                Console.WriteLine(list[i]);
+            }
         }
 
         private void ExportBLP(string file)
@@ -193,6 +199,7 @@ namespace WoWExport
             treeView1.Nodes.Add(PopulateTreeNode2(Generators.DisplayStructure.MLF, "\\"));
             treeView1.Nodes[0].Expand();
             treeView1.Nodes[0].Text = "root";
+            treeView1.Sort();
 
             Managers.ConfigurationManager.ADTExportM2 = true;
             Managers.ConfigurationManager.ADTExportWMO = true;
@@ -207,11 +214,11 @@ namespace WoWExport
         {
             if (Path.GetExtension(treeView1.SelectedNode.FullPath) != "")
             {
-                button2.Enabled = true;
+                button1.Enabled = true;
             }
             else
             {
-                button2.Enabled = false;
+                button1.Enabled = false;
             }
 
             if (treeView1.SelectedNode.FullPath.EndsWith(".blp"))
@@ -276,6 +283,47 @@ namespace WoWExport
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
             Application.Exit();
+        }
+
+        //https://docs.microsoft.com/en-us/dotnet/api/system.windows.forms.treeview.aftercheck?view=netframework-4.0
+        private void treeView1_AfterCheck(object sender, TreeViewEventArgs e)
+        {
+            // The code only executes if the user caused the checked state to change.
+            if (e.Action != TreeViewAction.Unknown)
+            {
+                if (e.Node.Nodes.Count > 0)
+                {
+                    /* Calls the CheckAllChildNodes method, passing in the current 
+                    Checked value of the TreeNode whose checked state changed. */
+                    this.CheckAllChildNodes(e.Node, e.Node.Checked);
+                }
+            }
+        }
+
+        // Updates all child tree nodes recursively.
+        private void CheckAllChildNodes(TreeNode treeNode, bool nodeChecked)
+        {
+            foreach (TreeNode node in treeNode.Nodes)
+            {
+                node.Checked = nodeChecked;
+                if (node.Nodes.Count > 0)
+                {
+                    // If the current node has child nodes, call the CheckAllChildsNodes method recursively.
+                    this.CheckAllChildNodes(node, nodeChecked);
+                }
+            }
+        }
+
+        void ListCheckedFiles(TreeNodeCollection nodes, List<string> list)
+        {
+            foreach (TreeNode node in nodes)
+            {
+                if (node.Checked)
+                {
+                    list.Add(node.FullPath.Substring(5, node.FullPath.Length - 5));
+                }
+                ListCheckedFiles(node.Nodes, list);
+            }
         }
     }
 }
