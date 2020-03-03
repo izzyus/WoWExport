@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing;
 
 namespace WoWExport
 {
@@ -57,15 +58,18 @@ namespace WoWExport
             checkBox8.Text = "Use transparency";
             checkBox8.Checked = Managers.ConfigurationManager.ADTAlphaUseA;
 
+            listView1.View = View.List;
             for (int i = 0; i < fileList.Count; i++)
             {
-                listBox1.Items.Add(Path.GetFileName(fileList[i]));
+                listView1.Items.Add(Path.GetFileName(fileList[i]));
             }
-            
+
 
             button1.Text = "Export";
             label1.Text = "Save to: " + Managers.ConfigurationManager.OutputDirectory;
             this.Text = "Batch export";
+
+
         }
 
         private void UpdateConfiguration()
@@ -128,9 +132,12 @@ namespace WoWExport
 
         private void BatchExport()
         {
-            try
+            for (int i = 0; i < fileList.Count; i++)
             {
-                for (int i = 0; i < fileList.Count; i++)
+                bool skipped = false;
+                listView1.Items[i].BackColor = Color.Yellow;
+                listView1.Items[i].ForeColor = Color.DarkGoldenrod;
+                try
                 {
                     //Console.WriteLine("Exporting: " + fileList[i]);
                     string currentFile = fileList[i];
@@ -150,15 +157,30 @@ namespace WoWExport
                             break;
                         default:
                             //some other files that the exporter does not care about
+                            skipped = true;
                             break;
                     }
                     //Console.WriteLine("Finished: " + fileList[i]);
+                    if (!skipped)
+                    {
+                        listView1.Items[i].BackColor = Color.LightGreen;
+                        listView1.Items[i].ForeColor = Color.DarkGreen;
+                    }
+                    else
+                    {
+                        listView1.Items[i].BackColor = Color.DimGray;
+                        listView1.Items[i].ForeColor = Color.LightGray;
+                    }
+                }
+                catch
+                {
+                    //Error occured
+                    listView1.Items[i].BackColor = Color.Pink;
+                    listView1.Items[i].ForeColor = Color.DarkRed;
                 }
             }
-            catch
-            {
 
-            }
         }
     }
 }
+
