@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing;
+using System.ComponentModel;
 
 namespace WoWExport
 {
     public partial class Form_BatchExport : Form
     {
+        private readonly BackgroundWorker worker = new BackgroundWorker();
+        public int file;
+
         public List<string> fileList;
         public static string[] AlphaType =
         {
@@ -25,6 +29,8 @@ namespace WoWExport
 
         private void Form_BatchExport_Load(object sender, EventArgs e)
         {
+            worker.DoWork += worker_DoWork;
+
             groupBox1.Text = "Export Settings";
             comboBox1.Items.AddRange(AlphaType);
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -122,7 +128,6 @@ namespace WoWExport
             if (Managers.ConfigurationManager.OutputDirectory != null)
             {
                 BatchExport();
-                MessageBox.Show("Done");
             }
             else
             {
@@ -132,11 +137,15 @@ namespace WoWExport
 
         private void BatchExport()
         {
+            worker.RunWorkerAsync();
+        }
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
             for (int i = 0; i < fileList.Count; i++)
             {
+                listViewChangeColor(i,Color.Yellow, Color.DarkGoldenrod);
                 bool skipped = false;
-                listView1.Items[i].BackColor = Color.Yellow;
-                listView1.Items[i].ForeColor = Color.DarkGoldenrod;
                 try
                 {
                     //Console.WriteLine("Exporting: " + fileList[i]);
@@ -163,24 +172,30 @@ namespace WoWExport
                     //Console.WriteLine("Finished: " + fileList[i]);
                     if (!skipped)
                     {
-                        listView1.Items[i].BackColor = Color.LightGreen;
-                        listView1.Items[i].ForeColor = Color.DarkGreen;
+                        listViewChangeColor(i, Color.LightGreen, Color.DarkGreen);
                     }
                     else
                     {
-                        listView1.Items[i].BackColor = Color.DimGray;
-                        listView1.Items[i].ForeColor = Color.LightGray;
+                        listViewChangeColor(i, Color.DimGray, Color.DarkGray);
                     }
                 }
                 catch
                 {
                     //Error occured
-                    listView1.Items[i].BackColor = Color.Pink;
-                    listView1.Items[i].ForeColor = Color.DarkRed;
+                    listViewChangeColor(i, Color.Pink, Color.DarkRed);
                 }
             }
-
+            MessageBox.Show("Done");
         }
+        private void listViewChangeColor(int index, Color back, Color fore) //horrible solution, but it works
+        {
+            listView1.Invoke(new MethodInvoker(delegate
+            {
+                listView1.Items[index].BackColor = back;
+                listView1.Items[index].ForeColor = fore;
+            }));
+        }
+
     }
 }
 
