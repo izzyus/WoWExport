@@ -591,6 +591,7 @@ namespace Exporters.OBJ
                 {
                     //Generate layer information CSV
                     StreamWriter layerCsvSR = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv"));
+                    layerCsvSR.WriteLine("chunk;tex0;tex1;tex2;tex3");
                     for (uint c = 0; c < reader.adtfile.chunks.Count(); c++)
                     {
                         string csvLine = c.ToString();
