@@ -10,7 +10,6 @@ namespace WoWExport
     public partial class Form_BatchExport : Form
     {
         private readonly BackgroundWorker worker = new BackgroundWorker();
-        public int file;
 
         public List<string> fileList;
         public static string[] AlphaType =
@@ -30,6 +29,7 @@ namespace WoWExport
         private void Form_BatchExport_Load(object sender, EventArgs e)
         {
             worker.DoWork += worker_DoWork;
+            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
 
             groupBox1.Text = "Export Settings";
             comboBox1.Items.AddRange(AlphaType);
@@ -137,6 +137,7 @@ namespace WoWExport
 
         private void BatchExport()
         {
+            button1.Enabled = false;
             worker.RunWorkerAsync();
         }
 
@@ -185,7 +186,6 @@ namespace WoWExport
                     listViewChangeColor(i, Color.Pink, Color.DarkRed);
                 }
             }
-            MessageBox.Show("Done");
         }
         private void listViewChangeColor(int index, Color back, Color fore) //horrible solution, but it works
         {
@@ -194,6 +194,12 @@ namespace WoWExport
                 listView1.Items[index].BackColor = back;
                 listView1.Items[index].ForeColor = fore;
             }));
+        }
+
+        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            button1.Enabled = true;
+            MessageBox.Show("Done");
         }
 
     }
