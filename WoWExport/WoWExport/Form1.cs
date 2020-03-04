@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
 using WoWFormatLib.FileReaders;
+using System.ComponentModel;
 
 namespace WoWExport
 {
     public partial class Form1 : Form
     {
+        private readonly BackgroundWorker worker = new BackgroundWorker();
+        public TreeNode displayStructure = new TreeNode();
         public Form1()
         {
             InitializeComponent();
@@ -15,6 +18,11 @@ namespace WoWExport
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            worker.DoWork += worker_DoWork;
+            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            worker.ProgressChanged += worker_ProgressChanged;
+            worker.WorkerReportsProgress = true;
+
             //Set picturebox defaults
             panel1.AutoScroll = true;
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;
@@ -22,7 +30,9 @@ namespace WoWExport
             this.Text = "WoW Export";
 
             button1.Text = "Export";
+            button1.Enabled = false;
             textBox1.Text = "D:\\export";
+            textBox1.Enabled = false;
 
             groupBox1.Text = "Preview";
 
@@ -168,35 +178,7 @@ namespace WoWExport
 
         private void LoadGame()
         {
-            //Extract listfiles to cache
-            if (!Directory.Exists(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles"))
-            {
-                Directory.CreateDirectory(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles");
-            }
-            Managers.ArchiveManager.FindLocale();
-            Managers.ArchiveManager.ExtractListfiles(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles\\");
-
-            Managers.ArchiveManager.LoadArchives();
-            Managers.ArchiveManager.GenerateMainListFileFromMPQ();
-
-            if (Managers.ConfigurationManager.Profile == "LK" || Managers.ConfigurationManager.Profile == "TBC" || Managers.ConfigurationManager.Profile == "Vanilla")
-            {
-                Managers.md5Manager.LoadMD5();
-            }
-
-            Generators.DisplayStructure.GenerateList();
-            treeView1.Nodes.Add(PopulateTreeNode2(Generators.DisplayStructure.MLF, "\\"));
-            treeView1.Nodes[0].Expand();
-            treeView1.Nodes[0].Text = "root";
-            treeView1.Sort();
-
-            Managers.ConfigurationManager.ADTExportM2 = true;
-            Managers.ConfigurationManager.ADTExportWMO = true;
-            Managers.ConfigurationManager.ADTExportFoliage = false; //Obsolete atm
-            Managers.ConfigurationManager.ADTexportTextures = true;
-            Managers.ConfigurationManager.ADTexportAlphaMaps = true;
-            Managers.ConfigurationManager.WMOExportM2 = true;
-            //Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//"; -- not here please
+            worker.RunWorkerAsync();
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
@@ -307,6 +289,73 @@ namespace WoWExport
                 }
                 ListCheckedFiles(node.Nodes, list);
             }
+        }
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            worker.ReportProgress(0, "Searching cached listfiles");
+            //Extract listfiles to cache
+            if (!Directory.Exists(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles"))
+            {
+                Directory.CreateDirectory(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles");
+            }
+            worker.ReportProgress(1, "Finding locale");
+            Managers.ArchiveManager.FindLocale();
+            worker.ReportProgress(2, "Extracting listfiles if needed");
+            Managers.ArchiveManager.ExtractListfiles(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles\\");
+            worker.ReportProgress(3, "Loading game archives");
+            Managers.ArchiveManager.LoadArchives();
+            worker.ReportProgress(4, "Merging listfiles");
+            Managers.ArchiveManager.GenerateMainListFileFromMPQ();
+
+            if (Managers.ConfigurationManager.Profile == "LK" || Managers.ConfigurationManager.Profile == "TBC" || Managers.ConfigurationManager.Profile == "Vanilla")
+            {
+                worker.ReportProgress(5, "Loading MD5 minimap translator");
+                Managers.md5Manager.LoadMD5();
+            }
+
+            worker.ReportProgress(6, "Generating display list... please wait (window may freez)");
+            Generators.DisplayStructure.GenerateList();
+
+            PopulateTree();
+
+            worker.ReportProgress(99, "Assigning settings");
+            Managers.ConfigurationManager.ADTExportM2 = true;
+            Managers.ConfigurationManager.ADTExportWMO = true;
+            Managers.ConfigurationManager.ADTExportFoliage = false; //Obsolete atm
+            Managers.ConfigurationManager.ADTexportTextures = true;
+            Managers.ConfigurationManager.ADTexportAlphaMaps = true;
+            Managers.ConfigurationManager.WMOExportM2 = true;
+            //Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//"; -- not here please
+
+        }
+
+        private void PopulateTree()
+        {
+            treeView1.Invoke(new MethodInvoker(delegate
+            {
+                treeView1.Nodes.Add(PopulateTreeNode2(Generators.DisplayStructure.MLF, "\\"));
+                treeView1.Nodes[0].Text = "root";
+                treeView1.Nodes[0].Expand();
+            }));
+        }
+
+        private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            button1.Enabled = true;
+            textBox1.Enabled = true;
+            label1.Hide();
+        }
+
+        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            var state = (string)e.UserState;
+            
+            if (!string.IsNullOrEmpty(state))
+            {
+                label1.Text = state;
+            }
+            //progressBar.Value = e.ProgressPercentage;
         }
     }
 }

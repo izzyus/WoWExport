@@ -30,6 +30,8 @@ namespace WoWExport
         {
             worker.DoWork += worker_DoWork;
             worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            //worker.ProgressChanged += worker_ProgressChanged;
+            //worker.WorkerReportsProgress = true;
 
             groupBox1.Text = "Export Settings";
             comboBox1.Items.AddRange(AlphaType);
@@ -201,6 +203,13 @@ namespace WoWExport
             button1.Enabled = true;
             MessageBox.Show("Done");
         }
+
+        /*
+        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            var state = (string)e.UserState;
+        }
+        */
 
     }
 }
