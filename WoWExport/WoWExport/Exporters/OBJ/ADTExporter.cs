@@ -23,11 +23,11 @@ namespace Exporters.OBJ
             }
             */
             //var outdir = ConfigurationManager.AppSettings["outdir"];
-            
+
             var customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-            
+
             var MaxSize = 51200 / 3.0;
             var TileSize = MaxSize / 32.0;
             var ChunkSize = TileSize / 16.0;
@@ -204,7 +204,7 @@ namespace Exporters.OBJ
                         }
 
                         //Sloppy ignore holes:
-                        if(Managers.ConfigurationManager.ADTIgnoreHoles)
+                        if (Managers.ConfigurationManager.ADTIgnoreHoles)
                         {
                             isHole = false;
                         }
@@ -403,8 +403,8 @@ namespace Exporters.OBJ
                             //WMOExporter.ExportWMO(filedataid, exportworker, Path.Combine(outdir, Path.GetDirectoryName(file)), wmo.doodadSet, filename);
                             WMOExporter.ExportWMO(filename, Path.Combine(outdir, Path.GetDirectoryName(file)), null, wmo.doodadSet);
                             //wmoSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
-                        
-                        if (wmo.scale != 0)
+
+                            if (wmo.scale != 0)
                             {
                                 doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
                             }
@@ -432,7 +432,7 @@ namespace Exporters.OBJ
                     }
                     //wmoSW.Close();
                 }
-            
+
                 if (exportM2)
                 {
                     //exportworker.ReportProgress(50, "Exporting M2s");
@@ -479,10 +479,9 @@ namespace Exporters.OBJ
                         }
                     }
                 }
-
                 doodadSW.Close();
             }
-#region Alpha&Tex
+            #region Alpha&Tex
             //----------------------------------------------------------------------------------------------------------
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             ///TEXTURE & ALPHA RELATED START
@@ -495,22 +494,22 @@ namespace Exporters.OBJ
                     Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures"));
                 }
 
-                List<String>GroundTextures = reader.adtfile.textures.filenames.ToList();
+                List<String> GroundTextures = reader.adtfile.textures.filenames.ToList();
 
                 var blpreader = new BLPReader();
                 foreach (string texture in GroundTextures)
                 {
-                    if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png")));
+                    if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png"))) ;
                     {
                         //if (File.Exists(@"D:\mpqediten32\Work\" + texture))
-                        if(Managers.ArchiveManager.FileExists(texture))
+                        if (Managers.ArchiveManager.FileExists(texture))
                         {
                             try
                             {
                                 blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(texture));
                                 blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png"));
                             }
-                            catch(Exception e)
+                            catch (Exception e)
                             {
                                 //error on save
                                 throw new Exception(e.Message);
@@ -531,7 +530,7 @@ namespace Exporters.OBJ
 
                 List<System.Drawing.Bitmap> AlphaLayers = new List<System.Drawing.Bitmap>();
                 AlphaLayers = AlphaMapsGenerator.AlphaLayers;
-                
+
                 if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps")))
                 {
                     Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps"));
@@ -591,7 +590,7 @@ namespace Exporters.OBJ
                 {
                     //Generate layer information CSV
                     StreamWriter layerCsvSR = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv"));
-                    layerCsvSR.WriteLine("chunk;tex0;tex1;tex2;tex3");
+                    layerCsvSR.WriteLine("chunk;tex0;tex1;tex2;tex3"); //header
                     for (uint c = 0; c < reader.adtfile.chunks.Count(); c++)
                     {
                         string csvLine = c.ToString();
@@ -613,7 +612,36 @@ namespace Exporters.OBJ
             ///TEXTURE & ALPHA RELATED END
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //----------------------------------------------------------------------------------------------------------
-#endregion
+            #endregion
+
+
+            /*
+            //Vertex color data
+            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "vertex_colors.csv")))
+            {
+                StreamWriter vertesColorCSV = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "vertex_colors.csv"));
+                vertesColorCSV.WriteLine("chunk;vert;a;r;g;b"); //header
+                for (uint c = 0; c < reader.adtfile.chunks.Count(); c++)
+                {
+                    if (reader.adtfile.chunks[c].vertexShading.red != null)
+                    {
+                        for (int i = 0; i < 145; i++)
+                        {
+                            //Console.WriteLine(c + "_" + i + "-" + reader.adtfile.chunks[c].vertexShading.alpha[i] + " " + reader.adtfile.chunks[c].vertexShading.red[i] + " " + reader.adtfile.chunks[c].vertexShading.green[i] + " " + reader.adtfile.chunks[c].vertexShading.blue[i]);
+                            vertesColorCSV.WriteLine(c + ";" + i + ";" + reader.adtfile.chunks[c].vertexShading.alpha[i] + ";" + reader.adtfile.chunks[c].vertexShading.red[i] + ";" + reader.adtfile.chunks[c].vertexShading.green[i] + ";" + reader.adtfile.chunks[c].vertexShading.blue[i]);
+                        }
+                    }
+                    else
+                    {
+                        //Console.WriteLine(c + "- null");
+                        vertesColorCSV.WriteLine(c + ";0;0;0;0;0");
+                    }
+                }
+                vertesColorCSV.Close();
+            }
+            */
+
+
             //exportworker.ReportProgress(75, "Exporting terrain textures..");
 
             if (bakeQuality != "none")
