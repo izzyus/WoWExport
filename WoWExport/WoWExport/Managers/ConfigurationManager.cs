@@ -24,5 +24,7 @@ namespace Managers
 
         //WMO Export
         public static Boolean WMOExportM2 = false;
+        public static Boolean WMODoodadsGlobalPath = false;
+        public static Boolean WMODoodadsPlacementGlobalPath = false;
     }
 }

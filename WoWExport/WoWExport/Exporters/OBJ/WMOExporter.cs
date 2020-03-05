@@ -326,11 +326,22 @@ namespace Exporters.OBJ
                                 if (destinationOverride == null)
                                 {
                                     //if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
-                                    if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
+                                    if (Managers.ConfigurationManager.WMODoodadsGlobalPath)
                                     {
-                                        //M2Exporter.exportM2(doodadFileName, null, Path.Combine(outdir, Path.GetDirectoryName(file)));
-                                        //M2Exporter.exportM2(doodadFileName, Path.Combine(outdir, Path.GetDirectoryName(filename)), null);
-                                        M2Exporter.ExportM2(doodadFileName, Path.Combine(outdir, Path.GetDirectoryName(filename)));
+                                        if (!File.Exists(Path.Combine(outdir, Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
+                                        {
+
+                                            M2Exporter.ExportM2(doodadFileName, outdir);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(filename), Path.GetFileName(doodadFileName.ToLower()).Replace(".m2", ".obj"))))
+                                        {
+                                            //M2Exporter.exportM2(doodadFileName, null, Path.Combine(outdir, Path.GetDirectoryName(file)));
+                                            //M2Exporter.exportM2(doodadFileName, Path.Combine(outdir, Path.GetDirectoryName(filename)), null);
+                                            M2Exporter.ExportM2(doodadFileName, Path.Combine(outdir, Path.GetDirectoryName(filename)));
+                                        }
                                     }
                                 }
                                 else
@@ -342,7 +353,15 @@ namespace Exporters.OBJ
                                     }
                                 }
 
-                                doodadSW.WriteLine(Path.GetFileNameWithoutExtension(doodadNameEntry.filename).ToLower() + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
+                                if (Managers.ConfigurationManager.WMODoodadsPlacementGlobalPath)
+                                {
+                                    doodadSW.WriteLine(doodadNameEntry.filename.ToLower().Replace(".mdx", ".m2").Replace(".mdl", ".m2").Replace(".m2", ".obj;") + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
+                                }
+                                else
+                                {
+                                    doodadSW.WriteLine(Path.GetFileNameWithoutExtension(doodadNameEntry.filename).ToLower() + ".obj;" + doodadDefinition.position.X.ToString("F09") + ";" + doodadDefinition.position.Y.ToString("F09") + ";" + doodadDefinition.position.Z.ToString("F09") + ";" + doodadDefinition.rotation.W.ToString("F15") + ";" + doodadDefinition.rotation.X.ToString("F15") + ";" + doodadDefinition.rotation.Y.ToString("F15") + ";" + doodadDefinition.rotation.Z.ToString("F15") + ";" + doodadDefinition.scale + ";" + currentDoodadSetName);
+                                }
+                                
                                 break;
                             }
                         }
