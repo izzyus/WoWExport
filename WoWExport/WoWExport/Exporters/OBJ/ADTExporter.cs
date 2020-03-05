@@ -359,6 +359,17 @@ namespace Exporters.OBJ
                     {
                         var wmo = reader.adtfile.objects.worldModels.entries[mi];
 
+                        float wmoScale;
+                        if (wmo.scale != 0)
+                        {
+                            wmoScale = wmo.scale / 1024f;
+                        }
+                        else
+                        {
+                            wmoScale = 1;
+                        }
+
+
                         //var filename = "";
                         var filename = reader.adtfile.objects.wmoNames.filenames[wmo.mwidEntry];
 
@@ -403,31 +414,17 @@ namespace Exporters.OBJ
                             //WMOExporter.ExportWMO(filedataid, exportworker, Path.Combine(outdir, Path.GetDirectoryName(file)), wmo.doodadSet, filename);
                             WMOExporter.ExportWMO(filename, Path.Combine(outdir, Path.GetDirectoryName(file)), null, wmo.doodadSet);
                             //wmoSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
-
-                            if (wmo.scale != 0)
-                            {
-                                doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
-                            }
-                            else
-                            {
-                                doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + "1" + ";" + wmo.uniqueId + ";wmo");
-                            }
-
                         }
 
-                        if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
+                        if (Managers.ConfigurationManager.ADTModelsPlacementGlobalPath)
                         {
-                            //doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
-                            if (wmo.scale != 0)
-                            {
-                                doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
-                            }
-                            else
-                            {
-                                doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + "1" + ";" + wmo.uniqueId + ";wmo");
-                            }
-                            //wmoSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
+                            doodadSW.WriteLine(Path.Combine(Path.GetDirectoryName(filename).ToLower(),Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj") + ";" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmoScale + ";" + wmo.uniqueId + ";wmo");
                         }
+                        else
+                        {
+                            doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmoScale + ";" + wmo.uniqueId + ";wmo");
+                        }
+
                         //}
                     }
                     //wmoSW.Close();
@@ -470,10 +467,12 @@ namespace Exporters.OBJ
                         {
                             //M2Exporter.ExportM2(filedataid, null, Path.Combine(outdir, Path.GetDirectoryName(file)), filename);
                             M2Exporter.ExportM2(filename, Path.Combine(outdir, Path.GetDirectoryName(file)));
-                            doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + doodad.position.X + ";" + doodad.position.Y + ";" + doodad.position.Z + ";" + doodad.rotation.X + ";" + doodad.rotation.Y + ";" + doodad.rotation.Z + ";" + doodad.scale / 1024f + ";" + doodad.uniqueId + ";m2");
                         }
-
-                        if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
+                        if (Managers.ConfigurationManager.ADTModelsPlacementGlobalPath)
+                        {
+                            doodadSW.WriteLine(Path.Combine(Path.GetDirectoryName(filename).ToLower(), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj") + ";" + doodad.position.X + ";" + doodad.position.Y + ";" + doodad.position.Z + ";" + doodad.rotation.X + ";" + doodad.rotation.Y + ";" + doodad.rotation.Z + ";" + doodad.scale / 1024f + ";" + doodad.uniqueId + ";m2");
+                        }
+                        else
                         {
                             doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + doodad.position.X + ";" + doodad.position.Y + ";" + doodad.position.Z + ";" + doodad.rotation.X + ";" + doodad.rotation.Y + ";" + doodad.rotation.Z + ";" + doodad.scale / 1024f + ";" + doodad.uniqueId + ";m2");
                         }
