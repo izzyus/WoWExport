@@ -696,11 +696,24 @@ namespace Exporters.OBJ
                 objsw.WriteLine("usemtl " + materials[1]);
                 objsw.WriteLine("s 1");
             }
-
+            int currentChunk = 0;
             foreach (var renderBatch in renderBatches)
             {
                 var i = renderBatch.firstFace;
-                if (bakeQuality == "high" && materials.ContainsKey((int)renderBatch.materialID)) { objsw.WriteLine("usemtl " + materials[(int)renderBatch.materialID]); }
+                if (bakeQuality == "high" && materials.ContainsKey((int)renderBatch.materialID))
+                {
+                    if (Managers.ConfigurationManager.ADTSplitChunks)
+                    {
+                        //objsw.WriteLine("g chunk" + currentChunk);
+                        objsw.WriteLine("g "+ materials[(int)renderBatch.materialID]);
+                        objsw.WriteLine("usemtl " + materials[(int)renderBatch.materialID]);
+                        objsw.WriteLine("s 1");
+                    }
+                    else
+                    {
+                        objsw.WriteLine("usemtl " + materials[(int)renderBatch.materialID]);
+                    }
+                }
                 while (i < (renderBatch.firstFace + renderBatch.numFaces))
                 {
                     objsw.WriteLine("f " +
@@ -709,6 +722,7 @@ namespace Exporters.OBJ
                         (indices[i] + 1) + "/" + (indices[i] + 1) + "/" + (indices[i] + 1));
                     i = i + 3;
                 }
+                currentChunk++;
             }
 
             objsw.Close();

@@ -23,6 +23,7 @@ namespace Managers
         public static Boolean ADTAlphaUseA = false;
         public static Boolean ADTModelsPlacementGlobalPath = false;
         public static String ADTQuality = "low"; //Hardcoded for the moment
+        public static Boolean ADTSplitChunks = false;
 
         //WMO Export
         public static Boolean WMOExportM2 = false;
