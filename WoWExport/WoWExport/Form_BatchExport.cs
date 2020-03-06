@@ -45,10 +45,14 @@ namespace WoWExport
             if (checkBox2.Checked)
             {
                 checkBox3.Enabled = true;
+                checkBox10.Enabled = true;
+                checkBox11.Enabled = true;
             }
             else
             {
                 checkBox3.Enabled = false;
+                checkBox10.Enabled = false;
+                checkBox11.Enabled = false;
             }
             checkBox4.Checked = Managers.ConfigurationManager.ADTExportFoliage;
             checkBox4.Text = "Export foliage (ADT)";
@@ -65,6 +69,13 @@ namespace WoWExport
 
             checkBox8.Text = "Use transparency";
             checkBox8.Checked = Managers.ConfigurationManager.ADTAlphaUseA;
+
+            checkBox9.Text = "ADT model placement global paths";
+            checkBox9.Checked = Managers.ConfigurationManager.ADTModelsPlacementGlobalPath;
+            checkBox10.Text = "WMO Doodads use global paths";
+            checkBox10.Checked = Managers.ConfigurationManager.WMODoodadsGlobalPath;
+            checkBox11.Text = "WMO Doodads placement global paths";
+            checkBox11.Checked = Managers.ConfigurationManager.WMODoodadsPlacementGlobalPath;
 
             listView1.View = View.List;
             for (int i = 0; i < fileList.Count; i++)
@@ -92,6 +103,11 @@ namespace WoWExport
 
             Managers.ConfigurationManager.ADTAlphaMode = comboBox1.SelectedIndex;
             Managers.ConfigurationManager.ADTAlphaUseA = checkBox8.Checked;
+
+            Managers.ConfigurationManager.ADTModelsPlacementGlobalPath = checkBox9.Checked;
+            Managers.ConfigurationManager.WMODoodadsGlobalPath = checkBox10.Checked;
+            Managers.ConfigurationManager.WMODoodadsPlacementGlobalPath = checkBox11.Checked;
+
         }
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
@@ -202,6 +218,43 @@ namespace WoWExport
         {
             button1.Enabled = true;
             MessageBox.Show("Done");
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked || checkBox2.Checked)
+            {
+                checkBox9.Enabled = true;
+            }
+            else
+            {
+                checkBox9.Enabled = false;
+            }
+        }
+
+        private void checkBox2_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox2.Checked)
+            {
+                checkBox3.Enabled = true;
+                checkBox10.Enabled = true;
+                checkBox11.Enabled = true;
+            }
+            else
+            {
+                checkBox3.Enabled = false;
+                checkBox10.Enabled = false;
+                checkBox11.Enabled = false;
+            }
+
+            if (checkBox2.Checked || checkBox1.Checked)
+            {
+                checkBox9.Enabled = true;
+            }
+            else
+            {
+                checkBox9.Enabled = false;
+            }
         }
 
         /*

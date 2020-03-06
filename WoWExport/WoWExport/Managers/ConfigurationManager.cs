@@ -21,11 +21,11 @@ namespace Managers
         public static Boolean ADTIgnoreHoles = false;
         public static int ADTAlphaMode = 0;
         public static Boolean ADTAlphaUseA = false;
-        public static Boolean ADTModelsPlacementGlobalPath = true;
+        public static Boolean ADTModelsPlacementGlobalPath = false;
 
         //WMO Export
         public static Boolean WMOExportM2 = false;
         public static Boolean WMODoodadsGlobalPath = false;
-        public static Boolean WMODoodadsPlacementGlobalPath = true;
+        public static Boolean WMODoodadsPlacementGlobalPath = false;
     }
 }

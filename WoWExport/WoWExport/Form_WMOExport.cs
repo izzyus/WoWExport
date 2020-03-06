@@ -26,6 +26,12 @@ namespace WoWExport
         {
             checkBox1.Checked = Managers.ConfigurationManager.WMOExportM2;
             checkBox1.Text = "Export doodads";
+
+            checkBox2.Text = "Doodads use global paths";
+            checkBox2.Checked = Managers.ConfigurationManager.WMODoodadsGlobalPath;
+            checkBox3.Text = "Doodads placement global paths";
+            checkBox3.Checked = Managers.ConfigurationManager.WMODoodadsPlacementGlobalPath;
+
             button1.Text = "Export";
             this.Text = filename;
 
@@ -61,6 +67,8 @@ namespace WoWExport
         private void UpdateConfiguration()
         {
             Managers.ConfigurationManager.WMOExportM2 = checkBox1.Checked;
+            Managers.ConfigurationManager.WMODoodadsGlobalPath = checkBox2.Checked ;
+            Managers.ConfigurationManager.WMODoodadsPlacementGlobalPath = checkBox3.Checked;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -76,6 +84,20 @@ namespace WoWExport
                 throw new Exception("No output direcotry set");
             }
             MessageBox.Show("Done");
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                checkBox2.Enabled = true;
+                checkBox3.Enabled = true;
+            }
+            else
+            {
+                checkBox2.Enabled = false;
+                checkBox3.Enabled = false;
+            }
         }
     }
 }
