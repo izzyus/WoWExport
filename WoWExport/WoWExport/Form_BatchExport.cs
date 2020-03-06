@@ -172,7 +172,7 @@ namespace WoWExport
                     switch (Path.GetExtension(currentFile))
                     {
                         case ".adt":
-                            Exporters.OBJ.ADTExporter.exportADT(currentFile, Managers.ConfigurationManager.OutputDirectory, "low"/* hardcoded for the moment */);
+                            Exporters.OBJ.ADTExporter.exportADT(currentFile, Managers.ConfigurationManager.OutputDirectory, Managers.ConfigurationManager.ADTQuality);
                             break;
                         case ".m2":
                             Exporters.OBJ.M2Exporter.ExportM2(currentFile, Managers.ConfigurationManager.OutputDirectory);

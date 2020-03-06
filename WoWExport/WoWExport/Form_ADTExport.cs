@@ -157,7 +157,7 @@ namespace WoWExport
 
             if (Managers.ConfigurationManager.OutputDirectory != null)
             {
-                Exporters.OBJ.ADTExporter.exportADT(filename, Managers.ConfigurationManager.OutputDirectory, "low"/* hardcoded for the moment */);
+                Exporters.OBJ.ADTExporter.exportADT(filename, Managers.ConfigurationManager.OutputDirectory, Managers.ConfigurationManager.ADTQuality);
             }
             else
             {
