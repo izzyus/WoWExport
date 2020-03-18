@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
 using WoWFormatLib.Structs.ADT;
+using System.IO;
 namespace Generators.ADT_Alpha
 {
     class ADT_Alpha
@@ -200,11 +201,7 @@ namespace Generators.ADT_Alpha
                             //Store the layer textures
                             //----------------------------------------------------------------------------------------------------------
                             var AlphaLayerName = adtfile.textures.filenames[adtfile.texChunks[c].layers[li].textureId].ToLower();
-                            AlphaLayerName = AlphaLayerName.Substring(AlphaLayerName.LastIndexOf("\\", AlphaLayerName.Length - 2) + 1);
-                            AlphaLayerName = AlphaLayerName.Substring(0, AlphaLayerName.Length - 4);
-                            //AlphaLayersNames.Add(AlphaLayerName + "_" + c + "_" + li);
-                            //AlphaLayersNames.Add(c + "_" + li + "_" + AlphaLayerName);
-                            AlphaLayersNames.Add(c + ";" + li + ";" + AlphaLayerName);
+                            AlphaLayersNames.Add(c + ";" + li + ";" + Path.GetFileNameWithoutExtension(AlphaLayerName));
                             //----------------------------------------------------------------------------------------------------------
 
                             //----------------------------------------------------------------------------------------------------------
