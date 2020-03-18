@@ -515,6 +515,17 @@ namespace Exporters.OBJ
                                 {
                                     blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(texture));
                                     blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures", Path.GetDirectoryName(texture), Path.GetFileNameWithoutExtension(texture) + ".png"));
+                                    if (Managers.ConfigurationManager.ADTExportSpecularTextures)
+                                    {
+                                        if (Managers.ArchiveManager.FileExists(Path.Combine(Path.GetDirectoryName(texture), Path.GetFileNameWithoutExtension(texture) + "_s.blp")))
+                                        {
+                                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures", Path.GetDirectoryName(texture), Path.GetFileNameWithoutExtension(texture) + "_s.png")))
+                                            {
+                                                blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(Path.Combine(Path.GetDirectoryName(texture), Path.GetFileNameWithoutExtension(texture) + "_s.blp")));
+                                                blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures", Path.GetDirectoryName(texture), Path.GetFileNameWithoutExtension(texture) + "_s.png"));
+                                            }
+                                        }
+                                    }
                                 }
                                 catch (Exception e)
                                 {
@@ -530,7 +541,7 @@ namespace Exporters.OBJ
                     }
                     else
                     {
-                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png"))) ;
+                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png")))
                         {
                             //if (File.Exists(@"D:\mpqediten32\Work\" + texture))
                             if (Managers.ArchiveManager.FileExists(texture))
@@ -539,6 +550,17 @@ namespace Exporters.OBJ
                                 {
                                     blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(texture));
                                     blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png"));
+                                    if (Managers.ConfigurationManager.ADTExportSpecularTextures)
+                                    {
+                                        if (Managers.ArchiveManager.FileExists(Path.Combine(Path.GetDirectoryName(texture), Path.GetFileNameWithoutExtension(texture) + "_s.blp")))
+                                        {
+                                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + "_s.png")))
+                                            {
+                                                blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(Path.Combine(Path.GetDirectoryName(texture), Path.GetFileNameWithoutExtension(texture) + "_s.blp")));
+                                                blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + "_s.png"));
+                                            }
+                                        }
+                                    }
                                 }
                                 catch (Exception e)
                                 {

@@ -25,6 +25,7 @@ namespace Managers
         public static String ADTQuality = "low"; //Hardcoded for the moment
         public static Boolean ADTSplitChunks = false;
         public static Boolean ADTPreserveTextureStruct = false;
+        public static Boolean ADTExportSpecularTextures = true;
 
         //WMO Export
         public static Boolean WMOExportM2 = false;
