@@ -488,35 +488,68 @@ namespace Exporters.OBJ
             //----------------------------------------------------------------------------------------------------------
             if (exportTextures) //Export ground textures
             {
-                if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures")))
                 {
-                    Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures"));
-                }
+                    if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures")))
+                    {
+                        Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures"));
+                    }
+                }   
 
                 List<String> GroundTextures = reader.adtfile.textures.filenames.ToList();
 
                 var blpreader = new BLPReader();
                 foreach (string texture in GroundTextures)
                 {
-                    if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png"))) ;
+                    if (Managers.ConfigurationManager.ADTPreserveTextureStruct)
                     {
-                        //if (File.Exists(@"D:\mpqediten32\Work\" + texture))
-                        if (Managers.ArchiveManager.FileExists(texture))
+                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures", Path.GetDirectoryName(texture) + Path.GetFileNameWithoutExtension(texture) + ".png")))
                         {
-                            try
+                            if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures", Path.GetDirectoryName(texture))))
                             {
-                                blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(texture));
-                                blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png"));
+                                Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures", Path.GetDirectoryName(texture)));
                             }
-                            catch (Exception e)
+
+                            if (Managers.ArchiveManager.FileExists(texture))
                             {
-                                //error on save
-                                throw new Exception(e.Message);
+                                try
+                                {
+                                    blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(texture));
+                                    blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures", Path.GetDirectoryName(texture), Path.GetFileNameWithoutExtension(texture) + ".png"));
+                                }
+                                catch (Exception e)
+                                {
+                                    //error on save
+                                    throw new Exception(e.Message);
+                                }
+                            }
+                            else
+                            {
+                                //missing file
                             }
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png"))) ;
                         {
-                            //missing file
+                            //if (File.Exists(@"D:\mpqediten32\Work\" + texture))
+                            if (Managers.ArchiveManager.FileExists(texture))
+                            {
+                                try
+                                {
+                                    blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(texture));
+                                    blpreader.bmp.Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png"));
+                                }
+                                catch (Exception e)
+                                {
+                                    //error on save
+                                    throw new Exception(e.Message);
+                                }
+                            }
+                            else
+                            {
+                                //missing file
+                            }
                         }
                     }
                 }
@@ -596,9 +629,15 @@ namespace Exporters.OBJ
                         for (int li = 0; li < reader.adtfile.texChunks[c].layers.Count(); li++)
                         {
                             var AlphaLayerName = reader.adtfile.textures.filenames[reader.adtfile.texChunks[c].layers[li].textureId].ToLower();
-                            AlphaLayerName = AlphaLayerName.Substring(AlphaLayerName.LastIndexOf("\\", AlphaLayerName.Length - 2) + 1);
-                            AlphaLayerName = AlphaLayerName.Substring(0, AlphaLayerName.Length - 4);
-                            csvLine = csvLine + ";" + AlphaLayerName;
+                            if (Managers.ConfigurationManager.ADTPreserveTextureStruct)
+                            {
+                                csvLine = csvLine + ";" + Path.Combine(Path.GetDirectoryName(AlphaLayerName), Path.GetFileNameWithoutExtension(AlphaLayerName));
+                            }
+                            else
+                            {
+                                csvLine = csvLine + ";" + Path.GetFileNameWithoutExtension(AlphaLayerName);
+                            }
+                            
                         }
                         layerCsvSR.WriteLine(csvLine);
                         //File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", csvLine + Environment.NewLine);

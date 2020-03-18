@@ -24,6 +24,7 @@ namespace Managers
         public static Boolean ADTModelsPlacementGlobalPath = false;
         public static String ADTQuality = "low"; //Hardcoded for the moment
         public static Boolean ADTSplitChunks = false;
+        public static Boolean ADTPreserveTextureStruct = false;
 
         //WMO Export
         public static Boolean WMOExportM2 = false;
