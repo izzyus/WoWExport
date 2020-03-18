@@ -59,6 +59,18 @@ namespace WoWExport
             checkBox4.Enabled = false; //Disabled for the time being
             checkBox5.Checked = Managers.ConfigurationManager.ADTexportTextures;
             checkBox5.Text = "Export ground textures";
+
+            checkBox12.Checked = Managers.ConfigurationManager.ADTPreserveTextureStruct;
+            checkBox12.Text = "Preserve textures path";
+            if (checkBox5.Checked)
+            {
+                checkBox12.Enabled = true;
+            }
+            else
+            {
+                checkBox12.Enabled = false;
+            }
+
             checkBox6.Checked = Managers.ConfigurationManager.ADTexportAlphaMaps;
             checkBox6.Text = "Export alphamaps";
 
@@ -123,6 +135,8 @@ namespace WoWExport
             Managers.ConfigurationManager.ADTModelsPlacementGlobalPath = checkBox9.Checked;
             Managers.ConfigurationManager.WMODoodadsGlobalPath = checkBox10.Checked;
             Managers.ConfigurationManager.WMODoodadsPlacementGlobalPath = checkBox11.Checked;
+
+            Managers.ConfigurationManager.ADTPreserveTextureStruct = checkBox12.Checked;
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -204,6 +218,18 @@ namespace WoWExport
             else
             {
                 checkBox9.Enabled = false;
+            }
+        }
+
+        private void checkBox5_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox5.Checked)
+            {
+                checkBox12.Enabled = true;
+            }
+            else
+            {
+                checkBox12.Enabled = false;
             }
         }
     }
