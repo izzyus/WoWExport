@@ -27,6 +27,7 @@ This project is based on [Marlamin's](https://github.com/Marlamin) tools
 * [WoWFormatTest](https://github.com/Marlamin/WoWFormatTest)
 * [SereniaBLPLib](https://github.com/WoW-Tools/SereniaBLPLib)
 * [StormLibSharp](https://github.com/robpaveza/stormlibsharp)
+* [CascLib](https://github.com/WoW-Tools/CascLib)
 
 ## Thanks
 

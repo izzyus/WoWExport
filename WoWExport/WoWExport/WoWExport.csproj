@@ -35,6 +35,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CascLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>CASCLib\CascLib.dll</HintPath>
+    </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>OpenTK\OpenTK.dll</HintPath>
@@ -168,6 +172,15 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="CASCLib\CascLib.dll" />
+    <ContentWithTargetPath Include="CASCLib\MimeKitLite.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>MimeKitLite.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="CASCLib\System.Runtime.CompilerServices.Unsafe.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>System.Runtime.CompilerServices.Unsafe.dll</TargetPath>
+    </ContentWithTargetPath>
     <Content Include="OpenTK\OpenTK.Compatibility.dll" />
     <Content Include="OpenTK\OpenTK.dll" />
     <Content Include="OpenTK\OpenTK.GLControl.dll" />
@@ -175,10 +188,10 @@
     <Content Include="OpenTK\OpenTK.GLControl.xml" />
     <Content Include="OpenTK\OpenTK.pdb" />
     <Content Include="OpenTK\OpenTK.xml" />
-	<ContentWithTargetPath Include="StormLibSharp\StormLib.dll">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  <TargetPath>StormLib.dll</TargetPath>
-	</ContentWithTargetPath>
+    <ContentWithTargetPath Include="StormLibSharp\StormLib.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>StormLib.dll</TargetPath>
+    </ContentWithTargetPath>
     <Content Include="StormLibSharp\StormLibSharp.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
