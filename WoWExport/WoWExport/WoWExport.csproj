@@ -175,9 +175,10 @@
     <Content Include="OpenTK\OpenTK.GLControl.xml" />
     <Content Include="OpenTK\OpenTK.pdb" />
     <Content Include="OpenTK\OpenTK.xml" />
-    <Content Include="StormLib.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+	<ContentWithTargetPath Include="StormLibSharp\StormLib.dll">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <TargetPath>StormLib.dll</TargetPath>
+	</ContentWithTargetPath>
     <Content Include="StormLibSharp\StormLibSharp.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
