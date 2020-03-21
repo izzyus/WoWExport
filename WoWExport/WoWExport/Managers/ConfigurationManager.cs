@@ -22,10 +22,10 @@ namespace Managers
         public static int ADTAlphaMode = 0;
         public static Boolean ADTAlphaUseA = false;
         public static Boolean ADTModelsPlacementGlobalPath = false;
-        public static String ADTQuality = "low"; //Hardcoded for the moment
+        public static String ADTQuality = "low";
         public static Boolean ADTSplitChunks = false;
         public static Boolean ADTPreserveTextureStruct = false;
-        public static Boolean ADTExportSpecularTextures = true;
+        public static Boolean ADTExportSpecularTextures = false;
 
         //WMO Export
         public static Boolean WMOExportM2 = false;

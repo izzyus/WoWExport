@@ -65,10 +65,12 @@ namespace WoWExport
             if (checkBox5.Checked)
             {
                 checkBox12.Enabled = true;
+                checkBox13.Enabled = true;
             }
             else
             {
                 checkBox12.Enabled = false;
+                checkBox13.Enabled = false;
             }
 
             checkBox6.Checked = Managers.ConfigurationManager.ADTexportAlphaMaps;
@@ -100,6 +102,36 @@ namespace WoWExport
             label1.Text = "Save to: " + Managers.ConfigurationManager.OutputDirectory;
             this.Text = "Batch export";
 
+            checkBox13.Text = "Export ground \"specular?\" textures";
+            checkBox13.Checked = Managers.ConfigurationManager.ADTExportSpecularTextures;
+
+            //-------------------------------------------------------------------------------------
+            //Not really the intended use for this function, but for now it will stay like this.
+            //-------------------------------------------------------------------------------------
+            checkBox14.Text = "Split materials per chunk";
+            if (Managers.ConfigurationManager.ADTQuality == "high")
+            {
+                checkBox14.Checked = true;
+            }
+            else
+            {
+                checkBox14.Checked = false;
+            }
+            //-------------------------------------------------------------------------------------
+
+            if (checkBox14.Checked)
+            {
+                checkBox15.Enabled = true;
+            }
+            else
+            {
+                checkBox15.Enabled = false;
+            }
+
+            checkBox15.Text = "Split mesh per chunk";
+            checkBox15.Checked = Managers.ConfigurationManager.ADTSplitChunks;
+
+
 
         }
 
@@ -121,6 +153,21 @@ namespace WoWExport
             Managers.ConfigurationManager.WMODoodadsPlacementGlobalPath = checkBox11.Checked;
 
             Managers.ConfigurationManager.ADTPreserveTextureStruct = checkBox12.Checked;
+
+            Managers.ConfigurationManager.ADTExportSpecularTextures = checkBox13.Checked;
+            //----------------------------------------------------------------
+            //Again, not the intended use for this...
+            //----------------------------------------------------------------
+            if (checkBox14.Checked)
+            {
+                Managers.ConfigurationManager.ADTQuality = "high";
+            }
+            else
+            {
+                Managers.ConfigurationManager.ADTQuality = "low";
+            }
+            //----------------------------------------------------------------
+            Managers.ConfigurationManager.ADTSplitChunks = checkBox15.Checked;
         }
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
@@ -275,10 +322,24 @@ namespace WoWExport
             if (checkBox5.Checked)
             {
                 checkBox12.Enabled = true;
+                checkBox13.Enabled = true;
             }
             else
             {
                 checkBox12.Enabled = false;
+                checkBox13.Enabled = false;
+            }
+        }
+
+        private void checkBox14_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox14.Checked)
+            {
+                checkBox15.Enabled = true;
+            }
+            else
+            {
+                checkBox15.Enabled = false;
             }
         }
 
