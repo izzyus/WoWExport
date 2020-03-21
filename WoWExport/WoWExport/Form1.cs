@@ -293,40 +293,49 @@ namespace WoWExport
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            worker.ReportProgress(0, "Searching cached listfiles");
-            //Extract listfiles to cache
-            if (!Directory.Exists(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles"))
+            if (Managers.ArchiveManager.usingCasc)
             {
-                Directory.CreateDirectory(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles");
+                Console.WriteLine("Loading CASC");
+                Managers.ArchiveManager.LoadCASC();
             }
-            worker.ReportProgress(1, "Finding locale");
-            Managers.ArchiveManager.FindLocale();
-            worker.ReportProgress(2, "Extracting listfiles if needed");
-            Managers.ArchiveManager.ExtractListfiles(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles\\");
-            worker.ReportProgress(3, "Loading game archives");
-            Managers.ArchiveManager.LoadArchives();
-            worker.ReportProgress(4, "Merging listfiles");
-            Managers.ArchiveManager.GenerateMainListFileFromMPQ();
-
-            if (Managers.ConfigurationManager.Profile == "LK" || Managers.ConfigurationManager.Profile == "TBC" || Managers.ConfigurationManager.Profile == "Vanilla")
+            else
             {
-                worker.ReportProgress(5, "Loading MD5 minimap translator");
-                Managers.md5Manager.LoadMD5();
+                Console.WriteLine("Loading MPQ");
+                worker.ReportProgress(0, "Searching cached listfiles");
+                //Extract listfiles to cache
+                if (!Directory.Exists(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles"))
+                {
+                    Directory.CreateDirectory(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles");
+                }
+                worker.ReportProgress(1, "Finding locale");
+                Managers.ArchiveManager.FindLocale();
+                worker.ReportProgress(2, "Extracting listfiles if needed");
+                Managers.ArchiveManager.ExtractListfiles(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles\\");
+                worker.ReportProgress(3, "Loading game archives");
+                Managers.ArchiveManager.LoadArchives();
+                worker.ReportProgress(4, "Merging listfiles");
+                Managers.ArchiveManager.GenerateMainListFileFromMPQ();
+
+                if (Managers.ConfigurationManager.Profile == "LK" || Managers.ConfigurationManager.Profile == "TBC" || Managers.ConfigurationManager.Profile == "Vanilla")
+                {
+                    worker.ReportProgress(5, "Loading MD5 minimap translator");
+                    Managers.md5Manager.LoadMD5();
+                }
+
+                worker.ReportProgress(6, "Generating display list... please wait (window may freez)");
+                Generators.DisplayStructure.GenerateList();
+
+                PopulateTree();
+
+                worker.ReportProgress(99, "Assigning settings");
+                Managers.ConfigurationManager.ADTExportM2 = true;
+                Managers.ConfigurationManager.ADTExportWMO = true;
+                Managers.ConfigurationManager.ADTExportFoliage = false; //Obsolete atm
+                Managers.ConfigurationManager.ADTexportTextures = true;
+                Managers.ConfigurationManager.ADTexportAlphaMaps = true;
+                Managers.ConfigurationManager.WMOExportM2 = true;
+                //Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//"; -- not here please
             }
-
-            worker.ReportProgress(6, "Generating display list... please wait (window may freez)");
-            Generators.DisplayStructure.GenerateList();
-
-            PopulateTree();
-
-            worker.ReportProgress(99, "Assigning settings");
-            Managers.ConfigurationManager.ADTExportM2 = true;
-            Managers.ConfigurationManager.ADTExportWMO = true;
-            Managers.ConfigurationManager.ADTExportFoliage = false; //Obsolete atm
-            Managers.ConfigurationManager.ADTexportTextures = true;
-            Managers.ConfigurationManager.ADTexportAlphaMaps = true;
-            Managers.ConfigurationManager.WMOExportM2 = true;
-            //Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//"; -- not here please
 
         }
 

@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
@@ -56,9 +51,9 @@ namespace WoWExport
                 }
             }
             else
-            { 
-            comboBox1.SelectedIndex = 0;
-        }
+            {
+                comboBox1.SelectedIndex = 0;
+            }
 
             //Create Settings Folder if missing
             if (!Directory.Exists(Environment.CurrentDirectory + "\\settings"))
@@ -105,18 +100,21 @@ namespace WoWExport
 
         private void SwitchProfile()
         {
+
             if (comboBox1.Text == "WOD" || comboBox1.Text == "Legion" || comboBox1.Text == "BFA")
             {
-                button1.Enabled = false;
-                label1.Text = "Not implemented yet";
+                //button1.Enabled = false;
+                //label1.Text = "Not implemented yet";
+                Managers.ArchiveManager.usingCasc = true;
             }
             else
             {
-                button1.Enabled = true;
-                label1.Text = "";
+                //button1.Enabled = true;
+                //label1.Text = "";
+                Managers.ArchiveManager.usingCasc = false;
             }
             //Console.WriteLine("Profile set to: " + comboBox1.Text);
-            
+
             //Try to read the selectd profile path
             if (File.Exists(Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt"))
             {
@@ -150,7 +148,7 @@ namespace WoWExport
                     throw new Exception("Could not save this session index");
                 }
 
-                
+
                 if (!File.Exists(Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt"))
                 {
                     try
@@ -171,7 +169,7 @@ namespace WoWExport
             }
             else
             {
-                if(textBox1.Text == "")
+                if (textBox1.Text == "")
                 {
                     BrowseFolder();
                 }

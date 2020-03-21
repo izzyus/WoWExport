@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using StormLibSharp;
+using CASCLib;
 
 namespace Managers
 {
     class ArchiveManager
     {
+        public static Boolean usingCasc = false;
+        public static CASCHandler cascHandler;
+        public static String listFilePath = @"D:\test\listfile.csv"; //Hardcoded for the moment
+
+
         public static List<String> MainListFile = new List<String>();
         //public static String ConfigurationManager.GameDir;
 
@@ -25,7 +29,7 @@ namespace Managers
         public static MpqArchive expansion3;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\expansion3.MPQ", FileAccess.Read);
         public static MpqArchive world;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\world.mpq", FileAccess.Read);
         public static MpqArchive world2;// = new MpqArchive(@"D:\World of Warcraft - Cataclysm\Data\world2.mpq", FileAccess.Read);
-        
+
         //Locales
         public static MpqArchive locale1;
 
@@ -48,6 +52,33 @@ namespace Managers
         public static MpqArchive texture;
         public static MpqArchive wmo;
 
+        public static void LoadCASC()
+        {
+            if (ConfigurationManager.GameDir == null)
+            {
+                throw new Exception("Game directory not initialized, unable to load CASC");
+            }
+            try
+            {
+                cascHandler = CASCHandler.OpenLocalStorage(ConfigurationManager.GameDir);
+                cascHandler.Root.LoadListFile(listFilePath);
+                Console.WriteLine(cascHandler.Config.BuildName);
+
+                CASCConfig.ValidateData = false;
+                CASCConfig.ThrowOnFileNotFound = false;
+
+                //--------------------------------------------------------------------------
+                //TO DO: FIND A WAY TO GET THE LOCALE
+                //--------------------------------------------------------------------------
+                cascHandler.Root.SetFlags(LocaleFlags.enUS); //Hardcoded for the moment
+                //--------------------------------------------------------------------------
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
         public static void LoadArchives()
         {
             if (ConfigurationManager.GameDir == null)
@@ -69,7 +100,7 @@ namespace Managers
                 world2 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\world2.mpq", FileAccess.Read);
 
                 //locale1 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\enUS\locale-enUS.MPQ", FileAccess.Read); //temp locale solution
-                locale1 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\" + locale + @"\locale-"+locale+".MPQ", FileAccess.Read);
+                locale1 = new MpqArchive(ConfigurationManager.GameDir + @"\Data\" + locale + @"\locale-" + locale + ".MPQ", FileAccess.Read);
 
                 //Lich King
                 common = new MpqArchive(ConfigurationManager.GameDir + @"\Data\common.MPQ", FileAccess.Read);
@@ -368,7 +399,7 @@ namespace Managers
             foreach (string folder in directories)
             {
                 //Console.WriteLine(folder.Substring(folder.Length - 4, 4));
-                switch (folder.Substring(folder.Length-4,4).ToLower())
+                switch (folder.Substring(folder.Length - 4, 4).ToLower())
                 {
                     case "face": // "interFACE" that's why it's here
                         continue;
