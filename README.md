@@ -16,7 +16,7 @@ This project is based on [Marlamin's](https://github.com/Marlamin) tools
 | CATA | Yes | Yes | Yes |
 | MOP | Yes | Yes | Yes |
 | WOD | No | No | No |
-| Legion | No | No | No |
+| Legion | Yes | Yes | Yes |
 | BFA | No | No | No |
 | Classic | No | No | No |
 
