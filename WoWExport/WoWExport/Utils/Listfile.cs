@@ -25,7 +25,7 @@ namespace WoWExport
                     responseStream.CopyTo(stream);
                     //File.WriteAllBytes("listfile.csv", stream.ToArray());
 
-                    if (Directory.Exists(Path.GetDirectoryName(Managers.ArchiveManager.listFilePath)))
+                    if (!Directory.Exists(Path.GetDirectoryName(Managers.ArchiveManager.listFilePath)))
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(Managers.ArchiveManager.listFilePath));
                     }

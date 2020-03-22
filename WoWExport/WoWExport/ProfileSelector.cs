@@ -162,16 +162,6 @@ namespace WoWExport
                     }
                 }
 
-                //First check for listfile (the second one is in Archive Manager)
-                if (comboBox1.Text == "WOD" || comboBox1.Text == "Legion" || comboBox1.Text == "BFA")
-                {
-                    if (!File.Exists(Environment.CurrentDirectory + "\\listfiles\\" + "listfile.csv"))
-                    {
-                        //For now, just yell at the user if no listfile is provided
-                        throw new Exception("No listfile is provided in " + Environment.CurrentDirectory + "\\listfiles\\" + "listfile.csv");
-                    }
-                }
-
                 //Load up the main GUI and set the profile acordingly
                 Managers.ConfigurationManager.Profile = comboBox1.Text;
                 Managers.ConfigurationManager.GameDir = textBox1.Text;

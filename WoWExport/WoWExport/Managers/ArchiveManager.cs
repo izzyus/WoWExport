@@ -65,11 +65,10 @@ namespace Managers
             {
                 cascHandler = CASCHandler.OpenLocalStorage(ConfigurationManager.GameDir);
 
-                //The double check for the listfile
+                //Download a listfile if none exists
                 if (!File.Exists(listFilePath))
                 {
-                    //For now, just yell at the user if no listfile is provided
-                    throw new Exception("File does not exist: " + listFilePath);
+                    WoWExport.Listfile.Update();
                 }
 
                 cascHandler.Root.LoadListFile(listFilePath);
