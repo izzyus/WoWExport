@@ -232,7 +232,7 @@ namespace WoWExport
             {
                 try
                 {
-                    if (Managers.ConfigurationManager.Profile == "Cata" || Managers.ConfigurationManager.Profile == "MOP")
+                    if (Managers.ConfigurationManager.Profile == "Cata" || Managers.ConfigurationManager.Profile == "MOP" || Managers.ConfigurationManager.Profile == "WOD" || Managers.ConfigurationManager.Profile == "Legion")
                     {
                         string filedirectory = treeView1.SelectedNode.FullPath.Replace("\\maps\\", "\\minimaps\\");
                         filedirectory = filedirectory.Substring(0, filedirectory.LastIndexOf("\\") + 1);
@@ -244,8 +244,11 @@ namespace WoWExport
                         try
                         {
                             BLPReader reader = new BLPReader();
-                            reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(filedirectory + filename));
-                            pictureBox1.Image = reader.bmp;
+                            if (Managers.ArchiveManager.FileExists(filedirectory + filename))
+                            {
+                                reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(filedirectory + filename));
+                                pictureBox1.Image = reader.bmp;
+                            }
                         }
                         catch
                         {
@@ -258,8 +261,11 @@ namespace WoWExport
                         try
                         {
                             BLPReader reader = new BLPReader();
-                            reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(Managers.md5Manager.TranslateThisMap(filename)));
-                            pictureBox1.Image = reader.bmp;
+                            if (Managers.ArchiveManager.FileExists(Managers.md5Manager.TranslateThisMap(filename)))
+                            {
+                                reader.LoadBLP(Managers.ArchiveManager.ReadThisFile(Managers.md5Manager.TranslateThisMap(filename)));
+                                pictureBox1.Image = reader.bmp;
+                            }
                         }
                         catch
                         {
