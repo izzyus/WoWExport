@@ -232,7 +232,8 @@ namespace WoWExport
             {
                 try
                 {
-                    if (Managers.ConfigurationManager.Profile == "Cata" || Managers.ConfigurationManager.Profile == "MOP" || Managers.ConfigurationManager.Profile == "WOD" || Managers.ConfigurationManager.Profile == "Legion")
+                    //if (Managers.ConfigurationManager.Profile == "Cata" || Managers.ConfigurationManager.Profile == "MOP" || Managers.ConfigurationManager.Profile == "WOD" || Managers.ConfigurationManager.Profile == "Legion")
+                    if (Managers.ConfigurationManager.Profile >= 4) // Cata and above
                     {
                         string filedirectory = treeView1.SelectedNode.FullPath.Replace("\\maps\\", "\\minimaps\\");
                         filedirectory = filedirectory.Substring(0, filedirectory.LastIndexOf("\\") + 1);
@@ -363,7 +364,8 @@ namespace WoWExport
                 worker.ReportProgress(4, "Merging listfiles");
                 Managers.ArchiveManager.GenerateMainListFileFromMPQ();
 
-                if (Managers.ConfigurationManager.Profile == "LK" || Managers.ConfigurationManager.Profile == "TBC" || Managers.ConfigurationManager.Profile == "Vanilla")
+                //if (Managers.ConfigurationManager.Profile == "LK" || Managers.ConfigurationManager.Profile == "TBC" || Managers.ConfigurationManager.Profile == "Vanilla")
+                if (Managers.ConfigurationManager.Profile <= 3) //WoTLK and below
                 {
                     worker.ReportProgress(5, "Loading MD5 minimap translator");
                     Managers.md5Manager.LoadMD5();

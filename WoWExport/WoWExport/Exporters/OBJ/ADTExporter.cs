@@ -57,7 +57,8 @@ namespace Exporters.OBJ
 
             //reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
             //reader.LoadADT(ADTfile);
-            if (Managers.ConfigurationManager.Profile == "LK")
+            //if (Managers.ConfigurationManager.Profile == "LK") //this was wrong all along
+            if (Managers.ConfigurationManager.Profile <= 3) //WoTLK and below
             {
                 reader.Load335ADT(ADTfile);
             }

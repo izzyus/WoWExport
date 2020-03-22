@@ -12,6 +12,7 @@ namespace WoWExport
 
         public static string[] DisplayProfiles =
         {
+            "Extracted",
             "Vanilla",
             "TBC",
             "LK",
@@ -19,7 +20,8 @@ namespace WoWExport
             "MOP",
             "WOD",
             "Legion",
-            "BFA"
+            "BFA",
+            "Classic"
         };
 
         public ProfileSelector()
@@ -47,12 +49,12 @@ namespace WoWExport
                 }
                 catch
                 {
-                    comboBox1.SelectedIndex = 0;
+                    comboBox1.SelectedIndex = 1; //Don't automatically start on "Extracted"
                 }
             }
             else
             {
-                comboBox1.SelectedIndex = 0;
+                comboBox1.SelectedIndex = 1; //Don't automatically start on "Extracted"
             }
 
             //Create Settings Folder if missing
@@ -100,8 +102,19 @@ namespace WoWExport
 
         private void SwitchProfile()
         {
+            if(comboBox1.SelectedIndex == 0) //If "Extracted"
+            {
+                button1.Enabled = false;
+                label1.Text = "Not implemented yet";
+            }
+            else
+            {
+                button1.Enabled = true;
+                label1.Text = "";
+            }
 
-            if (comboBox1.Text == "WOD" || comboBox1.Text == "Legion" || comboBox1.Text == "BFA")
+            //if (comboBox1.Text == "WOD" || comboBox1.Text == "Legion" || comboBox1.Text == "BFA")
+            if (comboBox1.SelectedIndex >= 6) //WOD and above
             {
                 //button1.Enabled = false;
                 //label1.Text = "Not implemented yet";
@@ -163,7 +176,8 @@ namespace WoWExport
                 }
 
                 //Load up the main GUI and set the profile acordingly
-                Managers.ConfigurationManager.Profile = comboBox1.Text;
+                //Managers.ConfigurationManager.Profile = comboBox1.Text;
+                Managers.ConfigurationManager.Profile = comboBox1.SelectedIndex;
                 Managers.ConfigurationManager.GameDir = textBox1.Text;
                 new WoWExport.Form1().Show();
                 this.Hide();

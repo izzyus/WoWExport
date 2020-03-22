@@ -196,7 +196,8 @@ namespace Managers
 
                 //Add locale to the listfile:
                 //Console.WriteLine(ConfigurationManager.GameDir + "\\data\\" + locale + "\\" + "locale-" + locale + ".mpq");
-                if (Managers.ConfigurationManager.Profile != "Vanilla")
+                //if (Managers.ConfigurationManager.Profile != "Vanilla")
+                if (Managers.ConfigurationManager.Profile != 1) //Anything else than Vanilla
                 {
                     using (MpqArchive archive = new MpqArchive(ConfigurationManager.GameDir + "\\data\\" + locale + "\\" + "locale-" + locale + ".mpq", FileAccess.Read))
                     {
@@ -373,7 +374,8 @@ namespace Managers
                 }
             }
 
-            if (ConfigurationManager.Profile != "Vanilla")
+            //if (ConfigurationManager.Profile != "Vanilla")
+            if (ConfigurationManager.Profile != 1) //Anything else than vanilla
             {
                 if (!File.Exists(to + "\\" + "locale1.txt"))
                 {

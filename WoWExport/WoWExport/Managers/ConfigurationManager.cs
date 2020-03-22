@@ -7,7 +7,7 @@ namespace Managers
 {
     class ConfigurationManager
     {
-        public static String Profile;
+        public static int Profile;
         public static String GameDir;
 
         public static String OutputDirectory;

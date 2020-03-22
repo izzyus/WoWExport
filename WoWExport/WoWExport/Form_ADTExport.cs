@@ -130,7 +130,8 @@ namespace WoWExport
             try
             {
                 ADTReader reader = new ADTReader();
-                if (Managers.ConfigurationManager.Profile == "LK")
+                //if (Managers.ConfigurationManager.Profile == "LK")
+                if (Managers.ConfigurationManager.Profile <= 3) //WoTLK and below
                 {
                     reader.Load335ADT(filename);
                 }
