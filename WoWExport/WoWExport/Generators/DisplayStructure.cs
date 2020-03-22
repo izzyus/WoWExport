@@ -114,5 +114,22 @@ namespace WoWExport.Generators
         {
             return suffixes.Any(suffix => value.EndsWith(suffix));
         }
+
+        public static void GenerateCASCList()
+        {
+            Listfile.Load();
+            foreach (var line in Listfile.FDIDToFilename)
+            {
+                //Why does it not work with "line.Key"? To be investigated...
+                if (Managers.ArchiveManager.cascHandler.FileExists(line.Value))
+                {
+                    if (!EndsWithOneOf(line.Value, Skip))
+                    {
+                        MLF.Add(line.Value);
+                    }
+                }
+            }
+            Console.WriteLine("Display list generated");
+        }
     }
 }

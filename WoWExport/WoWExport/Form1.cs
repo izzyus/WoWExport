@@ -329,6 +329,11 @@ namespace WoWExport
                 worker.ReportProgress(0, "Loading CASC");
                 Console.WriteLine("Loading CASC");
                 Managers.ArchiveManager.LoadCASC();
+
+                worker.ReportProgress(20, "Generating list");
+                Generators.DisplayStructure.GenerateCASCList();
+                worker.ReportProgress(30, "Populating tree view");
+                PopulateTree("/");
             }
             else
             {
@@ -357,7 +362,7 @@ namespace WoWExport
                 worker.ReportProgress(6, "Generating display list... please wait (window may freez)");
                 Generators.DisplayStructure.GenerateList();
 
-                PopulateTree();
+                PopulateTree("\\");
 
                 worker.ReportProgress(99, "Assigning settings");
                 Managers.ConfigurationManager.ADTExportM2 = true;
@@ -371,11 +376,11 @@ namespace WoWExport
 
         }
 
-        private void PopulateTree()
+        private void PopulateTree(string separator)
         {
             treeView1.Invoke(new MethodInvoker(delegate
             {
-                treeView1.Nodes.Add(PopulateTreeNode2(Generators.DisplayStructure.MLF, "\\"));
+                treeView1.Nodes.Add(PopulateTreeNode2(Generators.DisplayStructure.MLF, separator));
                 treeView1.Nodes[0].Text = "root";
                 treeView1.Nodes[0].Expand();
             }));
