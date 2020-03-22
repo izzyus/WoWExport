@@ -216,128 +216,135 @@ namespace Managers
 
         public static Stream ReadThisFile(string filename)
         {
-            //Find the goddamn file in the archive hell
-            int index = MainListFile.FindIndex(a => a.Contains(filename.ToLower()));
-            //Stream stream;
             Stream stream = null;
-
-            if (index != -1)
+            if (usingCasc) //CASC
             {
-                //Get the archive in which the requested file resides
-                string archive = MainListFile[index];
-                archive = archive.Substring(archive.LastIndexOf(';', archive.Length - 2) + 1);
+                stream = cascHandler.OpenFile(filename);
+            }
+            else //MPQ
+            {
+                //Find the goddamn file in the archive hell
+                int index = MainListFile.FindIndex(a => a.Contains(filename.ToLower()));
+                //Stream stream;
 
-                //Old manager:
-                /*
-                //i just realised how obsolete this one is... (string filename) <-- seems familiar?
-                //Get the file (+path) 
-                
-                //string file = MainListFile[index];
-                //file = file.Substring(0, file.LastIndexOf(';'));
-                
-
-                //Try to open the archive and read the requested file
-                try
+                if (index != -1)
                 {
-                    MpqArchive CurrentArchive = new MpqArchive(ConfigurationManager.GameDir + "\\data\\" + archive, FileAccess.Read);
-                    stream = CurrentArchive.OpenFile(filename);
+                    //Get the archive in which the requested file resides
+                    string archive = MainListFile[index];
+                    archive = archive.Substring(archive.LastIndexOf(';', archive.Length - 2) + 1);
+
+                    //Old manager:
+                    /*
+                    //i just realised how obsolete this one is... (string filename) <-- seems familiar?
+                    //Get the file (+path) 
+
+                    //string file = MainListFile[index];
+                    //file = file.Substring(0, file.LastIndexOf(';'));
+
+
+                    //Try to open the archive and read the requested file
+                    try
+                    {
+                        MpqArchive CurrentArchive = new MpqArchive(ConfigurationManager.GameDir + "\\data\\" + archive, FileAccess.Read);
+                        stream = CurrentArchive.OpenFile(filename);
+                    }
+                    catch
+                    {
+                        //Error while opening the archive / reading the file
+                        stream = null;
+                    }
+                    */
+                    switch (archive.Substring(0, archive.Length - 4).Replace("-", ""))
+                    //switch (archive.Substring(0, archive.Length - 4))
+                    {
+                        //Mysts
+                        case "expansion4":
+                            stream = expansion4.OpenFile(filename);
+                            break;
+                        case "model":
+                            stream = model.OpenFile(filename);
+                            break;
+
+                        //Cataclysm
+                        case "art":
+                            stream = art.OpenFile(filename);
+                            break;
+                        case "expansion1":
+                            stream = expansion1.OpenFile(filename);
+                            break;
+                        case "expansion2":
+                            stream = expansion2.OpenFile(filename);
+                            break;
+                        case "expansion3":
+                            stream = expansion3.OpenFile(filename);
+                            break;
+                        case "world":
+                            stream = world.OpenFile(filename);
+                            break;
+                        case "world2":
+                            stream = world2.OpenFile(filename);
+                            break;
+
+                        case "locale1":
+                            stream = locale1.OpenFile(filename);
+                            break;
+
+                        //Lich King
+                        case "common":
+                            stream = common.OpenFile(filename);
+                            break;
+                        case "common2":
+                            stream = common2.OpenFile(filename);
+                            break;
+
+                        case "expansion":
+                            stream = expansion.OpenFile(filename);
+                            break;
+                        case "lichking":
+                            stream = lichking.OpenFile(filename);
+                            break;
+                        case "patch":
+                            stream = patch.OpenFile(filename);
+                            break;
+                        case "patch2":
+                            stream = patch2.OpenFile(filename);
+                            break;
+                        case "patch3":
+                            stream = patch3.OpenFile(filename);
+                            break;
+
+                        //Vanilla
+                        case "base":
+                            stream = baseMPQ.OpenFile(filename);
+                            break;
+                        case "dbc":
+                            stream = dbc.OpenFile(filename);
+                            break;
+                        case "interface":
+                            stream = interfaceMPQ.OpenFile(filename);
+                            break;
+                        case "misc":
+                            stream = misc.OpenFile(filename);
+                            break;
+                        case "sound":
+                            stream = sound.OpenFile(filename);
+                            break;
+                        case "terrain":
+                            stream = terrain.OpenFile(filename);
+                            break;
+                        case "texture":
+                            stream = texture.OpenFile(filename);
+                            break;
+                        case "wmo":
+                            stream = wmo.OpenFile(filename);
+                            break;
+                    }
                 }
-                catch
+                else
                 {
-                    //Error while opening the archive / reading the file
+                    //File is missing...
                     stream = null;
                 }
-                */
-                switch (archive.Substring(0, archive.Length - 4).Replace("-", ""))
-                //switch (archive.Substring(0, archive.Length - 4))
-                {
-                    //Mysts
-                    case "expansion4":
-                        stream = expansion4.OpenFile(filename);
-                        break;
-                    case "model":
-                        stream = model.OpenFile(filename);
-                        break;
-
-                    //Cataclysm
-                    case "art":
-                        stream = art.OpenFile(filename);
-                        break;
-                    case "expansion1":
-                        stream = expansion1.OpenFile(filename);
-                        break;
-                    case "expansion2":
-                        stream = expansion2.OpenFile(filename);
-                        break;
-                    case "expansion3":
-                        stream = expansion3.OpenFile(filename);
-                        break;
-                    case "world":
-                        stream = world.OpenFile(filename);
-                        break;
-                    case "world2":
-                        stream = world2.OpenFile(filename);
-                        break;
-
-                    case "locale1":
-                        stream = locale1.OpenFile(filename);
-                        break;
-
-                    //Lich King
-                    case "common":
-                        stream = common.OpenFile(filename);
-                        break;
-                    case "common2":
-                        stream = common2.OpenFile(filename);
-                        break;
-
-                    case "expansion":
-                        stream = expansion.OpenFile(filename);
-                        break;
-                    case "lichking":
-                        stream = lichking.OpenFile(filename);
-                        break;
-                    case "patch":
-                        stream = patch.OpenFile(filename);
-                        break;
-                    case "patch2":
-                        stream = patch2.OpenFile(filename);
-                        break;
-                    case "patch3":
-                        stream = patch3.OpenFile(filename);
-                        break;
-
-                    //Vanilla
-                    case "base":
-                        stream = baseMPQ.OpenFile(filename);
-                        break;
-                    case "dbc":
-                        stream = dbc.OpenFile(filename);
-                        break;
-                    case "interface":
-                        stream = interfaceMPQ.OpenFile(filename);
-                        break;
-                    case "misc":
-                        stream = misc.OpenFile(filename);
-                        break;
-                    case "sound":
-                        stream = sound.OpenFile(filename);
-                        break;
-                    case "terrain":
-                        stream = terrain.OpenFile(filename);
-                        break;
-                    case "texture":
-                        stream = texture.OpenFile(filename);
-                        break;
-                    case "wmo":
-                        stream = wmo.OpenFile(filename);
-                        break;
-                }
-            }
-            else
-            {
-                //File is missing...
-                stream = null;
             }
             return stream;
         }
@@ -384,13 +391,21 @@ namespace Managers
         public static Boolean FileExists(string filename)
         {
             bool exists;
-            if (MainListFile.FindIndex(a => a.Contains(filename.ToLower())) != -1) // it returns -1 if the file is not found
+            if (usingCasc)
             {
-                exists = true;
+                exists = cascHandler.FileExists(filename);
             }
+
             else
             {
-                exists = false;
+                if (MainListFile.FindIndex(a => a.Contains(filename.ToLower())) != -1) // it returns -1 if the file is not found
+                {
+                    exists = true;
+                }
+                else
+                {
+                    exists = false;
+                }
             }
             return exists;
         }

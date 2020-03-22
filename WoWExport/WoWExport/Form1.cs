@@ -378,12 +378,20 @@ namespace WoWExport
 
         private void PopulateTree(string separator)
         {
+            System.Diagnostics.Stopwatch stopWatch = new System.Diagnostics.Stopwatch();
+            stopWatch.Start();
+
             treeView1.Invoke(new MethodInvoker(delegate
             {
                 treeView1.Nodes.Add(PopulateTreeNode2(Generators.DisplayStructure.MLF, separator));
                 treeView1.Nodes[0].Text = "root";
                 treeView1.Nodes[0].Expand();
             }));
+            stopWatch.Stop();
+            // Get the elapsed time as a TimeSpan value.
+
+            TimeSpan ts = stopWatch.Elapsed;
+            Console.WriteLine("Tree populated in: " + ts);
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
