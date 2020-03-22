@@ -338,6 +338,10 @@ namespace WoWExport
 
                 worker.ReportProgress(20, "Generating list");
                 Generators.DisplayStructure.GenerateCASCList();
+
+                worker.ReportProgress(20, "Sorting list... please wait (this window may freez)");
+                Generators.DisplayStructure.SortListFile();
+
                 worker.ReportProgress(30, "Populating tree view");
                 PopulateTree("/");
             }
@@ -365,8 +369,11 @@ namespace WoWExport
                     Managers.md5Manager.LoadMD5();
                 }
 
-                worker.ReportProgress(6, "Generating display list... please wait (window may freez)");
+                worker.ReportProgress(6, "Generating display list");
                 Generators.DisplayStructure.GenerateList();
+
+                worker.ReportProgress(20, "Sorting list... please wait (this window may freez)");
+                Generators.DisplayStructure.SortListFile();
 
                 PopulateTree("\\");
 

@@ -113,6 +113,7 @@ namespace WoWExport.Generators
                     }
                 }
             }
+            Console.WriteLine("Display list generated");
         }
 
         public static bool EndsWithOneOf(string value, IEnumerable<string> suffixes)
@@ -135,6 +136,12 @@ namespace WoWExport.Generators
                 }
             }
             Console.WriteLine("Display list generated");
+        }
+
+        public static void SortListFile()
+        {
+            MLF.Sort();
+            Console.WriteLine("Sorted");
         }
     }
 }
