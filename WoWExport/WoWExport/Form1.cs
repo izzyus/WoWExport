@@ -31,7 +31,7 @@ namespace WoWExport
 
             button1.Text = "Export";
             button1.Enabled = false;
-            textBox1.Text = "D:\\export";
+            textBox1.Text = @"D:\export";
             textBox1.Enabled = false;
 
             groupBox1.Text = "Preview";
@@ -92,6 +92,37 @@ namespace WoWExport
         //---------------------------------------------------------------------------
         private void button2_Click(object sender, EventArgs e)
         {
+            //---------------------------------------------------------------------------
+            //TEST INDIVIDUAL CASC PREVIEW TEXTURE:
+            //---------------------------------------------------------------------------
+            /*
+            string fileToLoad = @"tileset\barrens\barrensbasedirt.blp"
+            if (Managers.ArchiveManager.cascHandler.FileExists(fileToLoad))
+            {
+
+                Console.WriteLine("File exists");
+                Console.WriteLine(fileToLoad);
+                try
+                {
+                    using (Stream stream = Managers.ArchiveManager.cascHandler.OpenFile(fileToLoad))
+                    {
+                        BLPReader reader = new BLPReader();
+                        reader.LoadBLP(stream);
+                        pictureBox1.Image = reader.bmp;
+                    }
+                }
+                catch (Exception ef)
+                {
+                    Console.WriteLine(ef.Message);
+                }
+            }
+            else
+            {
+                Console.WriteLine("File not found");
+            }
+            */
+            //---------------------------------------------------------------------------
+
             //---------------------------------------------------------------------------
             //TEST INDIVIDUAL ADT:
             //---------------------------------------------------------------------------
@@ -295,6 +326,7 @@ namespace WoWExport
         {
             if (Managers.ArchiveManager.usingCasc)
             {
+                worker.ReportProgress(0, "Loading CASC");
                 Console.WriteLine("Loading CASC");
                 Managers.ArchiveManager.LoadCASC();
             }
@@ -359,7 +391,7 @@ namespace WoWExport
         private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             var state = (string)e.UserState;
-            
+
             if (!string.IsNullOrEmpty(state))
             {
                 label1.Text = state;

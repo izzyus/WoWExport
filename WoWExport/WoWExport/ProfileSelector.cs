@@ -106,6 +106,7 @@ namespace WoWExport
                 //button1.Enabled = false;
                 //label1.Text = "Not implemented yet";
                 Managers.ArchiveManager.usingCasc = true;
+                Managers.ArchiveManager.listFilePath = Environment.CurrentDirectory + "\\listfiles\\" + "listfile.csv";
             }
             else
             {
@@ -158,6 +159,16 @@ namespace WoWExport
                     catch
                     {
                         throw new Exception("Could not create file: " + Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt");
+                    }
+                }
+
+                //First check for listfile (the second one is in Archive Manager)
+                if (comboBox1.Text == "WOD" || comboBox1.Text == "Legion" || comboBox1.Text == "BFA")
+                {
+                    if (!File.Exists(Environment.CurrentDirectory + "\\listfiles\\" + "listfile.csv"))
+                    {
+                        //For now, just yell at the user if no listfile is provided
+                        throw new Exception("No listfile is provided in " + Environment.CurrentDirectory + "\\listfiles\\" + "listfile.csv");
                     }
                 }
 

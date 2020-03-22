@@ -10,7 +10,7 @@ namespace Managers
     {
         public static Boolean usingCasc = false;
         public static CASCHandler cascHandler;
-        public static String listFilePath = @"D:\test\listfile.csv"; //Hardcoded for the moment
+        public static String listFilePath;
 
 
         public static List<String> MainListFile = new List<String>();
@@ -52,6 +52,9 @@ namespace Managers
         public static MpqArchive texture;
         public static MpqArchive wmo;
 
+        //----------------------------------------------------------------------------------
+        //  CASC
+        //----------------------------------------------------------------------------------
         public static void LoadCASC()
         {
             if (ConfigurationManager.GameDir == null)
@@ -61,14 +64,21 @@ namespace Managers
             try
             {
                 cascHandler = CASCHandler.OpenLocalStorage(ConfigurationManager.GameDir);
+
+                //The double check for the listfile
+                if (!File.Exists(listFilePath))
+                {
+                    //For now, just yell at the user if no listfile is provided
+                    throw new Exception("File does not exist: " + listFilePath);
+                }
+
                 cascHandler.Root.LoadListFile(listFilePath);
                 Console.WriteLine(cascHandler.Config.BuildName);
 
                 CASCConfig.ValidateData = false;
                 CASCConfig.ThrowOnFileNotFound = false;
-
                 //--------------------------------------------------------------------------
-                //TO DO: FIND A WAY TO GET THE LOCALE
+                //  TO DO: FIND A WAY TO GET THE LOCALE
                 //--------------------------------------------------------------------------
                 cascHandler.Root.SetFlags(LocaleFlags.enUS); //Hardcoded for the moment
                 //--------------------------------------------------------------------------
@@ -79,6 +89,10 @@ namespace Managers
             }
         }
 
+        //----------------------------------------------------------------------------------
+        //  MPQ
+        //----------------------------------------------------------------------------------
+        #region MPQLoading-Assigning
         public static void LoadArchives()
         {
             if (ConfigurationManager.GameDir == null)
@@ -124,6 +138,8 @@ namespace Managers
             }
 
         }
+        #endregion
+
         //Kind of obsolete at this point
         public static void GenerateMainListFileFromTXT()
         {
