@@ -337,6 +337,10 @@ namespace WoWExport
                 Console.WriteLine("Loading CASC");
                 Managers.ArchiveManager.LoadCASC();
 
+
+                worker.ReportProgress(15, "Loading extensions excluded from view");
+                Generators.DisplayStructure.LoadSkipList();
+
                 worker.ReportProgress(20, "Generating list");
                 Generators.DisplayStructure.GenerateCASCList();
 
@@ -361,7 +365,11 @@ namespace WoWExport
                 Managers.ArchiveManager.ExtractListfiles(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles\\");
                 worker.ReportProgress(3, "Loading game archives");
                 Managers.ArchiveManager.LoadArchives();
-                worker.ReportProgress(4, "Merging listfiles");
+
+                worker.ReportProgress(4, "Loading extensions excluded from view");
+                Generators.DisplayStructure.LoadSkipList();
+
+                worker.ReportProgress(5, "Merging listfiles");
                 Managers.ArchiveManager.GenerateMainListFileFromMPQ();
 
                 //if (Managers.ConfigurationManager.Profile == "LK" || Managers.ConfigurationManager.Profile == "TBC" || Managers.ConfigurationManager.Profile == "Vanilla")

@@ -9,8 +9,26 @@ namespace WoWExport.Generators
     class DisplayStructure
     {
         public static List<String> MLF = new List<string>();
-        public static string[] Skip =
+        public static string[] SkipList;
+
+
+        public static void LoadSkipList()
         {
+            if (File.Exists(Environment.CurrentDirectory + "\\settings\\skiplist.txt"))
+            {
+                SkipList = File.ReadAllLines(Environment.CurrentDirectory + "\\settings\\skiplist.txt");
+            }
+            else
+            {
+                Console.WriteLine("Skip list missing, generating one");
+                GenerateSkipList();
+            }
+        }
+
+        public static void GenerateSkipList()
+        {
+            SkipList = new string[]
+            {
             "(patch_metadata)",
             "signaturefile",
             ".manifest",
@@ -87,12 +105,16 @@ namespace WoWExport.Generators
             ".mp3",
             ".ogg",
             ".wav"
-            
+
             //".adt"
             //".blp"
             //".m2"
             //".wmo"
-        };
+            };
+
+            File.WriteAllLines(Environment.CurrentDirectory + "\\settings\\skiplist.txt", SkipList);
+        }
+
 
         public static void GenerateList()
         {
@@ -106,7 +128,7 @@ namespace WoWExport.Generators
                     while ((s = sr.ReadLine()) != null)
                     {
                         //MLF.Add(s.ToLower());
-                        if (!EndsWithOneOf(s.ToLower(), Skip))
+                        if (!EndsWithOneOf(s.ToLower(), SkipList))
                         {
                             MLF.Add(s.ToLower());
                         }
@@ -129,7 +151,7 @@ namespace WoWExport.Generators
                 //Why does it not work with "line.Key"? To be investigated...
                 if (Managers.ArchiveManager.cascHandler.FileExists(line.Value))
                 {
-                    if (!EndsWithOneOf(line.Value, Skip))
+                    if (!EndsWithOneOf(line.Value, SkipList))
                     {
                         MLF.Add(line.Value);
                     }
