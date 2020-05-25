@@ -10,12 +10,12 @@ This project is based on [Marlamin's](https://github.com/Marlamin) tools
 
 | | ADT | M2 | WMO |
 | --- | --- | --- | --- |
-| Vanilla | No | No | Yes |
-| TBC | No | No | Yes |
+| Vanilla | No | No | Partial |
+| TBC | No | No | Partial |
 | WOTLK | Yes | Yes | Yes |
 | CATA | Yes | Yes | Yes |
 | MOP | Yes | Yes | Yes |
-| WOD | No | No | No |
+| WOD | ? | ? | ? |
 | Legion | Yes | Yes | Yes |
 | BFA | No | No | No |
 | Classic | No | No | No |
