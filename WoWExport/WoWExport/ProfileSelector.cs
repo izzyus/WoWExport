@@ -12,16 +12,17 @@ namespace WoWExport
 
         public static string[] DisplayProfiles =
         {
-            "Extracted",
-            "Vanilla",
-            "TBC",
-            "LK",
-            "Cata",
-            "MOP",
-            "WOD",
-            "Legion",
-            "BFA",
-            "Classic"
+            "Extracted",  //0
+            "Vanilla",    //1
+            "TBC",        //2
+            "LK",         //3
+            "Cata",       //4
+            "MOP",        //5
+            "WOD",        //6
+            "Legion",     //7
+            "BFA",        //8
+            "SL",         //9
+            "Classic"     //10
         };
 
         public ProfileSelector()
@@ -102,16 +103,32 @@ namespace WoWExport
 
         private void SwitchProfile()
         {
-            if(comboBox1.SelectedIndex == 0) //If "Extracted"
+            if (comboBox1.SelectedIndex == 0) //If "Extracted"
             {
                 button1.Enabled = false;
                 label1.Text = "Not implemented yet";
+                return;
             }
             else
             {
                 button1.Enabled = true;
                 label1.Text = "";
             }
+
+            //Disable any attempt to load anything above Legion
+            if (comboBox1.SelectedIndex >= 8) //BFA and above
+            {
+                button1.Enabled = false;
+                label1.Text = "Not implemented yet";
+                return;
+            }
+            else
+            {
+                button1.Enabled = true;
+                label1.Text = "";
+            }
+            //Console.WriteLine("Profile set to: " + comboBox1.Text);
+
 
             //if (comboBox1.Text == "WOD" || comboBox1.Text == "Legion" || comboBox1.Text == "BFA")
             if (comboBox1.SelectedIndex >= 6) //WOD and above
@@ -128,6 +145,10 @@ namespace WoWExport
                 Managers.ArchiveManager.usingCasc = false;
             }
             //Console.WriteLine("Profile set to: " + comboBox1.Text);
+
+
+
+
 
             //Try to read the selectd profile path
             if (File.Exists(Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt"))
