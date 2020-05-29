@@ -629,6 +629,20 @@ namespace Exporters.OBJ
                             }
                         }
                     }
+                    if (Managers.ConfigurationManager.ADTAlphaMode == 4 || Managers.ConfigurationManager.ADTAlphaMode == 5)
+                    {
+                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + ".png")))
+                        {
+                            try
+                            {
+                                AlphaLayers[0].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + ".png"));
+                            }
+                            catch
+                            {
+                                //MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
                 }
 
                 //No need for this, the structure of the CSV remains the same for every mode

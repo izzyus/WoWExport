@@ -4,6 +4,8 @@ using System.Linq;
 using System.Drawing;
 using WoWFormatLib.Structs.ADT;
 using System.IO;
+using System.Diagnostics;
+
 namespace Generators.ADT_Alpha
 {
     class ADT_Alpha
@@ -224,6 +226,140 @@ namespace Generators.ADT_Alpha
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 //----------------------------------------------------------------------------------------------------------
             }
+
+            #region 1024x1024
+            if (GenerationMode == 4 || GenerationMode == 5)
+            {
+                //Chunk offset
+                int xOff = 0;
+                int yOff = 0;
+
+                var valuesR = new MCAL().layer;
+                var valuesG = new MCAL().layer;
+                var valuesB = new MCAL().layer;
+
+                var bmp = new Bitmap(1024, 1024);
+
+                for (uint c = 0; c < adtfile.chunks.Count(); c++)
+                {
+                    //Console.WriteLine(c + " - " + xOff + "_" + yOff);
+                    if (adtfile.texChunks[c].alphaLayer != null)
+                    {
+                        //Assign the channels...
+                        switch (adtfile.texChunks[c].layers.Count())
+                        {
+                            case 2:
+                                valuesR = adtfile.texChunks[c].alphaLayer[1].layer;
+                                break;
+                            case 3:
+                                valuesR = adtfile.texChunks[c].alphaLayer[1].layer;
+                                valuesG = adtfile.texChunks[c].alphaLayer[2].layer;
+                                break;
+
+                            case 4:
+                                valuesR = adtfile.texChunks[c].alphaLayer[1].layer;
+                                valuesG = adtfile.texChunks[c].alphaLayer[2].layer;
+                                valuesB = adtfile.texChunks[c].alphaLayer[3].layer;
+                                break;
+                            default:
+                                //Don't do anything
+                                break;
+                        }
+                        if (GenerationMode == 4)
+                        {
+                            // 64x64 ALPHAS:
+                            for (int x = 0; x < 64; x++)
+                            {
+                                for (int y = 0; y < 64; y++)
+                                {
+                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
+                                    Color color;
+                                    switch (adtfile.texChunks[c].layers.Count())
+                                    {
+                                        case 2:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], 0, 0);
+                                            break;
+                                        case 3:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], valuesG[x * 64 + y], 0);
+                                            break;
+                                        case 4:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], valuesG[x * 64 + y], valuesB[x * 64 + y]);
+                                            break;
+                                        default:
+                                            color = Color.FromArgb(255, 0, 0, 0);
+                                            break;
+                                    }
+                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
+                                    //bmp.SetPixel(x, y, color);
+                                    bmp.SetPixel(x + xOff, y + yOff, color);
+                                }
+                            }
+                        }
+                        //Not implemented yet
+                        /*
+                        if (GenerationMode == 5)
+                        {
+                            // 63x63 ALPHAS: (Last column/row = previous one)
+                            for (int x = 0; x < 63; x++)
+                            {
+                                for (int y = 0; y < 63; y++)
+                                {
+                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
+                                    Color color;
+                                    switch (adtfile.texChunks[c].layers.Count())
+                                    {
+                                        case 2:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], 0, 0);
+                                            break;
+                                        case 3:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], valuesG[x * 64 + y], 0);
+                                            break;
+                                        case 4:
+                                            color = Color.FromArgb(255, valuesR[x * 64 + y], valuesG[x * 64 + y], valuesB[x * 64 + y]);
+                                            break;
+                                        default:
+                                            color = Color.FromArgb(255, 0, 0, 0);
+                                            break;
+                                    }
+                                    bmp.SetPixel(x, y, color);
+                                    if (y == 62) { bmp.SetPixel(x, y + 1, color); }
+                                    if (x == 62) { bmp.SetPixel(x + 1, y, color); }
+                                    if (x == 62 && y == 62) { bmp.SetPixel(x + 1, y + 1, color); }
+                                }
+                            }
+                        }
+                        */
+                    }
+                    //----------------------------------------------------------------------------------------------------------
+                    //Change the offset
+                    //----------------------------------------------------------------------------------------------------------
+                    if (yOff + 64 > 960)
+                    {
+                        yOff = 0;
+                        if (xOff + 64 <= 960)
+                        {
+                            xOff += 64;
+                        }
+                    }
+                    else
+                    {
+                        yOff += 64;
+                    }
+                    //----------------------------------------------------------------------------------------------------------
+                }
+                //----------------------------------------------------------------------------------------------------------
+                //Fix bmp orientation:
+                //----------------------------------------------------------------------------------------------------------
+                bmp.RotateFlip(RotateFlipType.Rotate270FlipY);
+                //----------------------------------------------------------------------------------------------------------
+
+                //----------------------------------------------------------------------------------------------------------
+                //Store the generated map in the array
+                //----------------------------------------------------------------------------------------------------------
+                AlphaLayers.Add(bmp);
+                //----------------------------------------------------------------------------------------------------------   
+            }
+            #endregion
         }
     }
 }

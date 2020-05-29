@@ -21,7 +21,8 @@ namespace WoWExport
             "RGB",
             "RGB (63)",
             "Alpha",
-            "Alpha (63)"
+            "Alpha (63)",
+            "RGB (1024)"
         };
 
         public Form_ADTExport(string receivedFilename)
