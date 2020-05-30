@@ -14,15 +14,15 @@ namespace WoWExport
         public Form1()
         {
             InitializeComponent();
-        }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
             worker.DoWork += worker_DoWork;
             worker.RunWorkerCompleted += worker_RunWorkerCompleted;
             worker.ProgressChanged += worker_ProgressChanged;
             worker.WorkerReportsProgress = true;
+        }
 
+        private void Form1_Load(object sender, EventArgs e)
+        {
             //Set picturebox defaults
             panel1.AutoScroll = true;
             pictureBox1.SizeMode = PictureBoxSizeMode.AutoSize;

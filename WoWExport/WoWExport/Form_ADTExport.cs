@@ -13,7 +13,7 @@ namespace WoWExport
 {
     public partial class Form_ADTExport : Form
     {
-
+        private readonly BackgroundWorker exportworker = new BackgroundWorker();
         public String filename;
 
         public static string[] AlphaType =
@@ -29,6 +29,11 @@ namespace WoWExport
         {
             InitializeComponent();
             filename = receivedFilename;
+
+            exportworker.DoWork += exportworker_DoWork;
+            exportworker.RunWorkerCompleted += exportworker_RunWorkerCompleted;
+            exportworker.ProgressChanged += exportworker_ProgressChanged;
+            exportworker.WorkerReportsProgress = true;
         }
 
         private void Form_ADTExport_Load(object sender, EventArgs e)
@@ -36,6 +41,7 @@ namespace WoWExport
             comboBox1.Items.AddRange(AlphaType);
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
 
+            label4.Hide();
 
             checkBox1.Checked = Managers.ConfigurationManager.ADTExportM2;
             checkBox1.Text = "Export doodads";
@@ -98,15 +104,15 @@ namespace WoWExport
 
 
 
-            
+
             checkBox13.Text = "Export ground \"specular?\" textures";
             checkBox13.Checked = Managers.ConfigurationManager.ADTExportSpecularTextures;
-            
+
             //-------------------------------------------------------------------------------------
             //Not really the intended use for this function, but for now it will stay like this.
             //-------------------------------------------------------------------------------------
             checkBox14.Text = "Split materials per chunk";
-            if(Managers.ConfigurationManager.ADTQuality == "high")
+            if (Managers.ConfigurationManager.ADTQuality == "high")
             {
                 checkBox14.Checked = true;
             }
@@ -165,7 +171,7 @@ namespace WoWExport
             Managers.ConfigurationManager.ADTexportTextures = checkBox5.Checked;
             Managers.ConfigurationManager.ADTexportAlphaMaps = checkBox6.Checked;
             Managers.ConfigurationManager.ADTIgnoreHoles = checkBox7.Checked;
-            
+
             Managers.ConfigurationManager.ADTAlphaMode = comboBox1.SelectedIndex;
             Managers.ConfigurationManager.ADTAlphaUseA = checkBox8.Checked;
 
@@ -174,7 +180,7 @@ namespace WoWExport
             Managers.ConfigurationManager.WMODoodadsPlacementGlobalPath = checkBox11.Checked;
 
             Managers.ConfigurationManager.ADTPreserveTextureStruct = checkBox12.Checked;
-            
+
             Managers.ConfigurationManager.ADTExportSpecularTextures = checkBox13.Checked;
             //----------------------------------------------------------------
             //Again, not the intended use for this...
@@ -189,6 +195,29 @@ namespace WoWExport
             }
             //----------------------------------------------------------------
             Managers.ConfigurationManager.ADTSplitChunks = checkBox15.Checked;
+        }
+        private void exportworker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Exporters.OBJ.ADTExporter.exportADT(filename, Managers.ConfigurationManager.OutputDirectory, Managers.ConfigurationManager.ADTQuality, exportworker);
+        }
+
+        private void exportworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            button1.Enabled = true;
+            label4.Hide();
+            progressBar1.Value = 100;
+            MessageBox.Show("Done");
+        }
+
+        private void exportworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            var state = (string)e.UserState;
+
+            if (!string.IsNullOrEmpty(state))
+            {
+                label4.Text = state;
+            }
+            progressBar1.Value = e.ProgressPercentage;
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -220,16 +249,16 @@ namespace WoWExport
         private void button1_Click(object sender, EventArgs e)
         {
             UpdateConfiguration();
-
             if (Managers.ConfigurationManager.OutputDirectory != null)
             {
-                Exporters.OBJ.ADTExporter.exportADT(filename, Managers.ConfigurationManager.OutputDirectory, Managers.ConfigurationManager.ADTQuality);
+                label4.Show();
+                button1.Enabled = false;
+                exportworker.RunWorkerAsync();
             }
             else
             {
                 throw new Exception("No output direcotry set");
             }
-            MessageBox.Show("Done");
         }
 
         private void checkBox6_CheckedChanged(object sender, EventArgs e)
@@ -251,7 +280,7 @@ namespace WoWExport
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(comboBox1.SelectedIndex > 1)
+            if (comboBox1.SelectedIndex > 1)
             {
                 checkBox8.Enabled = true;
             }

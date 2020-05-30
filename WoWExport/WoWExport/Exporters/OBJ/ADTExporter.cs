@@ -13,15 +13,15 @@ namespace Exporters.OBJ
     public class ADTExporter
     {
         //public static void ExportADT(uint wdtFileDataID, byte tileX, byte tileY, BackgroundWorker exportworker = null)
-        public static void exportADT(string file, string outdir, string bakeQuality)
+        public static void exportADT(string file, string outdir, string bakeQuality, BackgroundWorker exportworker = null)
         {
-            /*
+            
             if (exportworker == null)
             {
                 exportworker = new BackgroundWorker();
                 exportworker.WorkerReportsProgress = true;
             }
-            */
+            
             //var outdir = ConfigurationManager.AppSettings["outdir"];
 
             var customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
@@ -55,6 +55,8 @@ namespace Exporters.OBJ
             var ADTobj = file.Replace(".adt", "_obj0.adt");
             var ADTtex = file.Replace(".adt", "_tex0.adt");
 
+            exportworker.ReportProgress(0, "Loading ADT " + file);
+
             //reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
             //reader.LoadADT(ADTfile);
             //if (Managers.ConfigurationManager.Profile == "LK") //this was wrong all along
@@ -81,7 +83,7 @@ namespace Exporters.OBJ
                 Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file)));
             }
 
-            //exportworker.ReportProgress(0, "Loading ADT " + file);
+            
 
             var renderBatches = new List<Structs.RenderBatch>();
             var verticelist = new List<Structs.Vertex>();
@@ -354,7 +356,7 @@ namespace Exporters.OBJ
 
                 if (exportWMO)
                 {
-                    //exportworker.ReportProgress(25, "Exporting WMOs");
+                    exportworker.ReportProgress(25, "Exporting WMOs");
 
                     for (var mi = 0; mi < reader.adtfile.objects.worldModels.entries.Count(); mi++)
                     {
@@ -433,7 +435,7 @@ namespace Exporters.OBJ
 
                 if (exportM2)
                 {
-                    //exportworker.ReportProgress(50, "Exporting M2s");
+                    exportworker.ReportProgress(50, "Exporting M2s");
 
                     for (var mi = 0; mi < reader.adtfile.objects.models.entries.Count(); mi++)
                     {
@@ -717,7 +719,7 @@ namespace Exporters.OBJ
             */
 
 
-            //exportworker.ReportProgress(75, "Exporting terrain textures..");
+            exportworker.ReportProgress(75, "Exporting terrain textures..");
 
             if (bakeQuality != "none")
             {
@@ -736,7 +738,7 @@ namespace Exporters.OBJ
                 mtlsw.Close();
             }
 
-            //exportworker.ReportProgress(85, "Exporting terrain geometry..");
+            exportworker.ReportProgress(85, "Exporting terrain geometry..");
 
             var indices = indicelist.ToArray();
 
