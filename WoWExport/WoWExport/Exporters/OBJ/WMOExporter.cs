@@ -27,17 +27,17 @@ namespace Exporters.OBJ
         }
         */
         //public static void ExportWMO(uint filedataid, BackgroundWorker exportworker = null, string destinationOverride = null, ushort doodadSetExportID = ushort.MaxValue, string filename = "")
-        public static void ExportWMO(string filename, string outdir, string destinationOverride = null, ushort doodadSetExportID = ushort.MaxValue)
+        public static void ExportWMO(string filename, string outdir, BackgroundWorker exportworker = null, string destinationOverride = null, ushort doodadSetExportID = ushort.MaxValue)
         {
             filename = filename.ToLower();
 
-            /*
+            
             if (exportworker == null)
             {
                 exportworker = new BackgroundWorker();
                 exportworker.WorkerReportsProgress = true;
             }
-            */
+            
             /*
             if (string.IsNullOrEmpty(filename))
             {
@@ -49,7 +49,7 @@ namespace Exporters.OBJ
             */
             //Console.WriteLine("Loading WMO file..");
 
-            //exportworker.ReportProgress(5, "Reading WMO..");
+            exportworker.ReportProgress(5, "Reading WMO..");
 
             //var outdir = ConfigurationManager.AppSettings["outdir"];
             //var wmo = new WMOReader().LoadWMO(filedataid);
@@ -61,7 +61,7 @@ namespace Exporters.OBJ
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
             
-            //exportworker.ReportProgress(30, "Reading WMO..");
+            exportworker.ReportProgress(30, "Reading WMO..");
 
             uint totalVertices = 0;
 
@@ -188,7 +188,7 @@ namespace Exporters.OBJ
                     }
                 }
 
-                //exportworker.ReportProgress(55, "Exporting doodads..");
+                exportworker.ReportProgress(55, "Exporting doodads..");
 
                 doodadSW.WriteLine("ModelFile;PositionX;PositionY;PositionZ;RotationW;RotationX;RotationY;RotationZ;ScaleFactor;DoodadSet");
 
@@ -610,7 +610,7 @@ namespace Exporters.OBJ
                 }
             }
 
-            //exportworker.ReportProgress(75, "Exporting model..");
+            exportworker.ReportProgress(75, "Exporting model..");
 
             var numRenderbatches = 0;
             //Get total amount of render batches
@@ -662,7 +662,7 @@ namespace Exporters.OBJ
                 }
             }
 
-            //exportworker.ReportProgress(95, "Writing files..");
+            exportworker.ReportProgress(95, "Writing files..");
 
             StreamWriter objsw;
             if (!string.IsNullOrEmpty(filename))

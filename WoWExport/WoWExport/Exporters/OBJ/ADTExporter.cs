@@ -415,7 +415,7 @@ namespace Exporters.OBJ
                         if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
                         {
                             //WMOExporter.ExportWMO(filedataid, exportworker, Path.Combine(outdir, Path.GetDirectoryName(file)), wmo.doodadSet, filename);
-                            WMOExporter.ExportWMO(filename, Path.Combine(outdir, Path.GetDirectoryName(file)), null, wmo.doodadSet);
+                            WMOExporter.ExportWMO(filename, Path.Combine(outdir, Path.GetDirectoryName(file)), exportworker, null, wmo.doodadSet);
                             //wmoSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
                         }
 
