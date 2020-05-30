@@ -25,14 +25,16 @@ namespace WoWExport
         {
             InitializeComponent();
             fileList = receivedFileList;
+
+            worker.DoWork += worker_DoWork;
+            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
+            worker.ProgressChanged += worker_ProgressChanged;
+            worker.WorkerReportsProgress = true;
         }
 
         private void Form_BatchExport_Load(object sender, EventArgs e)
         {
-            worker.DoWork += worker_DoWork;
-            worker.RunWorkerCompleted += worker_RunWorkerCompleted;
-            //worker.ProgressChanged += worker_ProgressChanged;
-            //worker.WorkerReportsProgress = true;
+            label2.Hide();
 
             groupBox1.Text = "Export Settings";
             comboBox1.Items.AddRange(AlphaType);
@@ -100,7 +102,7 @@ namespace WoWExport
 
 
             button1.Text = "Export";
-            label1.Text = "Save to: " + Managers.ConfigurationManager.OutputDirectory;
+            label1.Text = "Exporting to: " + Managers.ConfigurationManager.OutputDirectory;
             this.Text = "Batch export";
 
             checkBox13.Text = "Export ground \"specular?\" textures";
@@ -217,6 +219,7 @@ namespace WoWExport
         private void BatchExport()
         {
             button1.Enabled = false;
+            label2.Show();
             worker.RunWorkerAsync();
         }
 
@@ -233,7 +236,7 @@ namespace WoWExport
                     switch (Path.GetExtension(currentFile))
                     {
                         case ".adt":
-                            Exporters.OBJ.ADTExporter.exportADT(currentFile, Managers.ConfigurationManager.OutputDirectory, Managers.ConfigurationManager.ADTQuality);
+                            Exporters.OBJ.ADTExporter.exportADT(currentFile, Managers.ConfigurationManager.OutputDirectory, Managers.ConfigurationManager.ADTQuality,worker);
                             break;
                         case ".m2":
                             Exporters.OBJ.M2Exporter.ExportM2(currentFile, Managers.ConfigurationManager.OutputDirectory);
@@ -278,7 +281,21 @@ namespace WoWExport
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             button1.Enabled = true;
+            progressBar1.Value = 100;
+            label2.Hide();
             MessageBox.Show("Done");
+        }
+
+
+        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            var state = (string)e.UserState;
+
+            if (!string.IsNullOrEmpty(state))
+            {
+                label2.Text = state;
+            }
+            progressBar1.Value = e.ProgressPercentage;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)

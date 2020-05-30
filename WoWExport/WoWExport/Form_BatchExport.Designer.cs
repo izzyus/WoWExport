@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox15 = new System.Windows.Forms.CheckBox();
+            this.checkBox14 = new System.Windows.Forms.CheckBox();
+            this.checkBox13 = new System.Windows.Forms.CheckBox();
             this.checkBox12 = new System.Windows.Forms.CheckBox();
             this.checkBox11 = new System.Windows.Forms.CheckBox();
             this.checkBox10 = new System.Windows.Forms.CheckBox();
@@ -45,9 +48,8 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.listView1 = new System.Windows.Forms.ListView();
-            this.checkBox13 = new System.Windows.Forms.CheckBox();
-            this.checkBox14 = new System.Windows.Forms.CheckBox();
-            this.checkBox15 = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,6 +77,37 @@
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
+            // 
+            // checkBox15
+            // 
+            this.checkBox15.AutoSize = true;
+            this.checkBox15.Location = new System.Drawing.Point(6, 296);
+            this.checkBox15.Name = "checkBox15";
+            this.checkBox15.Size = new System.Drawing.Size(86, 17);
+            this.checkBox15.TabIndex = 30;
+            this.checkBox15.Text = "checkBox15";
+            this.checkBox15.UseVisualStyleBackColor = true;
+            // 
+            // checkBox14
+            // 
+            this.checkBox14.AutoSize = true;
+            this.checkBox14.Location = new System.Drawing.Point(6, 273);
+            this.checkBox14.Name = "checkBox14";
+            this.checkBox14.Size = new System.Drawing.Size(86, 17);
+            this.checkBox14.TabIndex = 29;
+            this.checkBox14.Text = "checkBox14";
+            this.checkBox14.UseVisualStyleBackColor = true;
+            this.checkBox14.CheckedChanged += new System.EventHandler(this.checkBox14_CheckedChanged);
+            // 
+            // checkBox13
+            // 
+            this.checkBox13.AutoSize = true;
+            this.checkBox13.Location = new System.Drawing.Point(6, 250);
+            this.checkBox13.Name = "checkBox13";
+            this.checkBox13.Size = new System.Drawing.Size(86, 17);
+            this.checkBox13.TabIndex = 28;
+            this.checkBox13.Text = "checkBox13";
+            this.checkBox13.UseVisualStyleBackColor = true;
             // 
             // checkBox12
             // 
@@ -233,46 +266,33 @@
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(12, 12);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(205, 426);
+            this.listView1.Size = new System.Drawing.Size(205, 431);
             this.listView1.TabIndex = 24;
             this.listView1.UseCompatibleStateImageBehavior = false;
             // 
-            // checkBox13
+            // label2
             // 
-            this.checkBox13.AutoSize = true;
-            this.checkBox13.Location = new System.Drawing.Point(6, 250);
-            this.checkBox13.Name = "checkBox13";
-            this.checkBox13.Size = new System.Drawing.Size(86, 17);
-            this.checkBox13.TabIndex = 28;
-            this.checkBox13.Text = "checkBox13";
-            this.checkBox13.UseVisualStyleBackColor = true;
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 475);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 25;
+            this.label2.Text = "label2";
             // 
-            // checkBox14
+            // progressBar1
             // 
-            this.checkBox14.AutoSize = true;
-            this.checkBox14.Location = new System.Drawing.Point(6, 273);
-            this.checkBox14.Name = "checkBox14";
-            this.checkBox14.Size = new System.Drawing.Size(86, 17);
-            this.checkBox14.TabIndex = 29;
-            this.checkBox14.Text = "checkBox14";
-            this.checkBox14.UseVisualStyleBackColor = true;
-            this.checkBox14.CheckedChanged += new System.EventHandler(this.checkBox14_CheckedChanged);
-            // 
-            // checkBox15
-            // 
-            this.checkBox15.AutoSize = true;
-            this.checkBox15.Location = new System.Drawing.Point(6, 296);
-            this.checkBox15.Name = "checkBox15";
-            this.checkBox15.Size = new System.Drawing.Size(86, 17);
-            this.checkBox15.TabIndex = 30;
-            this.checkBox15.Text = "checkBox15";
-            this.checkBox15.UseVisualStyleBackColor = true;
+            this.progressBar1.Location = new System.Drawing.Point(12, 449);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(514, 23);
+            this.progressBar1.TabIndex = 26;
             // 
             // Form_BatchExport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(538, 450);
+            this.ClientSize = new System.Drawing.Size(538, 494);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
@@ -309,5 +329,7 @@
         private System.Windows.Forms.CheckBox checkBox15;
         private System.Windows.Forms.CheckBox checkBox14;
         private System.Windows.Forms.CheckBox checkBox13;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
