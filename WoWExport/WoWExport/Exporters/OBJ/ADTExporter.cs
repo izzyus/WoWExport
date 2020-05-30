@@ -469,7 +469,7 @@ namespace Exporters.OBJ
                         if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
                         {
                             //M2Exporter.ExportM2(filedataid, null, Path.Combine(outdir, Path.GetDirectoryName(file)), filename);
-                            M2Exporter.ExportM2(filename, Path.Combine(outdir, Path.GetDirectoryName(file)));
+                            M2Exporter.ExportM2(filename, Path.Combine(outdir, Path.GetDirectoryName(file)),exportworker);
                         }
                         if (Managers.ConfigurationManager.ADTModelsPlacementGlobalPath)
                         {

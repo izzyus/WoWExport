@@ -27,9 +27,8 @@ namespace Exporters.OBJ
         }
         */
         //public static void ExportM2(uint fileDataID, BackgroundWorker exportworker = null, string destinationOverride = null, string filename = "")
-        public static void ExportM2(string filename, string outdir, string destinationOverride = null)
+        public static void ExportM2(string filename, string outdir,BackgroundWorker exportworker = null, string destinationOverride = null)
         {
-            /*
             if (exportworker == null)
             {
                 exportworker = new BackgroundWorker
@@ -37,7 +36,6 @@ namespace Exporters.OBJ
                     WorkerReportsProgress = true
                 };
             }
-            */
 
             filename = filename.ToLower();
 
@@ -48,7 +46,7 @@ namespace Exporters.OBJ
             //var outdir = ConfigurationManager.AppSettings["outdir"];
             var reader = new M2Reader();
 
-            //exportworker.ReportProgress(15, "Reading M2..");
+            exportworker.ReportProgress(15, "Reading M2..");
 
             //if (!CASC.FileExists(fileDataID)) { throw new Exception("404 M2 not found!"); }
             //if (!File.Exists(filename)) { throw new Exception("404 M2 not found!"); }
@@ -192,7 +190,7 @@ namespace Exporters.OBJ
             }
 
             var indices = indicelist.ToArray();
-            //exportworker.ReportProgress(35, "Writing files..");
+            exportworker.ReportProgress(35, "Writing files..");
 
             var renderbatches = new Structs.RenderBatch[reader.model.skins[0].submeshes.Count()];
             for (var i = 0; i < reader.model.skins[0].submeshes.Count(); i++)
@@ -221,7 +219,7 @@ namespace Exporters.OBJ
                 }
             }
 
-            //exportworker.ReportProgress(65, "Exporting textures..");
+            exportworker.ReportProgress(65, "Exporting textures..");
 
             StreamWriter mtlsb;
 
@@ -325,7 +323,7 @@ namespace Exporters.OBJ
                 }
             }
 
-            //exportworker.ReportProgress(85, "Writing files..");
+            exportworker.ReportProgress(85, "Writing files..");
 
             foreach (var material in materials)
             {

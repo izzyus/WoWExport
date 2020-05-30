@@ -239,7 +239,7 @@ namespace WoWExport
                             Exporters.OBJ.ADTExporter.exportADT(currentFile, Managers.ConfigurationManager.OutputDirectory, Managers.ConfigurationManager.ADTQuality,worker);
                             break;
                         case ".m2":
-                            Exporters.OBJ.M2Exporter.ExportM2(currentFile, Managers.ConfigurationManager.OutputDirectory);
+                            Exporters.OBJ.M2Exporter.ExportM2(currentFile, Managers.ConfigurationManager.OutputDirectory,worker);
                             break;
                         case ".wmo":
                             Exporters.OBJ.WMOExporter.ExportWMO(currentFile, Managers.ConfigurationManager.OutputDirectory, worker);

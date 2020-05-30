@@ -13,7 +13,7 @@ namespace WoWExport
 {
     public partial class Form_M2Export : Form
     {
-
+        private readonly BackgroundWorker exportworker = new BackgroundWorker();
         public String filename;
 
         string[] formats = {
@@ -25,6 +25,11 @@ namespace WoWExport
         {
             InitializeComponent();
             filename = receivedFilename;
+
+            exportworker.DoWork += exportworker_DoWork;
+            exportworker.RunWorkerCompleted += exportworker_RunWorkerCompleted;
+            exportworker.ProgressChanged += exportworker_ProgressChanged;
+            exportworker.WorkerReportsProgress = true;
         }
 
         private void Form_M2Export_Load(object sender, EventArgs e)
@@ -35,6 +40,7 @@ namespace WoWExport
             comboBox1.Items.AddRange(formats);
             comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox1.SelectedIndex = 0;
+            label11.Hide();
 
             try
             {
@@ -70,24 +76,49 @@ namespace WoWExport
 
             if (Managers.ConfigurationManager.OutputDirectory != null)
             {
-                switch (comboBox1.SelectedIndex)
-                {
-                    case 0: //obj
-                    Exporters.OBJ.M2Exporter.ExportM2(filename, Managers.ConfigurationManager.OutputDirectory);
-                        break;
-                    case 1: //smd
-                        Exporters.SMD.M2SmdExporter.ExportM2(filename, Managers.ConfigurationManager.OutputDirectory);
-                        break;
-                    default:
-                        break;
-                }
-                
+                button1.Enabled = false;
+                label11.Show();
+                exportworker.RunWorkerAsync(comboBox1.SelectedIndex);
             }
             else
             {
                 throw new Exception("No output direcotry set");
             }
+        }
+
+        private void exportworker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            switch (e.Argument)
+            {
+                case 0: //obj
+                    Exporters.OBJ.M2Exporter.ExportM2(filename, Managers.ConfigurationManager.OutputDirectory,exportworker);
+                    break;
+                case 1: //smd
+                    Exporters.SMD.M2SmdExporter.ExportM2(filename, Managers.ConfigurationManager.OutputDirectory);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void exportworker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            button1.Enabled = true;
+            label11.Hide();
+            progressBar1.Value = 100;
             MessageBox.Show("Done");
         }
+
+        private void exportworker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            var state = (string)e.UserState;
+
+            if (!string.IsNullOrEmpty(state))
+            {
+                label11.Text = state;
+            }
+            progressBar1.Value = e.ProgressPercentage;
+        }
+
     }
 }
