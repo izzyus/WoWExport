@@ -36,6 +36,8 @@ namespace WoWExport.Generators
             "_obj1.adt",
             "_tex0.adt",
             "_tex1.adt",
+            "_lod1.wmo",
+            "_lod2.wmo",
             "_lod.adt",
             "reporter",
             "warcraft",
@@ -128,7 +130,7 @@ namespace WoWExport.Generators
                     while ((s = sr.ReadLine()) != null)
                     {
                         //MLF.Add(s.ToLower());
-                        if (!EndsWithOneOf(s.ToLower(), SkipList))
+                        if (!EndsWithOneOf(s.ToLower(), SkipList) && !IsWMOGroupFile(s))
                         {
                             MLF.Add(s.ToLower());
                         }
@@ -140,7 +142,19 @@ namespace WoWExport.Generators
 
         public static bool EndsWithOneOf(string value, IEnumerable<string> suffixes)
         {
-            return suffixes.Any(suffix => value.EndsWith(suffix));
+            return suffixes.Any(suffix => value.EndsWith(suffix));   
+        }
+        
+        public static bool IsWMOGroupFile(string filename)
+        {
+            if(filename.ToLower().EndsWith(".wmo") && System.Text.RegularExpressions.Regex.Match(Path.GetFileNameWithoutExtension(filename), @"\d{3}$").Success)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public static void GenerateCASCList()
@@ -151,7 +165,7 @@ namespace WoWExport.Generators
                 //Why does it not work with "line.Key"? To be investigated...
                 if (Managers.ArchiveManager.cascHandler.FileExists(line.Value))
                 {
-                    if (!EndsWithOneOf(line.Value, SkipList))
+                    if (!EndsWithOneOf(line.Value, SkipList) && !IsWMOGroupFile(line.Value))
                     {
                         MLF.Add(line.Value);
                     }
