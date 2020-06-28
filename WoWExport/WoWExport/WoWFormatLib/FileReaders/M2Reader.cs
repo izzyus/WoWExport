@@ -438,10 +438,12 @@ namespace WoWFormatLib.FileReaders
                 textures[i].type = bin.ReadUInt32();
                 textures[i].flags = (TextureFlags)bin.ReadUInt32();
 
+                var lenFilename = bin.ReadUInt32();
+                var ofsFilename = bin.ReadUInt32();
+
                 if (textures[i].type == 0)
                 {
-                    var lenFilename = bin.ReadUInt32();
-                    var ofsFilename = bin.ReadUInt32();
+
                     var preFilenamePosition = bin.BaseStream.Position; // probably a better way to do all this
                     bin.BaseStream.Position = ofsFilename;
                     var filename = new string(bin.ReadChars(int.Parse(lenFilename.ToString())));
