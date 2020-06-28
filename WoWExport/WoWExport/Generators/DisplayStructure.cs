@@ -38,6 +38,7 @@ namespace WoWExport.Generators
             "_tex1.adt",
             "_lod1.wmo",
             "_lod2.wmo",
+            "_lod3.wmo",
             "_lod.adt",
             "reporter",
             "warcraft",
