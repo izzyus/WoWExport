@@ -103,30 +103,30 @@ namespace WoWExport
 
         private void SwitchProfile()
         {
-            if (comboBox1.SelectedIndex == 0) //If "Extracted"
-            {
-                button1.Enabled = false;
-                label1.Text = "Not implemented yet";
-                return;
-            }
-            else
-            {
-                button1.Enabled = true;
-                label1.Text = "";
-            }
+            //if (comboBox1.SelectedIndex == 0) //If "Extracted"
+            //{
+            //    button1.Enabled = false;
+            //    label1.Text = "Not implemented yet";
+            //    return;
+            //}
+            //else
+            //{
+            //    button1.Enabled = true;
+            //    label1.Text = "";
+            //}
 
             //Disable any attempt to load anything above Legion
-            if (comboBox1.SelectedIndex >= 8) //BFA and above
-            {
-                button1.Enabled = false;
-                label1.Text = "Not implemented yet";
-                return;
-            }
-            else
-            {
-                button1.Enabled = true;
-                label1.Text = "";
-            }
+            //if (comboBox1.SelectedIndex >= 8) //BFA and above
+            //{
+            //    button1.Enabled = false;
+            //    label1.Text = "Not implemented yet";
+            //    return;
+            //}
+            //else
+            //{
+            //    button1.Enabled = true;
+            //    label1.Text = "";
+            //}
             //Console.WriteLine("Profile set to: " + comboBox1.Text);
 
 

@@ -163,8 +163,7 @@ namespace WoWExport.Generators
             Listfile.Load();
             foreach (var line in Listfile.FDIDToFilename)
             {
-                //Why does it not work with "line.Key"? To be investigated...
-                if (Managers.ArchiveManager.cascHandler.FileExists(line.Value))
+                if (Managers.ArchiveManager.FileExists(line.Key))
                 {
                     if (!EndsWithOneOf(line.Value, SkipList) && !IsWMOGroupFile(line.Value))
                     {

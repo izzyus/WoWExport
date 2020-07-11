@@ -412,6 +412,11 @@ namespace Managers
             return exists;
         }
 
+        public static bool FileExists(uint fdid)
+        {
+            return cascHandler.FileExists((int)fdid);
+        }
+
         public static void FindLocale()
         {
 
