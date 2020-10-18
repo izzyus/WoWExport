@@ -37,7 +37,7 @@ namespace WoWExport
             groupBox1.Text = "Preview";
 
             //Debug button - to be deleted later
-            button2.Hide();
+            //button2.Hide();
             button2.Text = "Crash Me!";
 
             LoadGame();
@@ -126,8 +126,8 @@ namespace WoWExport
             //---------------------------------------------------------------------------
             //TEST INDIVIDUAL ADT:
             //---------------------------------------------------------------------------
-            //ADTReader reader = new ADTReader();
-            //reader.LoadADT(@"world\maps\azeroth\azeroth_30_47.adt");
+            ADTReader reader = new ADTReader();
+            reader.LoadADT(@"world\maps\azeroth\azeroth_30_47.adt");
             //---------------------------------------------------------------------------
 
             //---------------------------------------------------------------------------

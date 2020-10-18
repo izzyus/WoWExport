@@ -747,6 +747,11 @@ namespace WoWFormatLib.FileReaders
                             break;
                         case "MTXF":
                             break;
+                        case "MDID": //TODO
+                            break;
+                        case "MHID": //TODO
+                            break;
+
                         default:
                             throw new Exception(string.Format("Found unknown header at offset {1} \"{0}\" while we should've already read them all!", chunkName, position));
                     }
