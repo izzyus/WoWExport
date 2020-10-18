@@ -32,12 +32,8 @@ namespace WoWFormatLib.FileReaders
         {
             _lod = lod;
 
-            //if (CASC.cascHandler.FileExists(filename))
-            //if (File.Exists(filename))
             if (Managers.ArchiveManager.FileExists(filename))
             {
-                //using (var wmoStream = CASC.cascHandler.OpenFile(filename))
-                //var wmoStream = File.OpenRead(filename);
                 var wmoStream = Managers.ArchiveManager.ReadThisFile(filename);
                 {
                     ReadWMO(filename, wmoStream);
@@ -124,32 +120,24 @@ namespace WoWFormatLib.FileReaders
 
                 if (_lod)
                 {
-                    //if (CASC.cascHandler.FileExists(groupfilename.Replace(".wmo", "_lod2.wmo")))
-                    //if (File.Exists(groupfilename.Replace(".wmo", "_lod2.wmo")))
                     if (Managers.ArchiveManager.FileExists(groupfilename.Replace(".wmo", "_lod2.wmo")))
                     {
                         groupfilename = groupfilename.Replace(".wmo", "_lod2.wmo");
-                        Console.WriteLine("[LOD] Loading LOD 2 for group " + i);
+                        //Console.WriteLine("[LOD] Loading LOD 2 for group " + i);
                     }
-                    //else if (CASC.cascHandler.FileExists(groupfilename.Replace(".wmo", "_lod1.wmo")))
-                    //else if (File.Exists(groupfilename.Replace(".wmo", "_lod1.wmo")))
                     else if (Managers.ArchiveManager.FileExists(groupfilename.Replace(".wmo", "_lod1.wmo")))
                     {
                         groupfilename = groupfilename.Replace(".wmo", "_lod1.wmo");
-                        Console.WriteLine("[LOD] Loading LOD 1 for group " + i);
+                        //Console.WriteLine("[LOD] Loading LOD 1 for group " + i);
                     }
                     else
                     {
-                        Console.WriteLine("[LOD] No LOD " + i);
+                        //Console.WriteLine("[LOD] No LOD " + i);
                     }
                 }
 
-                //if (CASC.cascHandler.FileExists(groupfilename))
-                //if (File.Exists(groupfilename))
                 if (Managers.ArchiveManager.FileExists(groupfilename))
                 {
-                    //using (var wmoStream = CASC.cascHandler.OpenFile(groupfilename))
-                    //var wmoStream = File.OpenRead(groupfilename);
                     var wmoStream = Managers.ArchiveManager.ReadThisFile(groupfilename);
                     {
                         groupFiles[i] = ReadWMOGroupFile(groupfilename, wmoStream);
@@ -372,7 +360,7 @@ namespace WoWFormatLib.FileReaders
                     }
                 }
             }
-            
+
             return groupFile;
         }
         private MOGP ReadMOGPChunk(uint size, BinaryReader bin)
@@ -465,7 +453,7 @@ namespace WoWFormatLib.FileReaders
                     }
                 }
             }
-            
+
             return mogp;
         }
         private MONR[] ReadMONRChunk(uint size, BinaryReader bin)

@@ -7,7 +7,6 @@ namespace WoWExport
 {
     public partial class ProfileSelector : Form
     {
-
         public List<string> Profiles;
 
         public static string[] DisplayProfiles =
@@ -95,7 +94,6 @@ namespace WoWExport
                 string s = String.Empty;
                 while ((s = sr.ReadLine()) != null)
                 {
-                    //MainListFile.Add(s.ToLower() + ";" + fileInfo.Name.Replace(".txt", ".mpq"));
                     Profiles.Add(s);
                 }
             }
@@ -103,34 +101,6 @@ namespace WoWExport
 
         private void SwitchProfile()
         {
-            //if (comboBox1.SelectedIndex == 0) //If "Extracted"
-            //{
-            //    button1.Enabled = false;
-            //    label1.Text = "Not implemented yet";
-            //    return;
-            //}
-            //else
-            //{
-            //    button1.Enabled = true;
-            //    label1.Text = "";
-            //}
-
-            //Disable any attempt to load anything above Legion
-            //if (comboBox1.SelectedIndex >= 8) //BFA and above
-            //{
-            //    button1.Enabled = false;
-            //    label1.Text = "Not implemented yet";
-            //    return;
-            //}
-            //else
-            //{
-            //    button1.Enabled = true;
-            //    label1.Text = "";
-            //}
-            //Console.WriteLine("Profile set to: " + comboBox1.Text);
-
-
-            //if (comboBox1.Text == "WOD" || comboBox1.Text == "Legion" || comboBox1.Text == "BFA")
             if (comboBox1.SelectedIndex >= 6) //WOD and above
             {
                 //button1.Enabled = false;
@@ -144,11 +114,6 @@ namespace WoWExport
                 //label1.Text = "";
                 Managers.ArchiveManager.usingCasc = false;
             }
-            //Console.WriteLine("Profile set to: " + comboBox1.Text);
-
-
-
-
 
             //Try to read the selectd profile path
             if (File.Exists(Environment.CurrentDirectory + "\\settings\\" + comboBox1.Text + ".txt"))
@@ -197,10 +162,9 @@ namespace WoWExport
                 }
 
                 //Load up the main GUI and set the profile acordingly
-                //Managers.ConfigurationManager.Profile = comboBox1.Text;
                 Managers.ConfigurationManager.Profile = comboBox1.SelectedIndex;
                 Managers.ConfigurationManager.GameDir = textBox1.Text;
-                new WoWExport.Form1().Show();
+                new Form_MainWindow().Show();
                 this.Hide();
             }
             else

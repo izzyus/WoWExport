@@ -227,7 +227,7 @@ namespace WoWExport
         {
             for (int i = 0; i < fileList.Count; i++)
             {
-                listViewChangeColor(i,Color.Yellow, Color.DarkGoldenrod);
+                listViewChangeColor(i, Color.Yellow, Color.DarkGoldenrod);
                 bool skipped = false;
                 try
                 {
@@ -236,10 +236,10 @@ namespace WoWExport
                     switch (Path.GetExtension(currentFile))
                     {
                         case ".adt":
-                            Exporters.OBJ.ADTExporter.exportADT(currentFile, Managers.ConfigurationManager.OutputDirectory, Managers.ConfigurationManager.ADTQuality,worker);
+                            Exporters.OBJ.ADTExporter.exportADT(currentFile, Managers.ConfigurationManager.OutputDirectory, Managers.ConfigurationManager.ADTQuality, worker);
                             break;
                         case ".m2":
-                            Exporters.OBJ.M2Exporter.ExportM2(currentFile, Managers.ConfigurationManager.OutputDirectory,worker);
+                            Exporters.OBJ.M2Exporter.ExportM2(currentFile, Managers.ConfigurationManager.OutputDirectory, worker);
                             break;
                         case ".wmo":
                             Exporters.OBJ.WMOExporter.ExportWMO(currentFile, Managers.ConfigurationManager.OutputDirectory, worker);
@@ -360,14 +360,6 @@ namespace WoWExport
                 checkBox15.Enabled = false;
             }
         }
-
-        /*
-        private void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            var state = (string)e.UserState;
-        }
-        */
-
     }
 }
 

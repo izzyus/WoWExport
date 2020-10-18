@@ -17,21 +17,17 @@ namespace WoWFormatLib.FileReaders
         {
             filename = Path.ChangeExtension(filename, ".skin");
 
-            //if (!CASC.FileExists(filename))
-            //if (!File.Exists(filename))
             if (!Managers.ArchiveManager.FileExists(filename))
             {
-                //new WoWFormatLib.Utils.MissingFile(filename);
+                //File missing
             }
 
-            //BinaryReader bin = new BinaryReader(CASC.OpenFile(filename));
-            //BinaryReader bin = new BinaryReader(File.OpenRead(filename));
             BinaryReader bin = new BinaryReader(Managers.ArchiveManager.ReadThisFile(filename));
 
             var header = new string(bin.ReadChars(4));
             if (header != "SKIN")
             {
-                Console.WriteLine("Invalid SKIN file!");
+                //Console.WriteLine("Invalid SKIN file!");
             }
 
             skin.filename = filename;
@@ -82,7 +78,7 @@ namespace WoWFormatLib.FileReaders
         {
             bin.BaseStream.Position = ofsSubmeshes;
             var submeshes = new Submesh[nSubmeshes];
-            
+
             for (int i = 0; i < nSubmeshes; i++)
             {
                 submeshes[i].submeshID = bin.ReadUInt16();

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using WoWFormatLib.Utils;
 using WoWFormatLib.Structs.WDT;
 using System.Linq;
 
@@ -22,27 +21,8 @@ namespace WoWFormatLib.FileReaders
         {
             tiles = new List<int[]>();
 
-            //--
-            /*
-            if (CASC.cascHandler.FileExists(filename))
-            {
-                using (Stream tex = CASC.cascHandler.OpenFile(filename))
-                {
-                    ReadWDT(filename, tex);
-                }
-            }
-            else
-            {
-                throw new FileNotFoundException("WDT " + filename + " does not exist");
-            }
-            */
-            //--
-
-            //--
-            //if (File.Exists(filename))
             if (Managers.ArchiveManager.FileExists(filename))
             {
-                //using (Stream tex = File.OpenRead(filename))
                 using (Stream tex = Managers.ArchiveManager.ReadThisFile(filename))
                 {
                     ReadWDT(filename, tex);
@@ -52,8 +32,6 @@ namespace WoWFormatLib.FileReaders
             {
                 throw new FileNotFoundException("WDT " + filename + " does not exist");
             }
-            //--
-
         }
         private void ReadMAINChunk(BinaryReader bin, uint size, String filename)
         {
@@ -67,10 +45,11 @@ namespace WoWFormatLib.FileReaders
                 for (var y = 0; y < 64; y++)
                 {
                     var flags = bin.ReadUInt32();
-                    var nobodycares = bin.ReadUInt32();
+                    //var nobodycares = bin.ReadUInt32();
+                    bin.ReadUInt32(); //Replaceds above
+
                     if (flags == 1)
                     {
-                        var adtfilename = filename.Replace(".WDT", "_" + y + "_" + x + ".adt");
                         int[] xy = new int[] { y, x };
                         tiles.Add(xy);
                     }
@@ -96,9 +75,6 @@ namespace WoWFormatLib.FileReaders
                 {
                     str.Append(c);
                 }
-                var wmofilename = str.ToString();
-                //var wmoreader = new WMOReader();
-                //wmoreader.LoadWMO(wmofilename);
             }
         }
         private MPHD ReadMPHDChunk(BinaryReader bin)
@@ -133,7 +109,7 @@ namespace WoWFormatLib.FileReaders
                     case "MAIN":
                         ReadMAINChunk(bin, chunkSize, filename);
                         break;
-                    case "MAID": //TO BE IMPLEMENTED
+                    case "MAID": //TODO
                         break;
                     case "MWMO":
                         ReadMWMOChunk(bin);

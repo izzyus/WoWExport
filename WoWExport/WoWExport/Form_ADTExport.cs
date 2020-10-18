@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 using WoWFormatLib.FileReaders;
@@ -101,10 +98,6 @@ namespace WoWExport
             button1.Text = "Export";
             this.Text = filename;
 
-
-
-
-
             checkBox13.Text = "Export ground \"specular?\" textures";
             checkBox13.Checked = Managers.ConfigurationManager.ADTExportSpecularTextures;
 
@@ -137,7 +130,6 @@ namespace WoWExport
             try
             {
                 ADTReader reader = new ADTReader();
-                //if (Managers.ConfigurationManager.Profile == "LK")
                 if (Managers.ConfigurationManager.Profile <= 3) //WoTLK and below
                 {
                     reader.Load335ADT(filename);
@@ -146,8 +138,6 @@ namespace WoWExport
                 {
                     reader.LoadADT(filename);
                 }
-                //listBox1.Items.AddRange(reader.m2Files.ToArray());
-                //listBox2.Items.AddRange(reader.wmoFiles.ToArray());
                 listBox1.Items.AddRange(reader.m2Files.Select(s => s.ToLowerInvariant()).ToArray());
                 listBox2.Items.AddRange(reader.wmoFiles.Select(s => s.ToLowerInvariant()).ToArray());
 

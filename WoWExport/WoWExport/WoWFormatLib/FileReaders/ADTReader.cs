@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using WoWFormatLib.Structs.ADT;
-using WoWFormatLib.Utils;
 
 namespace WoWFormatLib.FileReaders
 {
@@ -28,34 +27,17 @@ namespace WoWFormatLib.FileReaders
 
         #region Split-File_ADT_READER
         public void LoadADT(string filename, bool loadSecondaryADTs = true)
-        //public void LoadADT(string filename, string wdtfilename, string objfilename, string texfilename, bool loadSecondaryADTs = true)
         {
             m2Files = new List<string>();
             wmoFiles = new List<string>();
             blpFiles = new List<string>();
 
             var WDTfile = filename.Substring(0, filename.Length - 10) + ".wdt";
-            /*
-            filename = Path.ChangeExtension(filename, ".adt");
 
-            if (!CASC.cascHandler.FileExists(filename) || !CASC.cascHandler.FileExists(filename.Replace(".adt", "_obj0.adt")) || !CASC.cascHandler.FileExists(filename.Replace(".adt", "_tex0.adt"))) {
-                throw new FileNotFoundException("One or more ADT files for ADT " + filename + " could not be found.");
-            }
-
-            var mapname = filename.Replace("world\\maps\\", "").Substring(0, filename.Replace("world\\maps\\", "").IndexOf("\\"));
-
-            if (CASC.cascHandler.FileExists("world\\maps\\" + mapname + "\\" + mapname + ".wdt"))
-            */
-
-            //if(File.Exists(wdtfilename))
             if (Managers.ArchiveManager.FileExists(WDTfile))
             {
                 var wdtr = new WDTReader();
-
-                //wdtr.LoadWDT("world\\maps\\" + mapname + "\\" + mapname + ".wdt");
-                //wdtr.LoadWDT(wdtfilename);
                 wdtr.LoadWDT(WDTfile);
-
                 wdt = wdtr.wdtfile;
             }
             else
@@ -63,8 +45,6 @@ namespace WoWFormatLib.FileReaders
                 throw new Exception("WDT does not exist, need this for MCAL flags!");
             }
 
-            //using (var adt = CASC.cascHandler.OpenFile(filename))
-            //var adt = File.OpenRead(filename);
             var adt = Managers.ArchiveManager.ReadThisFile(filename);
 
             using (var bin = new BinaryReader(adt))
@@ -117,18 +97,14 @@ namespace WoWFormatLib.FileReaders
                     }
                 }
             }
-            
+
             if (loadSecondaryADTs)
             {
-                //using (var adtobj0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_obj0.adt")))
-                //using (var adtobj0 = File.OpenRead(objfilename))
                 using (var adtobj0 = Managers.ArchiveManager.ReadThisFile(filename.Replace(".adt", "_obj0.adt")))
                 {
                     ReadObjFile(adtobj0);
                 }
 
-                //using (var adttex0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_tex0.adt")))
-                //using (var adttex0 = File.OpenRead(texfilename))
                 using (var adttex0 = Managers.ArchiveManager.ReadThisFile(filename.Replace(".adt", "_tex0.adt")))
                 {
                     ReadTexFile(adttex0);
@@ -153,7 +129,6 @@ namespace WoWFormatLib.FileReaders
         //----------------------------------------------------------------------------------------------------------
 
         #region Single-File_ADT_READER
-        //public void Load335ADT(string filename, string wdtfilename)
         public void Load335ADT(string filename)
         {
             m2Files = new List<string>();
@@ -162,25 +137,9 @@ namespace WoWFormatLib.FileReaders
 
             var WDTfile = filename.Substring(0, filename.Length - 10) + ".wdt";
 
-            /*
-            filename = Path.ChangeExtension(filename, ".adt");
-
-            if (!CASC.cascHandler.FileExists(filename) || !CASC.cascHandler.FileExists(filename.Replace(".adt", "_obj0.adt")) || !CASC.cascHandler.FileExists(filename.Replace(".adt", "_tex0.adt"))) {
-                throw new FileNotFoundException("One or more ADT files for ADT " + filename + " could not be found.");
-            }
-
-            var mapname = filename.Replace("world\\maps\\", "").Substring(0, filename.Replace("world\\maps\\", "").IndexOf("\\"));
-
-            if (CASC.cascHandler.FileExists("world\\maps\\" + mapname + "\\" + mapname + ".wdt"))
-            */
-
-            //if (File.Exists(wdtfilename))
             if (Managers.ArchiveManager.FileExists(WDTfile))
             {
                 var wdtr = new WDTReader335();
-
-                //wdtr.LoadWDT("world\\maps\\" + mapname + "\\" + mapname + ".wdt");
-                //wdtr.LoadWDT(wdtfilename);
 
                 wdtr.LoadWDT(WDTfile);
                 wdt = wdtr.wdtfile;
@@ -191,9 +150,6 @@ namespace WoWFormatLib.FileReaders
                 throw new Exception("WDT does not exist, need this for MCAL flags!");
             }
 
-            //using (var adt = CASC.cascHandler.OpenFile(filename))
-
-            //var adt = File.OpenRead(filename);
             var adt = Managers.ArchiveManager.ReadThisFile(filename);
 
             using (var bin = new BinaryReader(adt))
@@ -205,8 +161,8 @@ namespace WoWFormatLib.FileReaders
 
                 adtfile.chunks = new MCNK[16 * 16];
 
-                adtfile.mcinChunks = new MCIN[16 * 16]; // <------
-                adtfile.texChunks = new TexMCNK[16 * 16]; // <------ You are not supposed to be in here (actually yes, but also no)
+                adtfile.mcinChunks = new MCIN[16 * 16];
+                adtfile.texChunks = new TexMCNK[16 * 16];
 
                 while (position < adt.Length)
                 {
@@ -230,24 +186,14 @@ namespace WoWFormatLib.FileReaders
                                 adtfile.version = version;
                             }
                             break;
-                        /* // <-------------------------------------------------------------------
-                    case "MFBO":
-                    //model.blob stuff
-                    case "MBMH":
-                    case "MBBB":
-                    case "MBMI":
-                    case "MBNV":
-                        break;
-                        */ // <-------------------------------------------------------------------
                         case "MHDR":
                             adtfile.header = bin.Read<MHDR>();
                             break;
 
-                        case "MCIN": // <-----
-                            adtfile.mcinChunks[MCINi] = readMCINChunk(chunkSize, bin);
+                        case "MCIN":
+                            adtfile.mcinChunks[MCINi] = ReadMCINChunk(chunkSize, bin);
                             MCINi++;
                             break;
-
                         case "MTEX":
                             adtfile.textures = ReadMTEXChunk(chunkSize, bin);
                             break;
@@ -283,26 +229,6 @@ namespace WoWFormatLib.FileReaders
                     }
                 }
             }
-
-            //----------------------------------------------------------------------------------------------------
-            // CLEAVED FOR THE MOMENT
-            //----------------------------------------------------------------------------------------------------
-            /*
-            if (loadSecondaryADTs)
-            {
-                //using (var adtobj0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_obj0.adt")))
-                using (var adtobj0 = File.OpenRead(objfilename))
-                {
-                    ReadObjFile(adtobj0);
-                }
-
-                //using (var adttex0 = CASC.cascHandler.OpenFile(filename.Replace(".adt", "_tex0.adt")))
-                using (var adttex0 = File.OpenRead(texfilename))
-                {
-                    ReadTexFile(adttex0);
-                }
-            }
-            */
         }
         #endregion
 
@@ -313,7 +239,7 @@ namespace WoWFormatLib.FileReaders
         //----------------------------------------------------------------------------------------------------------
 
         // MCIN chunk reader
-        private MCIN readMCINChunk(uint size, BinaryReader bin)
+        private MCIN ReadMCINChunk(uint size, BinaryReader bin)
         {
             var mcinChunk = new MCIN()
             {
@@ -324,8 +250,6 @@ namespace WoWFormatLib.FileReaders
             };
             return mcinChunk;
         }
-        //--
-
 
         private MCNK Read335MCNKChunk(uint size, BinaryReader bin)
         {
@@ -356,42 +280,16 @@ namespace WoWFormatLib.FileReaders
                             mapchunk.normals = ReadMCNRSubChunk(subbin);
                             subpos = subpos + 13; //The weird data that the wiki speaks about [Thanks Marl!]
                             break;
-
-                        /* // <-----
-                        case "MCCV":
-                            mapchunk.vertexShading = ReadMCCVSubChunk(subbin);
-                            break;
-                        case "MCBB":
-                            mapchunk.blendBatches = ReadMCBBSubChunk(subChunkSize, subbin);
-                            break;
-                        
-                        case "MCLV":
-                            continue;
-                        */  // <-----
-
-                        //----------------------------------------------------------------------------
-                        // To be properly implemented
-                        //----------------------------------------------------------------------------
                         case "MCLY":
-                            //mapchunk.layers = ReadMCLYSubChunk(subChunkSize, subbin);
                             adtfile.texChunks[currentChunk].layers = ReadMCLYSubChunk(subChunkSize, subbin); //very ghetto, much wow
                             break;
-                        //----------------------------------------------------------------------------
-
                         case "MCRF":
                             break;
                         case "MCSH":
                             break;
-
-                        //----------------------------------------------------------------------------
-                        // To be properly implemented
-                        //----------------------------------------------------------------------------
                         case "MCAL":
-                            //mapchunk.alphaLayer = ReadMCALSubChunk(subChunkSize, subbin, mapchunk);
                             adtfile.texChunks[currentChunk].alphaLayer = ReadMCALSubChunk(subChunkSize, subbin, adtfile.texChunks[currentChunk]); //very ghetto, much wow
                             break;
-                        //----------------------------------------------------------------------------
-
                         case "MCLQ": //FIND PROPER PLACE IN STACK (not that it matters)
 
                         case "MCSE":
@@ -406,8 +304,6 @@ namespace WoWFormatLib.FileReaders
 
             return mapchunk;
         }
-
-
 
         private MCNK ReadMCNKChunk(uint size, BinaryReader bin)
         {
@@ -531,7 +427,7 @@ namespace WoWFormatLib.FileReaders
         {
             var chunk = new MH2O();
             chunk.headers = new MH2OHeader[256];
-            for(var i = 0; i < 256; i++)
+            for (var i = 0; i < 256; i++)
             {
                 chunk.headers[i].offsetInstances = bin.ReadUInt32();
                 chunk.headers[i].layerCount = bin.ReadUInt32();
@@ -678,7 +574,7 @@ namespace WoWFormatLib.FileReaders
         {
             var mddf = new MDDF();
 
-            var count = size / 36; 
+            var count = size / 36;
 
             mddf.entries = new MDDFEntry[count];
 
@@ -687,7 +583,7 @@ namespace WoWFormatLib.FileReaders
                 mddf.entries[i] = bin.Read<MDDFEntry>();
                 if (mddf.entries[i].flags.HasFlag(MDDFFlags.mddf_entry_is_filedataid))
                 {
-                    Console.WriteLine("ADT Reader: Found a filedataid reference while parsing MDDF: {0}", mddf.entries[i].mmidEntry);
+                    //Console.WriteLine("ADT Reader: Found a filedataid reference while parsing MDDF: {0}", mddf.entries[i].mmidEntry);
                 }
             }
 
@@ -697,7 +593,7 @@ namespace WoWFormatLib.FileReaders
         {
             var modf = new MODF();
 
-            var count = size / 64; 
+            var count = size / 64;
 
             modf.entries = new MODFEntry[count];
             for (var i = 0; i < count; i++)
@@ -705,7 +601,7 @@ namespace WoWFormatLib.FileReaders
                 modf.entries[i] = bin.Read<MODFEntry>();
                 if (modf.entries[i].flags.HasFlag(MODFFlags.modf_entry_is_filedataid))
                 {
-                    Console.WriteLine("ADT Reader: Found a filedataid reference while parsing MODF: {0}", modf.entries[i].mwidEntry);
+                    //Console.WriteLine("ADT Reader: Found a filedataid reference while parsing MODF: {0}", modf.entries[i].mwidEntry);
                 }
             }
 
@@ -808,16 +704,6 @@ namespace WoWFormatLib.FileReaders
                 if (blpFilesChunk[i] == '\0')
                 {
                     blpFiles.Add(str.ToString());
-                    
-                    //--
-                    /*
-                    if (!CASC.cascHandler.FileExists(str.ToString()))
-                    {
-                        Console.WriteLine("BLP file does not exist!!! {0}", str.ToString());
-                    }
-                    */
-                    //--
-
                     str = new StringBuilder();
                 }
                 else
@@ -833,7 +719,7 @@ namespace WoWFormatLib.FileReaders
         {
             var txparams = new MTXP[count];
 
-            for(var i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 txparams[i] = bin.Read<MTXP>();
             }

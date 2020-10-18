@@ -1,6 +1,6 @@
 ﻿namespace WoWExport
 {
-    partial class Form1
+    partial class Form_MainWindow
     {
         /// <summary>
         /// Required designer variable.

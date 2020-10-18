@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-
 using WoWFormatLib.FileReaders;
 
 namespace WoWExport
@@ -56,7 +51,7 @@ namespace WoWExport
                 label5.Text = "Bones: " + reader.model.bones.Count();
                 label6.Text = "Vertices: " + reader.model.vertices.Count();
                 label7.Text = "Skins: " + reader.model.skins.Count();
-                label8.Text = "Textures: " + reader.model.textures.Count();    
+                label8.Text = "Textures: " + reader.model.textures.Count();
                 label9.Text = "Submeshes:" + reader.model.skins[0].submeshes.Count();
             }
             catch (Exception ex)
@@ -67,7 +62,7 @@ namespace WoWExport
 
         private void UpdateConfiguration()
         {
-            
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -91,7 +86,7 @@ namespace WoWExport
             switch (e.Argument)
             {
                 case 0: //obj
-                    Exporters.OBJ.M2Exporter.ExportM2(filename, Managers.ConfigurationManager.OutputDirectory,exportworker);
+                    Exporters.OBJ.M2Exporter.ExportM2(filename, Managers.ConfigurationManager.OutputDirectory, exportworker);
                     break;
                 case 1: //smd
                     Exporters.SMD.M2SmdExporter.ExportM2(filename, Managers.ConfigurationManager.OutputDirectory);

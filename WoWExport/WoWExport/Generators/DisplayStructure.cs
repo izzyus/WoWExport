@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.IO;
 
 namespace WoWExport.Generators
@@ -11,7 +10,6 @@ namespace WoWExport.Generators
         public static List<String> MLF = new List<string>();
         public static string[] SkipList;
 
-
         public static void LoadSkipList()
         {
             if (File.Exists(Environment.CurrentDirectory + "\\settings\\skiplist.txt"))
@@ -20,7 +18,7 @@ namespace WoWExport.Generators
             }
             else
             {
-                Console.WriteLine("Skip list missing, generating one");
+                //Console.WriteLine("Skip list missing, generating one");
                 GenerateSkipList();
             }
         }
@@ -121,7 +119,7 @@ namespace WoWExport.Generators
 
         public static void GenerateList()
         {
-            DirectoryInfo directory = new DirectoryInfo(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles\\"); //hardcoded for debug only
+            DirectoryInfo directory = new DirectoryInfo(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles\\");
             FileInfo[] ExtractedListfiles = directory.GetFiles("*.txt");
             foreach (FileInfo fileInfo in ExtractedListfiles)
             {
@@ -130,7 +128,6 @@ namespace WoWExport.Generators
                     string s = String.Empty;
                     while ((s = sr.ReadLine()) != null)
                     {
-                        //MLF.Add(s.ToLower());
                         if (!EndsWithOneOf(s.ToLower(), SkipList) && !IsWMOGroupFile(s))
                         {
                             MLF.Add(s.ToLower());
@@ -138,17 +135,17 @@ namespace WoWExport.Generators
                     }
                 }
             }
-            Console.WriteLine("Display list generated");
+            //Console.WriteLine("Display list generated");
         }
 
         public static bool EndsWithOneOf(string value, IEnumerable<string> suffixes)
         {
-            return suffixes.Any(suffix => value.EndsWith(suffix));   
+            return suffixes.Any(suffix => value.EndsWith(suffix));
         }
-        
+
         public static bool IsWMOGroupFile(string filename)
         {
-            if(filename.ToLower().EndsWith(".wmo") && System.Text.RegularExpressions.Regex.Match(Path.GetFileNameWithoutExtension(filename), @"\d{3}$").Success)
+            if (filename.ToLower().EndsWith(".wmo") && System.Text.RegularExpressions.Regex.Match(Path.GetFileNameWithoutExtension(filename), @"\d{3}$").Success)
             {
                 return true;
             }
@@ -171,13 +168,13 @@ namespace WoWExport.Generators
                     }
                 }
             }
-            Console.WriteLine("Display list generated");
+            //Console.WriteLine("Display list generated");
         }
 
         public static void SortListFile()
         {
             MLF.Sort();
-            Console.WriteLine("Sorted");
+            //Console.WriteLine("Sorted");
         }
     }
 }

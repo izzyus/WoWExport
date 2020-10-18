@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
-using System.Windows;
 
 namespace WoWExport
 {
@@ -23,7 +22,6 @@ namespace WoWExport
                     client.Headers[HttpRequestHeader.AcceptEncoding] = "gzip";
                     var responseStream = new GZipStream(client.OpenRead("https://wow.tools/casc/listfile/download/csv/unverified"), CompressionMode.Decompress);
                     responseStream.CopyTo(stream);
-                    //File.WriteAllBytes("listfile.csv", stream.ToArray());
 
                     if (!Directory.Exists(Path.GetDirectoryName(Managers.ArchiveManager.listFilePath)))
                     {
@@ -37,21 +35,17 @@ namespace WoWExport
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Listfile download failed:" + e.Message);
-                //MessageBox.Show("A fatal error occured during downloading the listfile.\n\n" + e.Message + "\n\nNo listfile means files might not appear in the exporter.", "Fatal error", MessageBoxButton.OK, MessageBoxImage.Error);
                 throw new Exception("A fatal error occured during downloading the listfile.\n\n" + e.Message + "\n\nPlease provide one manually to: \n." + Path.GetDirectoryName(Managers.ArchiveManager.listFilePath));
             }
         }
 
         public static void Load()
         {
-            //if (!File.Exists("listfile.csv"))
             if (!File.Exists(Managers.ArchiveManager.listFilePath))
             {
                 Update();
             }
 
-            //using (var listfile = File.Open("listfile.csv", FileMode.Open))
             using (var listfile = File.Open(Managers.ArchiveManager.listFilePath, FileMode.Open))
             using (var reader = new StreamReader(listfile))
             {
@@ -86,7 +80,6 @@ namespace WoWExport
         public static bool TryGetFileDataID(string filename, out uint fileDataID)
         {
             var cleaned = filename.ToLower().Replace('\\', '/');
-
             return FilenameToFDID.TryGetValue(cleaned, out fileDataID);
         }
 

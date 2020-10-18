@@ -7,11 +7,11 @@ using System.ComponentModel;
 
 namespace WoWExport
 {
-    public partial class Form1 : Form
+    public partial class Form_MainWindow : Form
     {
         private readonly BackgroundWorker worker = new BackgroundWorker();
         public TreeNode displayStructure = new TreeNode();
-        public Form1()
+        public Form_MainWindow()
         {
             InitializeComponent();
 
@@ -36,8 +36,8 @@ namespace WoWExport
 
             groupBox1.Text = "Preview";
 
-            //Debug button - to be deleted later
-            //button2.Hide();
+            //Debug button
+            button2.Hide();
             button2.Text = "Crash Me!";
 
             LoadGame();
@@ -64,13 +64,13 @@ namespace WoWExport
                         switch (Path.GetExtension(selectedItem))
                         {
                             case ".adt":
-                                new WoWExport.Form_ADTExport(selectedItem).Show();
+                                new Form_ADTExport(selectedItem).Show();
                                 break;
                             case ".m2":
-                                new WoWExport.Form_M2Export(selectedItem).Show();
+                                new Form_M2Export(selectedItem).Show();
                                 break;
                             case ".wmo":
-                                new WoWExport.Form_WMOExport(selectedItem).Show();
+                                new Form_WMOExport(selectedItem).Show();
                                 break;
                             case ".blp":
                                 Exporters.BLPExporter.ExportBLP(selectedItem, Managers.ConfigurationManager.OutputDirectory);
@@ -84,12 +84,13 @@ namespace WoWExport
             }
             else
             {
-                new WoWExport.Form_BatchExport(list).Show();
+                new Form_BatchExport(list).Show();
             }
         }
         //---------------------------------------------------------------------------
         //Debug Button:
         //---------------------------------------------------------------------------
+        #region DebugButton
         private void button2_Click(object sender, EventArgs e)
         {
             //---------------------------------------------------------------------------
@@ -126,37 +127,6 @@ namespace WoWExport
             //---------------------------------------------------------------------------
             //TEST INDIVIDUAL ADT:
             //---------------------------------------------------------------------------
-            ADTReader reader = new ADTReader();
-            reader.LoadADT(@"world\maps\azeroth\azeroth_30_47.adt");
-            //---------------------------------------------------------------------------
-
-            //---------------------------------------------------------------------------
-            //TEST INDIVIDUAL M2:
-            //---------------------------------------------------------------------------
-            //M2Reader reader = new M2Reader();
-            //reader.LoadM2(@"");
-            //---------------------------------------------------------------------------
-
-            //---------------------------------------------------------------------------
-            //TEST INDIVIDUAL WMO:
-            //---------------------------------------------------------------------------
-            //WMOReader reader = new WMOReader();
-            //reader.LoadWMO(@"");
-            //---------------------------------------------------------------------------
-
-            //---------------------------------------------------------------------------
-            //TEST INDIVIDUAL ADT (335):
-            //---------------------------------------------------------------------------
-            //ADTReader reader = new ADTReader();
-            //reader.Load335ADT(@"world\maps\azeroth\azeroth_32_48.adt");
-            //---------------------------------------------------------------------------
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            //---------------------------------------------------------------------------
-            //TEST INDIVIDUAL ADT:
-            //---------------------------------------------------------------------------
             //ADTReader reader = new ADTReader();
             //reader.LoadADT(@"world\maps\azeroth\azeroth_30_47.adt");
             //---------------------------------------------------------------------------
@@ -182,6 +152,9 @@ namespace WoWExport
             //reader.Load335ADT(@"world\maps\azeroth\azeroth_32_48.adt");
             //---------------------------------------------------------------------------
         }
+        #endregion
+
+
 
 
         private TreeNode PopulateTreeNode2(List<string> paths, string pathSeparator)
@@ -224,7 +197,7 @@ namespace WoWExport
                 }
                 catch
                 {
-                    Console.WriteLine("Error occured while trying to read " + treeView1.SelectedNode.FullPath.Replace(@"root\", ""));
+                    //Console.WriteLine("Error occured while trying to read " + treeView1.SelectedNode.FullPath.Replace(@"root\", ""));
                 }
             }
 
@@ -232,7 +205,6 @@ namespace WoWExport
             {
                 try
                 {
-                    //if (Managers.ConfigurationManager.Profile == "Cata" || Managers.ConfigurationManager.Profile == "MOP" || Managers.ConfigurationManager.Profile == "WOD" || Managers.ConfigurationManager.Profile == "Legion")
                     if (Managers.ConfigurationManager.Profile >= 4) // Cata and above
                     {
                         string filedirectory = treeView1.SelectedNode.FullPath.Replace("\\maps\\", "\\minimaps\\");
@@ -334,7 +306,7 @@ namespace WoWExport
             if (Managers.ArchiveManager.usingCasc)
             {
                 worker.ReportProgress(0, "Loading CASC");
-                Console.WriteLine("Loading CASC");
+                //Console.WriteLine("Loading CASC");
                 Managers.ArchiveManager.LoadCASC();
 
 
@@ -352,7 +324,7 @@ namespace WoWExport
             }
             else
             {
-                Console.WriteLine("Loading MPQ");
+                //Console.WriteLine("Loading MPQ");
                 worker.ReportProgress(0, "Searching cached listfiles");
                 //Extract listfiles to cache
                 if (!Directory.Exists(Environment.CurrentDirectory + "\\cache\\" + Managers.ConfigurationManager.Profile + "\\listfiles"))
@@ -372,7 +344,6 @@ namespace WoWExport
                 worker.ReportProgress(5, "Merging listfiles");
                 Managers.ArchiveManager.GenerateMainListFileFromMPQ();
 
-                //if (Managers.ConfigurationManager.Profile == "LK" || Managers.ConfigurationManager.Profile == "TBC" || Managers.ConfigurationManager.Profile == "Vanilla")
                 if (Managers.ConfigurationManager.Profile <= 3) //WoTLK and below
                 {
                     worker.ReportProgress(5, "Loading MD5 minimap translator");
@@ -394,9 +365,7 @@ namespace WoWExport
                 Managers.ConfigurationManager.ADTexportTextures = true;
                 Managers.ConfigurationManager.ADTexportAlphaMaps = true;
                 Managers.ConfigurationManager.WMOExportM2 = true;
-                //Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//"; -- not here please
             }
-
         }
 
         private void PopulateTree(string separator)
@@ -414,7 +383,7 @@ namespace WoWExport
             // Get the elapsed time as a TimeSpan value.
 
             TimeSpan ts = stopWatch.Elapsed;
-            Console.WriteLine("Tree populated in: " + ts);
+            //Console.WriteLine("Tree populated in: " + ts);
         }
 
         private void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -432,7 +401,6 @@ namespace WoWExport
             {
                 label1.Text = state;
             }
-            //progressBar.Value = e.ProgressPercentage;
         }
     }
 }

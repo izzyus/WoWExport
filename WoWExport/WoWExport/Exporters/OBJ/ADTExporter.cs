@@ -1,28 +1,23 @@
-﻿//using CASCLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using WoWFormatLib.FileReaders;
 
-//namespace OBJExporterUI.Exporters.OBJ
 namespace Exporters.OBJ
 {
     public class ADTExporter
     {
-        //public static void ExportADT(uint wdtFileDataID, byte tileX, byte tileY, BackgroundWorker exportworker = null)
         public static void exportADT(string file, string outdir, string bakeQuality, BackgroundWorker exportworker = null)
         {
-            
             if (exportworker == null)
             {
-                exportworker = new BackgroundWorker();
-                exportworker.WorkerReportsProgress = true;
+                exportworker = new BackgroundWorker
+                {
+                    WorkerReportsProgress = true
+                };
             }
-            
-            //var outdir = ConfigurationManager.AppSettings["outdir"];
 
             var customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
@@ -33,33 +28,17 @@ namespace Exporters.OBJ
             var ChunkSize = TileSize / 16.0;
             var UnitSize = ChunkSize / 8.0;
             var UnitSizeHalf = UnitSize / 2.0;
-            /*
-            if (!Listfile.TryGetFilename(wdtFileDataID, out string wdtFilename))
-            {
-                Logger.WriteLine("ADT OBJ Exporter: WDT {0} has no known filename, skipping export!", wdtFileDataID);
-                return;
-            }
-            */
-            //var mapName = Path.GetFileNameWithoutExtension(wdtFilename);
-            //var file = "world/maps/" + mapName + "/" + mapName + "_" + tileX.ToString() + "_" + tileY.ToString() + ".adt";
 
             string mapname = file;
             mapname = mapname.Substring(mapname.LastIndexOf("\\", mapname.Length - 2) + 1);
             mapname = mapname.Substring(0, mapname.Length - 4);
 
             var reader = new ADTReader();
-            //reader.LoadADT(wdtFileDataID, tileX, tileY, true, wdtFilename);
 
             var ADTfile = file;
-            var WDTfile = file.Substring(0, file.Length - 10) + ".wdt";
-            var ADTobj = file.Replace(".adt", "_obj0.adt");
-            var ADTtex = file.Replace(".adt", "_tex0.adt");
 
             exportworker.ReportProgress(0, "Loading ADT " + file);
 
-            //reader.LoadADT(ADTfile, WDTfile, ADTobj, ADTtex);
-            //reader.LoadADT(ADTfile);
-            //if (Managers.ConfigurationManager.Profile == "LK") //this was wrong all along
             if (Managers.ConfigurationManager.Profile <= 3) //WoTLK and below
             {
                 reader.Load335ADT(ADTfile);
@@ -71,49 +50,32 @@ namespace Exporters.OBJ
 
             if (reader.adtfile.chunks == null)
             {
-                //Logger.WriteLine("ADT OBJ Exporter: File {0} has no chunks, skipping export!", file);
                 throw new Exception("ADT OBJ Exporter: File has no chunks, skipping export!");
-                //return;
             }
-
-            //Logger.WriteLine("ADT OBJ Exporter: Starting export of {0}..", file);
 
             if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file))))
             {
                 Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file)));
             }
 
-            
-
             var renderBatches = new List<Structs.RenderBatch>();
             var verticelist = new List<Structs.Vertex>();
             var indicelist = new List<int>();
             var materials = new Dictionary<int, string>();
 
-            //ConfigurationManager.RefreshSection("appSettings");
-            //var bakeQuality = ConfigurationManager.AppSettings["bakeQuality"];
-
             // Calculate ADT offset in world coordinates
-            //var adtStartX = ((reader.adtfile.x - 32) * TileSize) * -1;
-            //var adtStartY = ((reader.adtfile.y - 32) * TileSize) * -1;
             var adtStartX = reader.adtfile.chunks[0].header.position.X;
             var adtStartY = reader.adtfile.chunks[0].header.position.Y;
 
             // Calculate first chunk offset in world coordinates
-            //var initialChunkX = adtStartY + (reader.adtfile.chunks[0].header.indexX * ChunkSize) * -1;
-            //var initialChunkY = adtStartX + (reader.adtfile.chunks[0].header.indexY * ChunkSize) * -1;
-
             var initialChunkX = adtStartX + (reader.adtfile.chunks[0].header.indexX * ChunkSize) * -1;
             var initialChunkY = adtStartY + (reader.adtfile.chunks[0].header.indexY * ChunkSize) * -1;
 
             uint ci = 0;
             for (var x = 0; x < 16; x++)
             {
-                double xOfs = x / 16d;
                 for (var y = 0; y < 16; y++)
                 {
-                    double yOfs = y / 16d;
-
                     var genx = (initialChunkX + (ChunkSize * x) * -1);
                     var geny = (initialChunkY + (ChunkSize * y) * -1);
 
@@ -211,8 +173,6 @@ namespace Exporters.OBJ
                         {
                             isHole = false;
                         }
-
-
                         else
                         {
                             // Check if current section is a hole
@@ -232,9 +192,7 @@ namespace Exporters.OBJ
                             // Generates quads instead of 4x triangles
                             //indicelist.AddRange(new int[] { off + j + 8, off + j - 9, off + j - 8 });
                             //indicelist.AddRange(new int[] { off + j - 8, off + j + 9, off + j + 8 });
-
                         }
-
                         if ((j + 1) % (9 + 8) == 0) j += 9;
                     }
 
@@ -251,30 +209,19 @@ namespace Exporters.OBJ
                         }
                         batch.materialID = (uint)materials.Count();
                     }
-
                     batch.numFaces = (uint)(indicelist.Count()) - batch.firstFace;
-
-                    var layermats = new List<uint>();
-
 
                     renderBatches.Add(batch);
                     ci++;
                 }
             }
 
-            //ConfigurationManager.RefreshSection("appSettings");
-
-            //bool exportWMO = ConfigurationManager.AppSettings["exportWMO"] == "True";
-            //bool exportM2 = ConfigurationManager.AppSettings["exportM2"] == "True";
-            //bool exportFoliage = ConfigurationManager.AppSettings["exportFoliage"] == "True";
-            //bool exportWMO = false;
-            //bool exportM2 = false;
-            //bool exportTextures = false;
-            //bool exportAlphaMaps = true;
             bool exportWMO = Managers.ConfigurationManager.ADTExportWMO;
             bool exportM2 = Managers.ConfigurationManager.ADTExportM2;
             bool exportTextures = Managers.ConfigurationManager.ADTexportTextures;
             bool exportAlphaMaps = Managers.ConfigurationManager.ADTexportAlphaMaps;
+
+            //FOLIAGE -- not implemented
             /*
             bool exportFoliage = false;
             
@@ -347,12 +294,11 @@ namespace Exporters.OBJ
                 }
             }
             */
+
             if (exportWMO || exportM2)
             {
                 var doodadSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file).Replace(" ", "") + "_ModelPlacementInformation.csv"));
-                //var wmoSW = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(file).Replace(" ", "") + "_WMOPlacementInformation.csv"));
                 doodadSW.WriteLine("ModelFile;PositionX;PositionY;PositionZ;RotationX;RotationY;RotationZ;ScaleFactor;ModelId;Type");
-                //wmoSW.WriteLine("ModelFile;PositionX;PositionY;PositionZ;RotationX;RotationY;RotationZ;ScaleFactor;ModelId;Type");
 
                 if (exportWMO)
                 {
@@ -372,65 +318,22 @@ namespace Exporters.OBJ
                             wmoScale = 1;
                         }
 
-
-                        //var filename = "";
                         var filename = reader.adtfile.objects.wmoNames.filenames[wmo.mwidEntry];
 
-                        //uint filedataid = 0;
-                        /*
-                        if (reader.adtfile.objects.wmoNames.filenames == null)
-                        {
-                            filedataid = wmo.mwidEntry;
-                            if (!Listfile.TryGetFilename(filedataid, out filename))
-                            {
-                                Logger.WriteLine("Warning! Could not find filename for " + filedataid + ", setting filename to filedataid..");
-                                filename = filedataid.ToString();
-                            }
-                        }
-                        else
-                        {
-                            Logger.WriteLine("Warning!! File " + filename + " ID: " + filedataid + " still has filenames!");
-                            filename = reader.adtfile.objects.wmoNames.filenames[wmo.mwidEntry];
-                            if (!Listfile.TryGetFileDataID(filename, out filedataid))
-                            {
-                                Logger.WriteLine("Error! Could not find filedataid for " + filename + "!");
-                                continue;
-                            }
-                        }
-                        if (string.IsNullOrEmpty(filename))
-                        {
-                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), filedataid.ToString() + ".obj")))
-                            {
-                                WMOExporter.ExportWMO(filedataid, exportworker, Path.Combine(outdir, Path.GetDirectoryName(file)), wmo.doodadSet);
-                            }
-
-                            if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), filedataid.ToString() + ".obj")))
-                            {
-                                doodadSW.WriteLine(filedataid + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
-                            }
-                        }
-                        else
-                        {
-                        */
                         if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
                         {
-                            //WMOExporter.ExportWMO(filedataid, exportworker, Path.Combine(outdir, Path.GetDirectoryName(file)), wmo.doodadSet, filename);
                             WMOExporter.ExportWMO(filename, Path.Combine(outdir, Path.GetDirectoryName(file)), exportworker, null, wmo.doodadSet);
-                            //wmoSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmo.scale / 1024f + ";" + wmo.uniqueId + ";wmo");
                         }
 
                         if (Managers.ConfigurationManager.ADTModelsPlacementGlobalPath)
                         {
-                            doodadSW.WriteLine(Path.Combine(Path.GetDirectoryName(filename).ToLower(),Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj") + ";" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmoScale + ";" + wmo.uniqueId + ";wmo");
+                            doodadSW.WriteLine(Path.Combine(Path.GetDirectoryName(filename).ToLower(), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj") + ";" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmoScale + ";" + wmo.uniqueId + ";wmo");
                         }
                         else
                         {
                             doodadSW.WriteLine(Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj;" + wmo.position.X + ";" + wmo.position.Y + ";" + wmo.position.Z + ";" + wmo.rotation.X + ";" + wmo.rotation.Y + ";" + wmo.rotation.Z + ";" + wmoScale + ";" + wmo.uniqueId + ";wmo");
                         }
-
-                        //}
                     }
-                    //wmoSW.Close();
                 }
 
                 if (exportM2)
@@ -442,34 +345,10 @@ namespace Exporters.OBJ
                         var doodad = reader.adtfile.objects.models.entries[mi];
 
                         string filename;
-                        //uint filedataid;
-                        /*
-                        if (reader.adtfile.objects.wmoNames.filenames == null)
-                        {
-                            filedataid = doodad.mmidEntry;
-                            if (!Listfile.TryGetFilename(filedataid, out filename))
-                            {
-                                Logger.WriteLine("Could not find filename for " + filedataid + ", setting filename to filedataid..");
-                                filename = filedataid.ToString();
-                            }
-                        }
-                        else
-                        {
-                        */
-                        //filename = reader.adtfile.objects.wmoNames.filenames[doodad.mmidEntry];
                         filename = reader.adtfile.objects.m2Names.filenames[doodad.mmidEntry];
-                        /*
-                            if (!Listfile.TryGetFileDataID(filename, out filedataid))
-                            {
-                                Logger.WriteLine("Error! Could not find filedataid for " + filename + "!");
-                                continue;
-                            }
-                        }
-                        */
                         if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
                         {
-                            //M2Exporter.ExportM2(filedataid, null, Path.Combine(outdir, Path.GetDirectoryName(file)), filename);
-                            M2Exporter.ExportM2(filename, Path.Combine(outdir, Path.GetDirectoryName(file)),exportworker);
+                            M2Exporter.ExportM2(filename, Path.Combine(outdir, Path.GetDirectoryName(file)), exportworker);
                         }
                         if (Managers.ConfigurationManager.ADTModelsPlacementGlobalPath)
                         {
@@ -496,7 +375,7 @@ namespace Exporters.OBJ
                     {
                         Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures"));
                     }
-                }   
+                }
 
                 List<String> GroundTextures = reader.adtfile.textures.filenames.ToList();
 
@@ -532,13 +411,13 @@ namespace Exporters.OBJ
                                 }
                                 catch (Exception e)
                                 {
-                                    //error on save
+                                    //Error on file save
                                     throw new Exception(e.Message);
                                 }
                             }
                             else
                             {
-                                //missing file
+                                //Missing file
                             }
                         }
                     }
@@ -546,7 +425,6 @@ namespace Exporters.OBJ
                     {
                         if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\GroundTextures\\", Path.GetFileNameWithoutExtension(texture) + ".png")))
                         {
-                            //if (File.Exists(@"D:\mpqediten32\Work\" + texture))
                             if (Managers.ArchiveManager.FileExists(texture))
                             {
                                 try
@@ -567,13 +445,13 @@ namespace Exporters.OBJ
                                 }
                                 catch (Exception e)
                                 {
-                                    //error on save
+                                    //Error on file save
                                     throw new Exception(e.Message);
                                 }
                             }
                             else
                             {
-                                //missing file
+                                //Missing file
                             }
                         }
                     }
@@ -607,7 +485,7 @@ namespace Exporters.OBJ
                                 }
                                 catch
                                 {
-                                    //MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    //Error on file save
                                 }
                             }
                         }
@@ -615,7 +493,6 @@ namespace Exporters.OBJ
                     if (Managers.ConfigurationManager.ADTAlphaMode == 2 || Managers.ConfigurationManager.ADTAlphaMode == 3)
                     {
                         List<String> AlphaLayersNames = new List<String>(AlphaMapsGenerator.AlphaLayersNames);
-                        //AlphaLayersNames = AlphaMapsGenerator.AlphaLayersNames;
                         for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
                         {
                             if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "_" + AlphaLayersNames[m].Replace(";", "_") + ".png")))
@@ -626,7 +503,7 @@ namespace Exporters.OBJ
                                 }
                                 catch
                                 {
-                                    //MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                    //Error on file save
                                 }
                             }
                         }
@@ -641,27 +518,19 @@ namespace Exporters.OBJ
                             }
                             catch
                             {
-                                //MessageBox.Show("Could not export the alpha maps", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                //Error on file save
                             }
                         }
                     }
                 }
-
-                //No need for this, the structure of the CSV remains the same for every mode
-                //Delete the existing layers CSV 
-                /*
-                if (File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv")))
-                {
-                    File.Delete(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv"));
-                }
-                */
 
                 //Check if the CSV already exists, if not, create it
                 if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv")))
                 {
                     //Generate layer information CSV
                     StreamWriter layerCsvSR = new StreamWriter(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "layers.csv"));
-                    layerCsvSR.WriteLine("chunk;tex0;tex1;tex2;tex3"); //header
+                    //Insert CSV scheme
+                    layerCsvSR.WriteLine("chunk;tex0;tex1;tex2;tex3");
                     for (uint c = 0; c < reader.adtfile.chunks.Count(); c++)
                     {
                         string csvLine = c.ToString();
@@ -676,10 +545,9 @@ namespace Exporters.OBJ
                             {
                                 csvLine = csvLine + ";" + Path.GetFileNameWithoutExtension(AlphaLayerName);
                             }
-                            
+
                         }
                         layerCsvSR.WriteLine(csvLine);
-                        //File.AppendAllText(Path.Combine(outdir, Path.GetDirectoryName(file)) + "\\" + mapname + "_" + "layers.csv", csvLine + Environment.NewLine);
                     }
                     layerCsvSR.Close();
                 }
@@ -691,7 +559,7 @@ namespace Exporters.OBJ
             //----------------------------------------------------------------------------------------------------------
             #endregion
 
-
+            //VERTEX COLORS -- not implemented
             /*
             //Vertex color data
             if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\" + mapname + "_" + "vertex_colors.csv")))
@@ -717,7 +585,6 @@ namespace Exporters.OBJ
                 vertesColorCSV.Close();
             }
             */
-
 
             exportworker.ReportProgress(75, "Exporting terrain textures..");
 
@@ -782,8 +649,7 @@ namespace Exporters.OBJ
                 {
                     if (Managers.ConfigurationManager.ADTSplitChunks)
                     {
-                        //objsw.WriteLine("g chunk" + currentChunk);
-                        objsw.WriteLine("g "+ materials[(int)renderBatch.materialID]);
+                        objsw.WriteLine("g " + materials[(int)renderBatch.materialID]);
                         objsw.WriteLine("usemtl " + materials[(int)renderBatch.materialID]);
                         objsw.WriteLine("s 1");
                     }
@@ -798,14 +664,12 @@ namespace Exporters.OBJ
                         (indices[i + 2] + 1) + "/" + (indices[i + 2] + 1) + "/" + (indices[i + 2] + 1) + " " +
                         (indices[i + 1] + 1) + "/" + (indices[i + 1] + 1) + "/" + (indices[i + 1] + 1) + " " +
                         (indices[i] + 1) + "/" + (indices[i] + 1) + "/" + (indices[i] + 1));
-                    i = i + 3;
+                    i += 3;
                 }
                 currentChunk++;
             }
 
             objsw.Close();
-
-            //Logger.WriteLine("ADT OBJ Exporter: Finished with export of {0}..", file);
         }
     }
 }

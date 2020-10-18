@@ -65,11 +65,11 @@
     <Compile Include="Exporters\OBJ\WMOExporter.cs" />
     <Compile Include="Exporters\SMD\M2SmdExporter.cs" />
     <Compile Include="Exporters\Structs.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Form_MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Form_MainWindow.Designer.cs">
+      <DependentUpon>Form_MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Form_ADTExport.cs">
       <SubType>Form</SubType>
@@ -109,7 +109,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Listfile.cs" />
-    <Compile Include="WoWFormatLib\FileReaders\ADTReader335.cs" />
     <Compile Include="WoWFormatLib\FileReaders\ADTReader.cs" />
     <Compile Include="WoWFormatLib\FileReaders\BLPReader.cs" />
     <Compile Include="WoWFormatLib\FileReaders\M2Reader.cs" />
@@ -130,8 +129,8 @@
     <Compile Include="WoWFormatLib\Utils\Quaternion.cs" />
     <Compile Include="WoWFormatLib\Utils\RGBColor.cs" />
     <Compile Include="WoWFormatLib\Utils\Vector3.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Form_MainWindow.resx">
+      <DependentUpon>Form_MainWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_ADTExport.resx">
       <DependentUpon>Form_ADTExport.cs</DependentUpon>

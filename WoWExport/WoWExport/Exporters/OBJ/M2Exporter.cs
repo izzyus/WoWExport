@@ -1,33 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using WoWFormatLib.FileReaders;
-using WoWFormatLib.Utils;
 
-//namespace OBJExporterUI.Exporters.OBJ
 namespace Exporters.OBJ
 {
     class M2Exporter
     {
-        /*
-        public static void ExportM2(string file, BackgroundWorker exportworker = null, string destinationOverride = null)
-        {
-            if (!Listfile.TryGetFileDataID(file, out var filedataid))
-            {
-                CASCLib.Logger.WriteLine("Error! Could not find filedataid for " + file + ", skipping export!");
-                return;
-            }
-            else
-            {
-                ExportM2(filedataid, exportworker, destinationOverride, file);
-            }
-        }
-        */
-        //public static void ExportM2(uint fileDataID, BackgroundWorker exportworker = null, string destinationOverride = null, string filename = "")
-        public static void ExportM2(string filename, string outdir,BackgroundWorker exportworker = null, string destinationOverride = null)
+        public static void ExportM2(string filename, string outdir, BackgroundWorker exportworker = null, string destinationOverride = null)
         {
             if (exportworker == null)
             {
@@ -43,14 +25,9 @@ namespace Exporters.OBJ
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
 
-            //var outdir = ConfigurationManager.AppSettings["outdir"];
             var reader = new M2Reader();
 
             exportworker.ReportProgress(15, "Reading M2..");
-
-            //if (!CASC.FileExists(fileDataID)) { throw new Exception("404 M2 not found!"); }
-            //if (!File.Exists(filename)) { throw new Exception("404 M2 not found!"); }
-            //if (!Managers.ArchiveManager.FileExists(filename)) { throw new Exception("404 M2 not found!"); }
 
             //If the missing file is an ".mdx", try to look for a ".m2" alternative
             if (!Managers.ArchiveManager.FileExists(filename))
@@ -72,7 +49,6 @@ namespace Exporters.OBJ
                 }
             }
 
-            //reader.LoadM2(fileDataID);
             reader.LoadM2(filename);
 
             // Don't export models without vertices
@@ -126,7 +102,6 @@ namespace Exporters.OBJ
                         Directory.CreateDirectory(outdir);
                     }
 
-                    //objsw = new StreamWriter(Path.Combine(outdir, fileDataID + ".obj"));
                     objsw = new StreamWriter(Path.Combine(outdir, filename + ".obj"));
                 }
             }
@@ -138,7 +113,6 @@ namespace Exporters.OBJ
                 }
                 else
                 {
-                    //objsw = new StreamWriter(Path.Combine(outdir, destinationOverride, fileDataID + ".obj"));
                     objsw = new StreamWriter(Path.Combine(outdir, destinationOverride, filename + ".obj"));
                 }
             }
@@ -150,37 +124,26 @@ namespace Exporters.OBJ
             }
             else
             {
-                //objsw.WriteLine("# Written by Marlamin's WoW Export Tools. Original fileDataID: " + fileDataID);
                 objsw.WriteLine("# Written by Marlamin's WoW Export Tools. Original fileDataID: " + filename);
-                //objsw.WriteLine("mtllib " + fileDataID + ".mtl");
                 objsw.WriteLine("mtllib " + filename + ".mtl");
             }
+
             //Added thunderysteak's adjustment (original commit: ed067c7c6e8321c33ef0f3679d33c9c472dcefc3)
             foreach (var vertex in vertices)
             {
-                /*
-                objsw.WriteLine("v " + vertex.Position.X + " " + vertex.Position.Y + " " + vertex.Position.Z);
-                objsw.WriteLine("vt " + vertex.TexCoord.X + " " + -vertex.TexCoord.Y);
-                objsw.WriteLine("vn " + vertex.Normal.X.ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
-                */
                 objsw.WriteLine("v " + -vertex.Position.X + " " + vertex.Position.Y + " " + -vertex.Position.Z);
-                
-                //--- the following moved to separated forloops below
-
-                //objsw.WriteLine("vt " + vertex.TexCoord.X + " " + (vertex.TexCoord.Y -1)*-1); //the last part is for fixing the UV going outside of 0-1 space
-                //objsw.WriteLine("vn " + (-vertex.Normal.X).ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
             }
             foreach (var vertex in vertices)
             {
-                objsw.WriteLine("vt " + vertex.TexCoord.X + " " + (vertex.TexCoord.Y -1)*-1); //the last part is for fixing the UV going outside of 0-1 space
-                
+                objsw.WriteLine("vt " + vertex.TexCoord.X + " " + (vertex.TexCoord.Y - 1) * -1);
+
             }
             foreach (var vertex in vertices)
             {
                 objsw.WriteLine("vn " + (-vertex.Normal.X).ToString("F12") + " " + vertex.Normal.Y.ToString("F12") + " " + vertex.Normal.Z.ToString("F12"));
             }
 
-                var indicelist = new List<uint>();
+            var indicelist = new List<uint>();
             for (var i = 0; i < reader.model.skins[0].triangles.Count(); i++)
             {
                 var t = reader.model.skins[0].triangles[i];
@@ -195,17 +158,6 @@ namespace Exporters.OBJ
             var renderbatches = new Structs.RenderBatch[reader.model.skins[0].submeshes.Count()];
             for (var i = 0; i < reader.model.skins[0].submeshes.Count(); i++)
             {
-                /*if (!string.IsNullOrEmpty(filename) && filename.StartsWith("character", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    if (reader.model.skins[0].submeshes[i].submeshID != 0)
-                    {
-                        if (!reader.model.skins[0].submeshes[i].submeshID.ToString().EndsWith("01"))
-                        {
-                            continue;
-                        }
-                    }
-                }*/
-
                 renderbatches[i].firstFace = reader.model.skins[0].submeshes[i].startTriangle;
                 renderbatches[i].numFaces = reader.model.skins[0].submeshes[i].nTriangles;
                 renderbatches[i].groupID = (uint)i;
@@ -231,7 +183,6 @@ namespace Exporters.OBJ
                 }
                 else
                 {
-                    //mtlsb = new StreamWriter(Path.Combine(outdir, fileDataID + ".mtl"));
                     mtlsb = new StreamWriter(Path.Combine(outdir, filename + ".mtl"));
                 }
             }
@@ -243,7 +194,6 @@ namespace Exporters.OBJ
                 }
                 else
                 {
-                    //mtlsb = new StreamWriter(Path.Combine(outdir, destinationOverride, fileDataID + ".mtl"));
                     mtlsb = new StreamWriter(Path.Combine(outdir, destinationOverride, filename + ".mtl"));
                 }
             }
@@ -255,39 +205,22 @@ namespace Exporters.OBJ
             for (var i = 0; i < reader.model.textures.Count(); i++)
             {
                 //uint textureFileDataID = 840426;
-                string textureUsed = @"Test\QA_TEST_BLP_1.blp"; //Placeholder, WIP: TAKE PATH IN CONSIDERATION!
+                string textureUsed = @"Test\QA_TEST_BLP_1.blp"; //Placeholder
                 materials[i].flags = reader.model.textures[i].flags;
                 switch (reader.model.textures[i].type)
                 {
                     case 0:
-                        /*
-                        Listfile.TryGetFileDataID(reader.model.textures[i].filename, out textureFileDataID);
-                        if (textureFileDataID == 372993)
-                        {
-                            textureFileDataID = reader.model.textureFileDataIDs[i];
-                        }
-                        break;
-                        */
                         textureUsed = reader.model.textures[i].filename;
                         break;
                     case 1:
                     case 2:
                     case 11:
                     default:
-                        Console.WriteLine("Texture type " + reader.model.textures[i].type + " not supported, falling back to placeholder texture");
+                        //Falling back to placeholder texture
                         break;
                 }
 
                 materials[i].textureID = textureID + i;
-                /*
-                //we already got the texture name, we are not using data ids
-                if (!Listfile.TryGetFilename(textureFileDataID, out var textureFilename))
-                {
-                    textureFilename = textureFileDataID.ToString();
-                }
-                */
-
-                //materials[i].filename = Path.GetFileNameWithoutExtension(textureFilename);
                 materials[i].filename = Path.GetFileNameWithoutExtension(textureUsed);
 
                 string textureSaveLocation;
@@ -311,15 +244,12 @@ namespace Exporters.OBJ
                 try
                 {
                     var blpreader = new BLPReader();
-                    //blpreader.LoadBLP(textureFileDataID);
-                    //blpreader.LoadBLP(textureUsed);
                     blpreader.LoadBLP(Managers.ArchiveManager.ReadThisFile(textureUsed));
                     blpreader.bmp.Save(textureSaveLocation);
-                    //blpreader.bmp.Save(outdir + materials[i].filename + ".png");//WIP
                 }
-                catch (Exception e)
+                catch
                 {
-                    //CASCLib.Logger.WriteLine("Exception while saving BLP " + materials[i].filename + ": " + e.Message);
+                    //Error on file save
                 }
             }
 
@@ -329,7 +259,6 @@ namespace Exporters.OBJ
             {
                 mtlsb.WriteLine("newmtl " + material.filename);
                 mtlsb.WriteLine("illum 1");
-                //mtlsb.WriteLine("map_Ka " + material.filename + ".png");
                 mtlsb.WriteLine("map_Kd " + material.filename + ".png");
             }
 
@@ -341,7 +270,6 @@ namespace Exporters.OBJ
             }
             else
             {
-                //objsw.WriteLine("g " + fileDataID);
                 objsw.WriteLine("g " + filename);
             }
 
@@ -354,7 +282,6 @@ namespace Exporters.OBJ
                 }
                 else
                 {
-                    //objsw.WriteLine("g " + fileDataID.ToString() + renderbatch.groupID.ToString());
                     objsw.WriteLine("g " + filename + renderbatch.groupID.ToString());
                 }
 
@@ -363,12 +290,14 @@ namespace Exporters.OBJ
                 while (i < (renderbatch.firstFace + renderbatch.numFaces))
                 {
                     objsw.WriteLine("f " + (indices[i] + 1) + "/" + (indices[i] + 1) + "/" + (indices[i] + 1) + " " + (indices[i + 1] + 1) + "/" + (indices[i + 1] + 1) + "/" + (indices[i + 1] + 1) + " " + (indices[i + 2] + 1) + "/" + (indices[i + 2] + 1) + "/" + (indices[i + 2] + 1));
-                    i = i + 3;
+                    i += 3;
                 }
             }
 
             objsw.Close();
-            /* //No funky collision at the moment
+
+            //COLLISION MODEL -- not implemented
+            /*
             // Only export phys when exporting a single M2, causes issues for some users when combined with WMO/ADT
             if (destinationOverride == null)
             {
@@ -404,6 +333,7 @@ namespace Exporters.OBJ
                 objsw.Close();
             }
             */
+
             // https://en.wikipedia.org/wiki/Wavefront_.obj_file#Basic_materials
             // http://wiki.unity3d.com/index.php?title=ExportOBJ
             // http://web.cse.ohio-state.edu/~hwshen/581/Site/Lab3_files/Labhelp_Obj_parser.htm

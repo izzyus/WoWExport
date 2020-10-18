@@ -1,12 +1,4 @@
-﻿using OpenTK;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-//namespace OBJExporterUI
-namespace Exporters
+﻿namespace Exporters
 {
     public class Structs
     {
@@ -46,6 +38,7 @@ namespace Exporters
             public double X;
             public double Y;
         }
+
         public struct Material
         {
             public string filename;

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Drawing;
 using WoWFormatLib.Structs.ADT;
 using System.IO;
-using System.Diagnostics;
 
 namespace Generators.ADT_Alpha
 {
@@ -61,7 +60,6 @@ namespace Generators.ADT_Alpha
                             {
                                 for (int y = 0; y < 64; y++)
                                 {
-                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
                                     Color color;
                                     switch (adtfile.texChunks[c].layers.Count())
                                     {
@@ -78,7 +76,6 @@ namespace Generators.ADT_Alpha
                                             color = Color.FromArgb(255, 0, 0, 0);
                                             break;
                                     }
-                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
                                     bmp.SetPixel(x, y, color);
                                 }
                             }
@@ -90,7 +87,6 @@ namespace Generators.ADT_Alpha
                             {
                                 for (int y = 0; y < 63; y++)
                                 {
-                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
                                     Color color;
                                     switch (adtfile.texChunks[c].layers.Count())
                                     {
@@ -242,7 +238,6 @@ namespace Generators.ADT_Alpha
 
                 for (uint c = 0; c < adtfile.chunks.Count(); c++)
                 {
-                    //Console.WriteLine(c + " - " + xOff + "_" + yOff);
                     if (adtfile.texChunks[c].alphaLayer != null)
                     {
                         //Assign the channels...
@@ -272,7 +267,6 @@ namespace Generators.ADT_Alpha
                             {
                                 for (int y = 0; y < 64; y++)
                                 {
-                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], values[x * 64 + y], values[x * 64 + y], values[x * 64 + y]);
                                     Color color;
                                     switch (adtfile.texChunks[c].layers.Count())
                                     {
@@ -289,8 +283,6 @@ namespace Generators.ADT_Alpha
                                             color = Color.FromArgb(255, 0, 0, 0);
                                             break;
                                     }
-                                    //var color = System.Drawing.Color.FromArgb(values[x * 64 + y], 0, 0, 0); //for pure black generation
-                                    //bmp.SetPixel(x, y, color);
                                     bmp.SetPixel(x + xOff, y + yOff, color);
                                 }
                             }

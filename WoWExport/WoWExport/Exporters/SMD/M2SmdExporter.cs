@@ -1,8 +1,6 @@
-﻿//Experimental SMD module
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WoWFormatLib.FileReaders;
 using System.IO;
 
@@ -118,13 +116,13 @@ namespace Exporters.SMD
                     }
                 }
                 smdsw.WriteLine("// Written by izzy's SMD Export module. Original file: " + filename);
-                
+
                 //Version
                 smdsw.WriteLine("version 1");
-                
+
                 //Bones block start
                 smdsw.WriteLine("nodes");
-                
+
                 //Root bone
                 smdsw.WriteLine("  0 \"" + reader.model.name + "\"  -1");
                 for (int i = 0; i < reader.model.bones.Count(); i++)
