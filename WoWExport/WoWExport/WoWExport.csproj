@@ -95,6 +95,7 @@
     <Compile Include="Form_WMOExport.Designer.cs">
       <DependentUpon>Form_WMOExport.cs</DependentUpon>
     </Compile>
+    <Compile Include="Generators\ADT_Height.cs" />
     <Compile Include="Generators\ADT_Alpha.cs" />
     <Compile Include="Generators\DisplayStructure.cs" />
     <Compile Include="Managers\ArchiveManager.cs" />

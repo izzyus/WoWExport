@@ -85,12 +85,12 @@ namespace Exporters.OBJ
 
                     var batch = new Structs.RenderBatch();
 
-                    for (int i = 0, idx = 0; i < 17; i++)
+                    for (int row = 0, idx = 0; row < 17; row++)
                     {
-                        bool isSmallRow = (i % 2) != 0;
+                        bool isSmallRow = (row % 2) != 0;
                         int rowLength = isSmallRow ? 8 : 9;
 
-                        for (var j = 0; j < rowLength; j++)
+                        for (var col = 0; col < rowLength; col++)
                         {
                             var v = new Structs.Vertex();
 
@@ -101,9 +101,9 @@ namespace Exporters.OBJ
                                 Z = (double)chunk.normals.normal_1[idx] / 127
                             };
 
-                            var px = geny - (j * UnitSize);
+                            var px = geny - (col * UnitSize);
                             var py = chunk.vertices.vertices[idx++] + chunk.header.position.Z;
-                            var pz = genx - (i * UnitSizeHalf);
+                            var pz = genx - (row * UnitSizeHalf);
 
                             v.Position = new Structs.Vector3D
                             {
@@ -112,16 +112,16 @@ namespace Exporters.OBJ
                                 Z = pz
                             };
 
-                            if ((i % 2) != 0) v.Position.X = (px - UnitSizeHalf);
+                            if ((row % 2) != 0) v.Position.X = (px - UnitSizeHalf);
 
-                            double ofs = j;
+                            double ofs = col;
                             if (isSmallRow)
                                 ofs += 0.5;
 
                             if (bakeQuality == "high")
                             {
                                 double tx = ofs / 8d;
-                                double ty = 1 - (i / 16d);
+                                double ty = 1 - (row / 16d);
                                 v.TexCoord = new Structs.Vector2D { X = tx, Y = ty };
                             }
                             else

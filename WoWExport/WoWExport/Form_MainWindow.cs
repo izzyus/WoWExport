@@ -94,6 +94,25 @@ namespace WoWExport
         private void button2_Click(object sender, EventArgs e)
         {
             //---------------------------------------------------------------------------
+            //TEST ADT HEIGHT:
+            //---------------------------------------------------------------------------
+            /*
+            ADTReader reader = new ADTReader();
+            //reader.Load335ADT(@"world\maps\azeroth\azeroth_30_47.adt");
+
+            string selectedItem = treeView1.SelectedNode.FullPath;
+            selectedItem = selectedItem.Substring(5, selectedItem.Length - 5); //that's because we remove from the name "root\"
+            reader.Load335ADT(selectedItem);
+            
+            ADT_Height heightGen = new ADT_Height();
+            heightGen.GenerateHeightmap(reader.adtfile);
+
+            pictureBox1.Image = heightGen.heightMap;
+            heightGen.heightMap.Save(@"D:\export\" + Path.GetFileNameWithoutExtension(selectedItem) + ".png");
+            //---------------------------------------------------------------------------
+            */
+
+            //---------------------------------------------------------------------------
             //TEST INDIVIDUAL CASC PREVIEW TEXTURE:
             //---------------------------------------------------------------------------
             /*
