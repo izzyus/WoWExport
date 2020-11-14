@@ -6,7 +6,7 @@ An attempt at creating an universal WoW Exporter
 
 This project is based on [Marlamin's](https://github.com/Marlamin) tools
 
-## Compatiblity table
+## Compatibility table
 
 | | ADT | M2 | WMO |
 | --- | --- | --- | --- |
@@ -31,11 +31,12 @@ This project is based on [Marlamin's](https://github.com/Marlamin) tools
 
 ## Thanks
 
-* Marlamin
+* [Marlamin](https://github.com/Marlamin)
 * Schlumpf
-* Kruithne
-* Xalcon
-* TOM_RUS
-* Ladislav Zezula
-* Rob Paveza
+* [Kruithne](https://github.com/Kruithne)
+* [Xalcon](https://github.com/Xalcon)
+* [TOM_RUS](https://github.com/tomrus88)
+* [Ladislav Zezula](https://github.com/ladislav-zezula)
+* [Rob Paveza](https://github.com/robpaveza)
+* [Selzier](https://github.com/Selzier)
 * ..and everyone else who contributed to Marlamin's work
