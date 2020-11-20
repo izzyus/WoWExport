@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Drawing;
 using WoWFormatLib.Structs.ADT;
+using System;
 
 namespace Generators.ADT_Height
 {
@@ -11,6 +12,7 @@ namespace Generators.ADT_Height
 		//PUBLIC STUFF:
 		//-----------------------------------------------------------------------------------------------------------------
 		public Bitmap heightMap = new Bitmap(257, 257);
+		public float[,] heightArray2d = new float[257, 257];
 		//-----------------------------------------------------------------------------------------------------------------
 
 		public void GenerateHeightmap(ADT adtfile)
@@ -189,7 +191,7 @@ namespace Generators.ADT_Height
 					vertexHeightList[i] = maxHeight;
 				}
 			}
-
+			#region Heightmam_Bitmap
 			// Draw heightmap
 			int yOff = 0;
 			int xOff = 0;
@@ -198,8 +200,8 @@ namespace Generators.ADT_Height
 			{
 				for (int y = 0; y < 16; y++)
 				{
-					var xSize=16;
-					var ySize=16;
+					var xSize = 16;
+					var ySize = 16;
 
 					if (y == 15 && x < 15)
 					{
@@ -219,14 +221,18 @@ namespace Generators.ADT_Height
 						xSize = 16;
 						ySize = 16;
 					}
-					
+
 					for (int col = 0; col < xSize; col++)
 					{
 						for (int row = 0; row < ySize; row++)
 						{
 							var normalized = FloatToIntNormalized255(vertexHeightList[hCount], maxHeight, minHeight);
 							var color = System.Drawing.Color.FromArgb(255, normalized, normalized, normalized);
-							heightMap.SetPixel(col+xOff, row+yOff, color);
+							heightMap.SetPixel(col + xOff, row + yOff, color);
+
+							//For JSON generation
+							heightArray2d[col + xOff, row + yOff] = vertexHeightList[hCount];
+
 							hCount++;
 						}
 					}
@@ -250,11 +256,51 @@ namespace Generators.ADT_Height
 			//----------------------------------------------------------------------------------------------------------
 			heightMap.RotateFlip(RotateFlipType.Rotate270FlipY);
 			//----------------------------------------------------------------------------------------------------------
+			#endregion
+
+			//----------------------------------------------------------------------------------------------------------
+			//Fix array orientation:
+			//----------------------------------------------------------------------------------------------------------
+			heightArray2d = RotateMatrixCounterClockwise(heightArray2d);
+			heightArray2d = FlipMatrix(heightArray2d);
+			//----------------------------------------------------------------------------------------------------------
 		}
 
 		private static int FloatToIntNormalized255(float value, float min, float max)
 		{
 			return (int)(((value - max) / (min - max)) * 255);
+		}
+
+
+		static float[,] RotateMatrixCounterClockwise(float[,] oldMatrix)
+		{
+			float[,] newMatrix = new float[oldMatrix.GetLength(1), oldMatrix.GetLength(0)];
+			int newColumn, newRow = 0;
+			for (int oldColumn = oldMatrix.GetLength(1) - 1; oldColumn >= 0; oldColumn--)
+			{
+				newColumn = 0;
+				for (int oldRow = 0; oldRow < oldMatrix.GetLength(0); oldRow++)
+				{
+					newMatrix[newRow, newColumn] = oldMatrix[oldRow, oldColumn];
+					newColumn++;
+				}
+				newRow++;
+			}
+			return newMatrix;
+		}
+
+		static float[,] FlipMatrix(float[,] oldMatrix)
+		{
+			float[,] newMatrix = new float[oldMatrix.GetLength(1), oldMatrix.GetLength(0)];
+
+			for (int i = 0; i < oldMatrix.GetLength(0); i++)
+			{
+				for (int j = 0; j < oldMatrix.GetLength(1); j++)
+				{
+					newMatrix[j, i] = oldMatrix[i, j];
+				}
+			}
+			return newMatrix;
 		}
 	}
 }

@@ -28,6 +28,7 @@ This project is based on [Marlamin's](https://github.com/Marlamin) tools
 * [SereniaBLPLib](https://github.com/WoW-Tools/SereniaBLPLib)
 * [StormLibSharp](https://github.com/robpaveza/stormlibsharp)
 * [CascLib](https://github.com/WoW-Tools/CascLib)
+* [NewtonSoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
 
 ## Thanks
 
