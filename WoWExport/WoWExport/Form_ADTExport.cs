@@ -274,7 +274,7 @@ namespace WoWExport
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex > 1)
+            if (comboBox1.SelectedIndex > 1 && comboBox1.SelectedIndex != 4)
             {
                 checkBox8.Enabled = true;
             }

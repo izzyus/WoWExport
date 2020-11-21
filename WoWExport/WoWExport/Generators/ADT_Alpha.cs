@@ -240,8 +240,17 @@ namespace Generators.ADT_Alpha
                     materialJSON += "\"" + c + "\":[";
                     for (int li = 0; li < adtfile.texChunks[c].layers.Count(); li++)
                     {
-                        string AlphaLayerName = adtfile.textures.filenames[adtfile.texChunks[c].layers[li].textureId].ToLower().Replace(".blp", ""); //Remove extension
-                        materialJSON += "{\"id\":\"" + AlphaLayerName.Replace("\\", "\\\\") + "\",\"scale\":\"" + 4 + "\"},"; //TODO: READ TEXTURE SCALE AND IMPLEMENT HERE
+                        string AlphaLayerName = adtfile.textures.filenames[adtfile.texChunks[c].layers[li].textureId].ToLower();
+                        if (Managers.ConfigurationManager.ADTPreserveTextureStruct)
+                        {
+                            AlphaLayerName = AlphaLayerName.Replace("\\", "\\\\").Replace(".blp", "");  //Remove extension and modify the path to use "\\" instead of "\"
+                        }
+                        else
+                        {
+                            AlphaLayerName = Path.GetFileNameWithoutExtension(AlphaLayerName); // Get only the filename
+                        }
+
+                        materialJSON += "{\"id\":\"" + AlphaLayerName + "\",\"scale\":\"" + 4 + "\"},"; //TODO: READ TEXTURE SCALE AND IMPLEMENT HERE
                     }
                     materialJSON = materialJSON.Substring(0, materialJSON.Length - 1); // Remove tailing comma
                     materialJSON += "],"; // Close the subchunk array
@@ -260,7 +269,18 @@ namespace Generators.ADT_Alpha
                 {
                     for (int q = 0; q < adtfile.textures.filenames.Length; q++)
                     {
-                        fullJSON += "\"id" + q + "\":\"" + adtfile.textures.filenames[q].Replace("\\", "\\\\").ToLower().Replace(".blp", "") + "\",";
+                        string textureFile = adtfile.textures.filenames[q].ToLower();
+
+                        if (Managers.ConfigurationManager.ADTPreserveTextureStruct)
+                        {
+                            textureFile = textureFile.Replace("\\", "\\\\").Replace(".blp", ""); //Remove extension and modify the path to use "\\" instead of "\"
+                        }
+                        else
+                        {
+                            textureFile = Path.GetFileNameWithoutExtension(textureFile);
+                        }
+
+                        fullJSON += "\"id" + q + "\":\"" + textureFile + "\",";
                     }
                 }
 
@@ -280,7 +300,14 @@ namespace Generators.ADT_Alpha
                 string[] materialIDs = adtfile.textures.filenames;
                 for (int i = 0; i < materialIDs.Length; i++)
                 {
-                    materialIDs[i] = materialIDs[i].ToLower().Replace(".blp", ""); //Remove extension for the files
+                    if (Managers.ConfigurationManager.ADTPreserveTextureStruct)
+                    {
+                        materialIDs[i] = materialIDs[i].ToLower().Replace(".blp", ""); //Remove extension for the files
+                    }
+                    else
+                    {
+                        materialIDs[i] = Path.GetFileNameWithoutExtension(materialIDs[i].ToLower());
+                    }
                 }
                 int imageCount = IntCeil(materialIDs.Length, 4);
 

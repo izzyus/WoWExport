@@ -43,6 +43,7 @@ namespace WoWExport.Generators
             ".delete",
             ".signed",
             "pkginfo",
+            ".dylib",
             ".plist",
             "gaming",
             ".anim",

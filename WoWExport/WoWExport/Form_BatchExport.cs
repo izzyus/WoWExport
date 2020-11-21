@@ -62,7 +62,7 @@ namespace WoWExport
             checkBox4.Enabled = false; //Disabled for the time being
             checkBox5.Checked = Managers.ConfigurationManager.ADTexportTextures;
             checkBox5.Text = "Export ground textures (ADT)";
-            checkBox6.Text = "Export heightmap (ADT)";
+            checkBox6.Text = "Export alphamaps (ADT)";
             checkBox6.Checked = Managers.ConfigurationManager.ADTExportHeightmap;
 
             checkBox12.Checked = Managers.ConfigurationManager.ADTPreserveTextureStruct;
@@ -193,7 +193,7 @@ namespace WoWExport
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox1.SelectedIndex > 1)
+            if (comboBox1.SelectedIndex > 1 && comboBox1.SelectedIndex != 4)
             {
                 checkBox8.Enabled = true;
             }
