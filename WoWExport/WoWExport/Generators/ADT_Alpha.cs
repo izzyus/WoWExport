@@ -240,11 +240,8 @@ namespace Generators.ADT_Alpha
                     materialJSON += "\"" + c + "\":[";
                     for (int li = 0; li < adtfile.texChunks[c].layers.Count(); li++)
                     {
-                        if (adtfile.texChunks[c].alphaLayer != null)
-                        {
-                            string AlphaLayerName = adtfile.textures.filenames[adtfile.texChunks[c].layers[li].textureId].ToLower().Replace(".blp", ""); //Remove extension
-                            materialJSON += "{\"id\":\"" + AlphaLayerName.Replace("\\", "\\\\") + "\",\"scale\":\"" + 4 + "\"},"; //TODO: READ TEXTURE SCALE AND IMPLEMENT HERE
-                        }
+                        string AlphaLayerName = adtfile.textures.filenames[adtfile.texChunks[c].layers[li].textureId].ToLower().Replace(".blp", ""); //Remove extension
+                        materialJSON += "{\"id\":\"" + AlphaLayerName.Replace("\\", "\\\\") + "\",\"scale\":\"" + 4 + "\"},"; //TODO: READ TEXTURE SCALE AND IMPLEMENT HERE
                     }
                     materialJSON = materialJSON.Substring(0, materialJSON.Length - 1); // Remove tailing comma
                     materialJSON += "],"; // Close the subchunk array
