@@ -220,6 +220,7 @@ namespace Exporters.OBJ
             bool exportM2 = Managers.ConfigurationManager.ADTExportM2;
             bool exportTextures = Managers.ConfigurationManager.ADTexportTextures;
             bool exportAlphaMaps = Managers.ConfigurationManager.ADTexportAlphaMaps;
+            bool exportHeightmap = Managers.ConfigurationManager.ADTExportHeightmap;
 
             //FOLIAGE -- not implemented
             /*
@@ -365,7 +366,7 @@ namespace Exporters.OBJ
             #region Alpha&Tex
             //----------------------------------------------------------------------------------------------------------
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            ///TEXTURE & ALPHA RELATED START
+            ///TEXTURE & ALPHA & HEIGHTMAP RELATED START
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //----------------------------------------------------------------------------------------------------------
             if (exportTextures) //Export ground textures
@@ -508,19 +509,36 @@ namespace Exporters.OBJ
                             }
                         }
                     }
-                    if (Managers.ConfigurationManager.ADTAlphaMode == 4 || Managers.ConfigurationManager.ADTAlphaMode == 5)
+                    if (Managers.ConfigurationManager.ADTAlphaMode == 4) //Splatmaps
                     {
-                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + ".png")))
+                        //Save the splatmaps
+                        for (int m = 0; m < AlphaLayers.ToArray().Length; m++)
+                        {
+                            if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "_splatmap_" + m + ".png")))
+                            {
+                                try
+                                {
+                                    AlphaLayers[m].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "_splatmap_" + m + ".png"));
+                                }
+                                catch
+                                {
+                                    //Error on file save
+                                }
+                            }
+                        }
+                        //Save the material info JSON
+                        if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "_MaterialData.json")))
                         {
                             try
                             {
-                                AlphaLayers[0].Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + ".png"));
+                                File.WriteAllText(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\AlphaMaps\\", mapname + "_MaterialData.json"), AlphaMapsGenerator.SplatmapJSON);
                             }
                             catch
                             {
                                 //Error on file save
                             }
                         }
+
                     }
                 }
 
@@ -552,9 +570,30 @@ namespace Exporters.OBJ
                     layerCsvSR.Close();
                 }
             }
+
+            if (exportHeightmap)
+            {
+                Generators.ADT_Height.ADT_Height heightmapGenerator = new Generators.ADT_Height.ADT_Height();
+                heightmapGenerator.GenerateHeightmap(reader.adtfile);
+
+                if (!Directory.Exists(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\HeightMaps")))
+                {
+                    Directory.CreateDirectory(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\HeightMaps"));
+                }
+
+                try
+                {
+                    File.WriteAllText(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\HeightMaps\\", mapname + "_HeightData.json"), Newtonsoft.Json.JsonConvert.SerializeObject(heightmapGenerator.heightArray2d));
+                    heightmapGenerator.heightMap.Save(Path.Combine(outdir, Path.GetDirectoryName(file) + "\\HeightMaps\\", mapname + "_heightmap.png"));
+                }
+                catch
+                {
+                    //Error on save
+                }
+            }
             //----------------------------------------------------------------------------------------------------------
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            ///TEXTURE & ALPHA RELATED END
+            ///TEXTURE & ALPHA & HEIGHTMAP RELATED END
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //----------------------------------------------------------------------------------------------------------
             #endregion

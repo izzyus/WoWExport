@@ -52,6 +52,7 @@
             this.checkBox15 = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.checkBox16 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // checkBox1
@@ -287,11 +288,22 @@
             this.progressBar1.Size = new System.Drawing.Size(423, 23);
             this.progressBar1.TabIndex = 23;
             // 
+            // checkBox16
+            // 
+            this.checkBox16.AutoSize = true;
+            this.checkBox16.Location = new System.Drawing.Point(212, 422);
+            this.checkBox16.Name = "checkBox16";
+            this.checkBox16.Size = new System.Drawing.Size(86, 17);
+            this.checkBox16.TabIndex = 24;
+            this.checkBox16.Text = "checkBox16";
+            this.checkBox16.UseVisualStyleBackColor = true;
+            // 
             // Form_ADTExport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(447, 493);
+            this.Controls.Add(this.checkBox16);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.checkBox15);
@@ -350,5 +362,6 @@
         private System.Windows.Forms.CheckBox checkBox15;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.CheckBox checkBox16;
     }
 }

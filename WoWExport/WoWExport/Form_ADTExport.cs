@@ -19,7 +19,7 @@ namespace WoWExport
             "RGB (63)",
             "Alpha",
             "Alpha (63)",
-            "RGB (1024)"
+            "Splatmaps"
         };
 
         public Form_ADTExport(string receivedFilename)
@@ -127,6 +127,9 @@ namespace WoWExport
             checkBox15.Text = "Split mesh per chunk";
             checkBox15.Checked = Managers.ConfigurationManager.ADTSplitChunks;
 
+            checkBox16.Checked = Managers.ConfigurationManager.ADTexportAlphaMaps;
+            checkBox16.Text = "Export heightmap";
+
             try
             {
                 ADTReader reader = new ADTReader();
@@ -161,6 +164,7 @@ namespace WoWExport
             Managers.ConfigurationManager.ADTexportTextures = checkBox5.Checked;
             Managers.ConfigurationManager.ADTexportAlphaMaps = checkBox6.Checked;
             Managers.ConfigurationManager.ADTIgnoreHoles = checkBox7.Checked;
+            Managers.ConfigurationManager.ADTExportHeightmap = checkBox16.Checked;
 
             Managers.ConfigurationManager.ADTAlphaMode = comboBox1.SelectedIndex;
             Managers.ConfigurationManager.ADTAlphaUseA = checkBox8.Checked;

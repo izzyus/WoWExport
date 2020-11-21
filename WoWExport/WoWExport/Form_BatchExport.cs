@@ -18,7 +18,7 @@ namespace WoWExport
             "RGB (63)",
             "Alpha",
             "Alpha (63)",
-            "RGB (1024)"
+            "Splatmaps"
         };
 
         public Form_BatchExport(List<string> receivedFileList)
@@ -62,6 +62,8 @@ namespace WoWExport
             checkBox4.Enabled = false; //Disabled for the time being
             checkBox5.Checked = Managers.ConfigurationManager.ADTexportTextures;
             checkBox5.Text = "Export ground textures (ADT)";
+            checkBox6.Text = "Export heightmap (ADT)";
+            checkBox6.Checked = Managers.ConfigurationManager.ADTExportHeightmap;
 
             checkBox12.Checked = Managers.ConfigurationManager.ADTPreserveTextureStruct;
             checkBox12.Text = "Preserve textures path";
@@ -75,9 +77,6 @@ namespace WoWExport
                 checkBox12.Enabled = false;
                 checkBox13.Enabled = false;
             }
-
-            checkBox6.Checked = Managers.ConfigurationManager.ADTexportAlphaMaps;
-            checkBox6.Text = "Export alphamaps (ADT)";
 
             comboBox1.SelectedIndex = Managers.ConfigurationManager.ADTAlphaMode;
 
@@ -134,7 +133,8 @@ namespace WoWExport
             checkBox15.Text = "Split mesh per chunk";
             checkBox15.Checked = Managers.ConfigurationManager.ADTSplitChunks;
 
-
+            checkBox16.Checked = Managers.ConfigurationManager.ADTexportAlphaMaps;
+            checkBox16.Text = "Export heightmap (ADT)";
 
         }
 
@@ -147,6 +147,7 @@ namespace WoWExport
             Managers.ConfigurationManager.ADTexportTextures = checkBox5.Checked;
             Managers.ConfigurationManager.ADTexportAlphaMaps = checkBox6.Checked;
             Managers.ConfigurationManager.ADTIgnoreHoles = checkBox7.Checked;
+            Managers.ConfigurationManager.ADTExportHeightmap = checkBox16.Checked;
 
             Managers.ConfigurationManager.ADTAlphaMode = comboBox1.SelectedIndex;
             Managers.ConfigurationManager.ADTAlphaUseA = checkBox8.Checked;
