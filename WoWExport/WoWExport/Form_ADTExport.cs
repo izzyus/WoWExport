@@ -127,7 +127,7 @@ namespace WoWExport
             checkBox15.Text = "Split mesh per chunk";
             checkBox15.Checked = Managers.ConfigurationManager.ADTSplitChunks;
 
-            checkBox16.Checked = Managers.ConfigurationManager.ADTexportAlphaMaps;
+            checkBox16.Checked = Managers.ConfigurationManager.ADTExportHeightmap;
             checkBox16.Text = "Export heightmap";
 
             try
