@@ -252,7 +252,7 @@ namespace Generators.ADT_Alpha
 
                         //Layer scale
                         float LayerScale = 4;
-                        if (adtfile.texParams != null)
+                        if (adtfile.texParams != null && adtfile.texParams.Count() >= adtfile.texChunks[c].layers[li].textureId)
                         {
                              LayerScale = (float)Math.Pow(2, (adtfile.texParams[adtfile.texChunks[c].layers[li].textureId].flags & 0xF0) >> 4);
                         }
