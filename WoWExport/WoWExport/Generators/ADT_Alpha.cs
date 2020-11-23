@@ -250,7 +250,14 @@ namespace Generators.ADT_Alpha
                             AlphaLayerName = Path.GetFileNameWithoutExtension(AlphaLayerName); // Get only the filename
                         }
 
-                        materialJSON += "{\"id\":\"" + AlphaLayerName + "\",\"scale\":\"" + 4 + "\"},"; //TODO: READ TEXTURE SCALE AND IMPLEMENT HERE
+                        //Layer scale
+                        float LayerScale = 4;
+                        if (adtfile.texParams != null)
+                        {
+                             LayerScale = (float)Math.Pow(2, (adtfile.texParams[adtfile.texChunks[c].layers[li].textureId].flags & 0xF0) >> 4);
+                        }
+                        
+                        materialJSON += "{\"id\":\"" + AlphaLayerName + "\",\"scale\":\"" + LayerScale + "\"},"; //TODO: READ TEXTURE SCALE AND IMPLEMENT HERE
                     }
                     materialJSON = materialJSON.Substring(0, materialJSON.Length - 1); // Remove tailing comma
                     materialJSON += "],"; // Close the subchunk array
