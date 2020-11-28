@@ -186,9 +186,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>System.Runtime.CompilerServices.Unsafe.dll</TargetPath>
     </ContentWithTargetPath>
-    <Content Include="NewtonsoftJson\Newtonsoft.Json.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="NewtonsoftJson\Newtonsoft.Json.dll" />
     <Content Include="OpenTK\OpenTK.Compatibility.dll" />
     <Content Include="OpenTK\OpenTK.dll" />
     <Content Include="OpenTK\OpenTK.GLControl.dll" />

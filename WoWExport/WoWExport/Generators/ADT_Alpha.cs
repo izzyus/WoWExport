@@ -257,7 +257,7 @@ namespace Generators.ADT_Alpha
                              LayerScale = (float)Math.Pow(2, (adtfile.texParams[adtfile.texChunks[c].layers[li].textureId].flags & 0xF0) >> 4);
                         }
                         
-                        materialJSON += "{\"id\":\"" + AlphaLayerName + "\",\"scale\":\"" + LayerScale + "\"},"; //TODO: READ TEXTURE SCALE AND IMPLEMENT HERE
+                        materialJSON += "{\"id\":\"" + AlphaLayerName + "\",\"scale\":\"" + LayerScale + "\"},";
                     }
                     materialJSON = materialJSON.Substring(0, materialJSON.Length - 1); // Remove tailing comma
                     materialJSON += "],"; // Close the subchunk array
