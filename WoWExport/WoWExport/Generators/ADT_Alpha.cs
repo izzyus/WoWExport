@@ -254,9 +254,9 @@ namespace Generators.ADT_Alpha
                         float LayerScale = 4;
                         if (adtfile.texParams != null && adtfile.texParams.Count() >= adtfile.texChunks[c].layers[li].textureId)
                         {
-                             LayerScale = (float)Math.Pow(2, (adtfile.texParams[adtfile.texChunks[c].layers[li].textureId].flags & 0xF0) >> 4);
+                            LayerScale = (float)Math.Pow(2, (adtfile.texParams[adtfile.texChunks[c].layers[li].textureId].flags & 0xF0) >> 4);
                         }
-                        
+
                         materialJSON += "{\"id\":\"" + AlphaLayerName + "\",\"scale\":\"" + LayerScale + "\"},";
                     }
                     materialJSON = materialJSON.Substring(0, materialJSON.Length - 1); // Remove tailing comma
@@ -382,40 +382,52 @@ namespace Generators.ADT_Alpha
                                     // 0-3 RGBA. If imageIndex=0 this should not be 0 because that is basetexture
                                     int channelIndex = texIndex % 4;
 
+                                    // 'vec3 blendTex' from the adt.fragment shader
+                                    var blendTexs = new int[3];
+                                    if (alphaLayers != null) //Those layers can be null
+                                    {
+                                        switch (alphaLayers.Length)
+                                        {
+                                            case 2:
+                                                blendTexs[0] = alphaLayers[1].layer[alphaIndex];
+                                                break;
+                                            case 3:
+                                                blendTexs[0] = alphaLayers[1].layer[alphaIndex];
+                                                blendTexs[1] = alphaLayers[2].layer[alphaIndex];
+                                                break;
+                                            case 4:
+                                                blendTexs[0] = alphaLayers[1].layer[alphaIndex];
+                                                blendTexs[1] = alphaLayers[2].layer[alphaIndex];
+                                                blendTexs[2] = alphaLayers[3].layer[alphaIndex];
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+
+                                    // 'vec4 layer_weights' from the adt.fragment shader
+                                    var sumBlendTex = 0;
+                                    for (int b = 0; b < blendTexs.Length; b++)
+                                    {
+                                        sumBlendTex += blendTexs[b];
+                                    }
+                                    sumBlendTex = Clamp(sumBlendTex, 0, 255);
+                                    int[] layerWeights = new int[4];
+                                    layerWeights[0] = 255 - sumBlendTex;
+                                    layerWeights[1] = blendTexs[0];
+                                    layerWeights[2] = blendTexs[1];
+                                    layerWeights[3] = blendTexs[2];
+
                                     // Write the actual pixel data
                                     if (k == 0)
                                     {
-                                        // BASE LAYER
-                                        pixelData[imageIndex][channelIndex][x + xOff, y + yOff] = 255; // Flood Base Layer
+                                        pixelData[imageIndex][channelIndex][x + xOff, y + yOff] = layerWeights[0];
                                     }
                                     else
                                     {
-                                        pixelData[imageIndex][channelIndex][x + xOff, y + yOff] = alphaLayers[k].layer[alphaIndex];
-
-                                        // Red   / 0 has everything subtracted from it
-                                        // Green / 1 has Blue & Alpha subtracted from it
-                                        // Blue  / 2 has Alpha subtracted from it
-
-                                        for (int m = 0; m < imageCount; m++)
-                                        { // All images
-                                            if (pixelData[m] == null) { Console.WriteLine("ERROR: pixeldata[" + m + "] is undefined!"); }
-                                            if (m != imageIndex)
-                                            {
-                                                pixelData[m][0][x + xOff, y + yOff] -= alphaLayers[k].layer[alphaIndex];
-                                                pixelData[m][1][x + xOff, y + yOff] -= alphaLayers[k].layer[alphaIndex];
-                                                pixelData[m][2][x + xOff, y + yOff] -= alphaLayers[k].layer[alphaIndex];
-                                                pixelData[m][3][x + xOff, y + yOff] -= alphaLayers[k].layer[alphaIndex];
-                                            }
-                                        }
-
-                                        for (int n = 0; n < 4; n++) // Loop 4 times
-                                        {
-                                            if (n != channelIndex)
-                                            {
-                                                pixelData[imageIndex][n][x + xOff, y + yOff] -= alphaLayers[k].layer[alphaIndex];
-                                            }
-                                        }
+                                        pixelData[imageIndex][channelIndex][x + xOff, y + yOff] = layerWeights[k];
                                     }
+
                                 }
                             }
                         }
@@ -496,6 +508,13 @@ namespace Generators.ADT_Alpha
                 return 0;
 
             return x;
+        }
+
+        private int Clamp(int val, int min, int max)
+        {
+            if (val.CompareTo(min) < 0) return min;
+            else if (val.CompareTo(max) > 0) return max;
+            else return val;
         }
     }
 }
