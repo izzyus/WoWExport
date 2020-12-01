@@ -29,6 +29,8 @@ This project is based on [Marlamin's](https://github.com/Marlamin) tools
 * [StormLibSharp](https://github.com/robpaveza/stormlibsharp)
 * [CascLib](https://github.com/WoW-Tools/CascLib)
 * [NewtonSoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
+* [DBFileReaderLib, DBCD](https://github.com/wowdev/DBCD)
+* [DBDefsLib](https://github.com/wowdev/DBDefsLib)
 
 ## Thanks
 

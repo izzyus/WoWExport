@@ -39,6 +39,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>CASCLib\CascLib.dll</HintPath>
     </Reference>
+    <Reference Include="DBCD">
+      <HintPath>DBFileReaderLib\DBCD.dll</HintPath>
+    </Reference>
+    <Reference Include="DBDefsLib">
+      <HintPath>DBFileReaderLib\DBDefsLib.dll</HintPath>
+    </Reference>
+    <Reference Include="DBFileReaderLib">
+      <HintPath>DBFileReaderLib\DBFileReaderLib.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>NewtonsoftJson\Newtonsoft.Json.dll</HintPath>
@@ -186,6 +195,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>System.Runtime.CompilerServices.Unsafe.dll</TargetPath>
     </ContentWithTargetPath>
+    <Content Include="DBFileReaderLib\DBCD.dll" />
+    <Content Include="DBFileReaderLib\DBDefsLib.dll" />
+    <Content Include="DBFileReaderLib\DBFileReaderLib.dll" />
     <Content Include="NewtonsoftJson\Newtonsoft.Json.dll" />
     <Content Include="OpenTK\OpenTK.Compatibility.dll" />
     <Content Include="OpenTK\OpenTK.dll" />
