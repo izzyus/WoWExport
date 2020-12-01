@@ -221,27 +221,19 @@ namespace Exporters.OBJ
             bool exportTextures = Managers.ConfigurationManager.ADTexportTextures;
             bool exportAlphaMaps = Managers.ConfigurationManager.ADTexportAlphaMaps;
             bool exportHeightmap = Managers.ConfigurationManager.ADTExportHeightmap;
+            bool exportFoliage = Managers.ConfigurationManager.ADTExportFoliage;
 
-            //FOLIAGE -- not implemented
-            /*
-            bool exportFoliage = false;
-            
+            //FOLIAGE
             if (exportFoliage)
             {
                 exportworker.ReportProgress(65, "Exporting foliage");
 
                 try
                 {
-                    if (!File.Exists("definitions/GroundEffectTexture.dbd") || !File.Exists("definitions/GroundEffectDoodad.dbd"))
-                    {
-                        MainWindow.UpdateDefinition("GroundEffectTexture");
-                        MainWindow.UpdateDefinition("GroundEffectDoodad");
-                        DefinitionManager.LoadDefinitions();
-                    }
-
-                    var build = WoWFormatLib.Utils.CASC.BuildName;
-                    var groundEffectTextureDB = DBCManager.LoadDBC(1308499, "GroundEffectTexture", build, true);
-                    var groundEffectDoodadDB = DBCManager.LoadDBC(1308057, "GroundEffectDoodad", build, true);
+                    var build = Managers.ArchiveManager.cascHandler.Config.VersionName; //TODO: IMPLEMENT PRE CASC BUILDS
+                    var dbcd = new DBCD.DBCD(new WoWExport.DBC.ArchiveDBCProvider(), new WoWExport.DBC.LocalDBCDProvider());
+                    var groundEffectTextureDB = dbcd.Load("GroundEffectTexture", build);
+                    var groundEffectDoodadDB = dbcd.Load("GroundEffectDoodad", build);
 
                     for (var c = 0; c < reader.adtfile.texChunks.Length; c++)
                     {
@@ -251,18 +243,16 @@ namespace Exporters.OBJ
                             if (effectID == 0)
                                 continue;
 
-                            if (!groundEffectTextureDB.Contains(effectID))
+                            if (!groundEffectTextureDB.ContainsKey(effectID))
                             {
-                                Console.WriteLine("Could not find groundEffectTexture entry " + reader.adtfile.texChunks[c].layers[l].effectId);
                                 continue;
                             }
 
                             dynamic textureEntry = groundEffectTextureDB[effectID];
                             foreach (int doodad in textureEntry.DoodadID)
                             {
-                                if (!groundEffectDoodadDB.Contains(doodad))
+                                if (!groundEffectDoodadDB.ContainsKey(doodad))
                                 {
-                                    Console.WriteLine("Could not find groundEffectDoodad entry " + doodad);
                                     continue;
                                 }
 
@@ -270,9 +260,9 @@ namespace Exporters.OBJ
 
                                 var filedataid = (uint)doodadEntry.ModelFileID;
 
-                                if (!Listfile.TryGetFilename(filedataid, out var filename))
+                                if (!WoWExport.Listfile.TryGetFilename(filedataid, out var filename))
                                 {
-                                    Logger.WriteLine("Could not find filename for " + filedataid + ", setting filename to filedataid..");
+                                    Console.WriteLine("Could not find filename for " + filedataid + ", setting filename to filedataid..");
                                     filename = filedataid.ToString();
                                 }
 
@@ -283,7 +273,7 @@ namespace Exporters.OBJ
 
                                 if (!File.Exists(Path.Combine(outdir, Path.GetDirectoryName(file), "foliage", Path.GetFileNameWithoutExtension(filename).ToLower() + ".obj")))
                                 {
-                                    M2Exporter.ExportM2(filedataid, null, Path.Combine(outdir, Path.GetDirectoryName(file), "foliage"), filename);
+                                    M2Exporter.ExportM2(filename, Path.Combine(outdir, Path.GetDirectoryName(file), "foliage"));
                                 }
                             }
                         }
@@ -291,10 +281,9 @@ namespace Exporters.OBJ
                 }
                 catch (Exception e)
                 {
-                    throw e;
+                    Console.WriteLine("Error exporting GroundEffects: " + e.Message);
                 }
             }
-            */
 
             if (exportWMO || exportM2)
             {

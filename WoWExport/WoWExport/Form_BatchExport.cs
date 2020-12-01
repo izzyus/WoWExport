@@ -59,7 +59,6 @@ namespace WoWExport
             }
             checkBox4.Checked = Managers.ConfigurationManager.ADTExportFoliage;
             checkBox4.Text = "Export foliage (ADT)";
-            checkBox4.Enabled = false; //Disabled for the time being
             checkBox5.Checked = Managers.ConfigurationManager.ADTexportTextures;
             checkBox5.Text = "Export ground textures (ADT)";
             checkBox6.Text = "Export alphamaps (ADT)";

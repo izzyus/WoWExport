@@ -12,7 +12,7 @@ namespace Managers
         //ADT Exporter
         public static Boolean ADTExportM2 = false;
         public static Boolean ADTExportWMO = false;
-        public static Boolean ADTExportFoliage = false; //Obsolete atm
+        public static Boolean ADTExportFoliage = false;
         public static Boolean ADTexportTextures = false;
         public static Boolean ADTexportAlphaMaps = false;
         public static Boolean ADTExportHeightmap = false;
