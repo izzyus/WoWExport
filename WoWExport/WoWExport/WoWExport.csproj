@@ -72,6 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBC\ArchiveDBCProvider.cs" />
+    <Compile Include="DBC\LocalDBCDProvider.cs" />
     <Compile Include="Exporters\BLPExporter.cs" />
     <Compile Include="Exporters\OBJ\ADTExporter.cs" />
     <Compile Include="Exporters\OBJ\M2Exporter.cs" />
