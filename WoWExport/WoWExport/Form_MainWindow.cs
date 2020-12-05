@@ -50,7 +50,7 @@ namespace WoWExport
         {
             var list = new List<string>();
             ListCheckedFiles(treeView1.Nodes, list);
-            Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "//";
+            Managers.ConfigurationManager.OutputDirectory = textBox1.Text + "\\";
 
             if (list.Count == 0)
             {

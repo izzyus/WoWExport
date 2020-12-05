@@ -225,6 +225,9 @@ namespace WoWExport
 
         private void worker_DoWork(object sender, DoWorkEventArgs e)
         {
+            string exportDataJson = "[";
+            bool hasADT = false;
+
             for (int i = 0; i < fileList.Count; i++)
             {
                 listViewChangeColor(i, Color.Yellow, Color.DarkGoldenrod);
@@ -236,6 +239,17 @@ namespace WoWExport
                     switch (Path.GetExtension(currentFile))
                     {
                         case ".adt":
+                            hasADT = true;
+                            string exportLoc = Managers.ConfigurationManager.OutputDirectory;
+                            string adtName = Path.GetFileNameWithoutExtension(currentFile);
+                            string wdtName = adtName.Substring(0,adtName.IndexOf("_",0));
+                            string adtCoordX = adtName.Substring(adtName.IndexOf("_",0)+1, 2);
+                            string adtCoordY = adtName.Substring(adtName.IndexOf("_", adtName.IndexOf("_", 0) + 1) +1, 2); ;
+                            string matJson = Path.Combine(exportLoc,adtName) + "_MaterialData.json";
+                            string heightJson = Path.Combine(exportLoc, adtName) + "_HeightData.json";
+                            string placementCSV = Path.Combine(exportLoc, adtName) + "_ModelPlacementInformation.csv";
+                            exportDataJson += String.Format("[\"{0}\",{1},{2},\"{3}\",\"{4}\",\"{5}\"],", wdtName,adtCoordX,adtCoordY,placementCSV,heightJson,matJson);
+
                             Exporters.OBJ.ADTExporter.exportADT(currentFile, Managers.ConfigurationManager.OutputDirectory, Managers.ConfigurationManager.ADTQuality, worker);
                             break;
                         case ".m2":
@@ -268,6 +282,15 @@ namespace WoWExport
                     listViewChangeColor(i, Color.Pink, Color.DarkRed);
                 }
             }
+
+            if (hasADT)
+            {
+                exportDataJson = exportDataJson.Substring(0, exportDataJson.Length - 1); // Remove tailing comma
+                exportDataJson += "]";
+                exportDataJson = exportDataJson.Replace("\\","\\\\");
+                File.WriteAllText(Managers.ConfigurationManager.OutputDirectory + "Experimental_ExportData.json", exportDataJson);
+            }
+
         }
         private void listViewChangeColor(int index, Color back, Color fore) //horrible solution, but it works
         {
