@@ -230,7 +230,17 @@ namespace WoWFormatLib.FileReaders
             var bones = new Bone[nBones];
             for (int i = 0; i < nBones; i++)
             {
-                bones[i] = bin.Read<Bone>();
+                //bones[i] = bin.Read<Bone>(); //We need them read one by one
+                bones[i].boneId = bin.ReadInt32();
+                bones[i].flags = bin.ReadUInt32();
+                bones[i].parentBone = bin.ReadInt16();
+                bones[i].submesh_id = bin.ReadUInt16();
+                bin.ReadUInt16(); //some union stuff
+                bin.ReadUInt16(); //some union stuff
+                bones[i].translation = bin.ReadM2Track<Vector3>();
+                bones[i].rotation = bin.ReadM2Track<QuaternionInt16>();
+                bones[i].scale = bin.ReadM2Track<Vector3>();
+                bones[i].pivot = bin.Read<Vector3>();
             }
             return bones;
         }

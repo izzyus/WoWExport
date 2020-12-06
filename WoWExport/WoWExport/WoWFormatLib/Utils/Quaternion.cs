@@ -84,4 +84,21 @@ namespace WoWFormatLib.Utils
             return !a.Equals(b);
         }
     }
+
+    public struct QuaternionInt16
+    {
+        public short X;
+        public short Y;
+        public short Z;
+        public short W;
+
+        public QuaternionInt16(short x, short y, short z, short w)
+            : this()
+        {
+            X = x;
+            Y = y;
+            Z = z;
+            W = w;
+        }
+    }
 }

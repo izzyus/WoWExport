@@ -169,31 +169,31 @@ namespace WoWFormatLib.Structs.M2
         public int boneId;
         public uint flags;
         public short parentBone;
-        private ushort unk_0;
+        public ushort submesh_id;
         private ushort unk_1;
         private ushort unk_2;
-        public ABlock<Vector3> translation;
-        public ABlock<Quaternion> rotation;
-        public ABlock<Vector3> scale;
+        public M2Track<Vector3> translation;
+        public M2Track<QuaternionInt16> rotation;
+        public M2Track<Vector3> scale;
         public Vector3 pivot;
     }
 
     public struct UVAnimation
     {
-        public ABlock<Vector3> translation;
-        public ABlock<Quaternion> rotation;
-        public ABlock<Vector3> scaling;
+        public M2Track<Vector3> translation;
+        public M2Track<Quaternion> rotation;
+        public M2Track<Vector3> scaling;
     }
 
     public struct Transparency
     {
-        public ABlock<short> alpha;
+        public M2Track<short> alpha;
     }
 
     public struct Color
     {
-        public ABlock<RGBColor> color;
-        public ABlock<short> alpha;
+        public M2Track<RGBColor> color;
+        public M2Track<short> alpha;
     }
 
     public struct Vertice
@@ -224,7 +224,7 @@ namespace WoWFormatLib.Structs.M2
         public uint id;
         public uint bone;
         public Vector3 position;
-        public ABlock<int> data;
+        public M2Track<int> data;
     }
 
     public struct BoundingNormal
@@ -249,12 +249,12 @@ namespace WoWFormatLib.Structs.M2
         public uint type;
         public float farClipping;
         public float nearClipping;
-        public ABlock<CameraPosition> translationPos;
+        public M2Track<CameraPosition> translationPos;
         public Vector3 position;
-        public ABlock<CameraPosition> translationTar;
+        public M2Track<CameraPosition> translationTar;
         public Vector3 target;
-        public ABlock<Vector3> scaling;
-        public ABlock<float> unkABlock;
+        public M2Track<Vector3> scaling;
+        public M2Track<float> unkABlock;
     }
 
     public struct CameraLookup
@@ -295,13 +295,13 @@ namespace WoWFormatLib.Structs.M2
         public short type;
         public short bone;
         public Vector3 position;
-        public ABlock<RGBColor> ambientColor;
-        public ABlock<float> ambientIntensity;
-        public ABlock<RGBColor> diffuseColor;
-        public ABlock<float> diffuseIntensity;
-        public ABlock<int> attenuationStart;
-        public ABlock<int> attenuationEnd;
-        public ABlock<int> unk;
+        public M2Track<RGBColor> ambientColor;
+        public M2Track<float> ambientIntensity;
+        public M2Track<RGBColor> diffuseColor;
+        public M2Track<float> diffuseIntensity;
+        public M2Track<int> attenuationStart;
+        public M2Track<int> attenuationEnd;
+        public M2Track<int> unk;
     }
 
     public struct TexReplace
@@ -349,16 +349,16 @@ namespace WoWFormatLib.Structs.M2
         public int ofsTextures;
         public int nBlendRef;
         public int ofsBlendRef;
-        public ABlock<RGBColor> color;
-        public ABlock<short> opacity;
-        public ABlock<int> above;
-        public ABlock<int> below;
+        public M2Track<RGBColor> color;
+        public M2Track<short> opacity;
+        public M2Track<int> above;
+        public M2Track<int> below;
         public float resolution;
         public float length;
         public float emissionAngle;
         public short renderFlags;
-        public ABlock<short> unkABlock;
-        public ABlock<bool> unkABlock2;
+        public M2Track<short> unkABlock;
+        public M2Track<bool> unkABlock2;
         public int unk2;
     }
 

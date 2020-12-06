@@ -38,6 +38,7 @@ This project is based on [Marlamin's](https://github.com/Marlamin) tools
 * Schlumpf
 * [Kruithne](https://github.com/Kruithne)
 * [Xalcon](https://github.com/Xalcon)
+* [MaxtorCoder](https://github.com/MaxtorCoder)
 * [TOM_RUS](https://github.com/tomrus88)
 * [Ladislav Zezula](https://github.com/ladislav-zezula)
 * [Rob Paveza](https://github.com/robpaveza)
