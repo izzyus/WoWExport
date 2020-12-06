@@ -145,6 +145,7 @@
     <Compile Include="WoWFormatLib\Structs\SKIN.Struct.cs" />
     <Compile Include="WoWFormatLib\Structs\WDT.struct.cs" />
     <Compile Include="WoWFormatLib\Structs\WMO.Struct.cs" />
+    <Compile Include="WoWFormatLib\Utils\BinaryReaderExtensions.cs" />
     <Compile Include="WoWFormatLib\Utils\M2Track.cs" />
     <Compile Include="WoWFormatLib\Utils\Quaternion.cs" />
     <Compile Include="WoWFormatLib\Utils\RGBColor.cs" />
