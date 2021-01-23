@@ -4,6 +4,8 @@ namespace Managers
 {
     class ConfigurationManager
     {
+        public static String LocalDBCDefinitionLoc;
+
         public static int Profile;
         public static String GameDir;
 

@@ -62,6 +62,13 @@ namespace WoWExport
             {
                 Directory.CreateDirectory(Environment.CurrentDirectory + "\\settings");
             }
+
+            //Create DBC Definitions Folder if missing
+            if(!Directory.Exists(Path.Combine(Environment.CurrentDirectory, "dbc_definitions")))
+            {
+                Directory.CreateDirectory(Path.Combine(Environment.CurrentDirectory, "dbc_definitions"));
+            }
+            Managers.ConfigurationManager.LocalDBCDefinitionLoc = Path.Combine(Environment.CurrentDirectory, "dbc_definitions");
         }
 
         private void BrowseFolder()
