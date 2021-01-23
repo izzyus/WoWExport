@@ -224,7 +224,7 @@ namespace Exporters.OBJ
             bool exportFoliage = Managers.ConfigurationManager.ADTExportFoliage;
 
             //FOLIAGE
-            if (exportFoliage)
+            if (exportFoliage && Managers.ArchiveManager.usingCasc) //ONLY EXPROT IF CASC; PRE CASC NEEDS TO BE IMPLEMEMNTED
             {
                 exportworker.ReportProgress(65, "Exporting foliage");
 
