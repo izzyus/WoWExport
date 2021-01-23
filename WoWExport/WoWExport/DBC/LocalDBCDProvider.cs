@@ -25,6 +25,10 @@ namespace WoWExport.DBC
                         var responseStream = new GZipStream(client.OpenRead($"https://raw.githubusercontent.com/wowdev/WoWDBDefs/master/definitions/{tableName}.dbd"), CompressionMode.Decompress);
                         responseStream.CopyTo(stream);
 
+                        if (!Directory.Exists(Managers.ConfigurationManager.LocalDBCDefinitionLoc))
+                        {
+                            Directory.CreateDirectory(Managers.ConfigurationManager.LocalDBCDefinitionLoc);
+                        }
                         File.WriteAllBytes(Path.Combine(Managers.ConfigurationManager.LocalDBCDefinitionLoc + "/" + tableName + ".dbd"), stream.ToArray());
 
                         responseStream.Close();
